@@ -14,7 +14,7 @@
 <h1 align="center">QuintorCatalog</h3>
 
   <p align="center">
-    Automated hardware catalog for the software company Quintor B.V.
+    Automated hardware catalog for the software company Quintor
     <br />
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
     <br />
@@ -37,7 +37,7 @@
 
 ## About Quintor
 
-Quintor is a software company based in the Netherlands. Quintor helps customers to professionalize software development. They do this mainly in complex enterprise projects for top 250 organizations.
+Quintor is a software company based in the Netherlands. Quintor helps customers to professionalize software development.
 
 Quintor has the following disciplines:
 
@@ -50,15 +50,9 @@ Quintor has the following disciplines:
 
 ## About the project
 
-This project was created by students bioinformatics at the Hanze University of applied sciences. The main task from Quintor was to create a (automated) catalog to store all ther're hardware components in the company.
+This project was created by students bioinformatics at the Hanze University of applied sciences. The main task was to create a (automated) catalog to store all hardware components in the company.
 
-The catalog contains the following components:
-
-- A database of all hardware components
-- A Authentication layer for authentication
-- A webapp (frond-end) to list/add components
-
-More about the used tools and techniquest below.
+The hardware tools are stored in a database. This information is served to the front end using a REST API.
 
 ## Built with
 
