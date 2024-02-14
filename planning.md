@@ -29,6 +29,8 @@ Applicatie:
 
 Voor deze sprint is het doel om de authenticatie laag van de applicatie klaar te hebben. Verder moet het design document voor zo ver als mogelijk klaar zijn.
 
+Github Hooks & Github Actions opgezet hebben.
+
 ## Week 11 11-03 t/m 17-03
 
 Begin van de 2e sprint
