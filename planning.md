@@ -27,9 +27,7 @@ Applicatie:
 
 > Einde van de 1e sprint (end of sprint)
 
-Voor deze sprint is het doel om de authenticatie laag van de applicatie klaar te hebben. Verder moet het design document voor zo ver als mogelijk klaar zijn.
-
-Github Hooks & Github Actions opgezet hebben.
+Database schema hebben ingericht. Github Hooks & Github Actions opgezet hebben. Verder moet het design document voor zo ver als mogelijk klaar zijn.
 
 ## Week 11 11-03 t/m 17-03
 
@@ -70,6 +68,11 @@ Tentamenweek:
 
 ## Week 17 t/m 26
 
+- Start authenticatie laag
+- Filteren van de database
+- Actieve users toekennen aan verschillende objecten
+
+
 De defenifieve planning voor deze weken zal nog moeten worden aangevuld.
 
 week 18: lesvrije week/meivakantie
@@ -78,3 +81,5 @@ week 24: inleveren eindproducten?
 Week 25: tentamens kwartaal 4
 week 26: hertentamens kwartaal 3
 week 27: hertentamens kwartaal 4
+
+

@@ -56,3 +56,44 @@ Het ultieme doel is het bouwen van een applicatie warbij alles uitstekend (en oo
 ### Compilieer Actions / JUNIT Tests / Github actions
 
 - Voor Sander...?
+
+
+### Basic requirements
+
+Gebruik applicatie voor:
+- Secretariaat
+- Systeemnbeheer
+- Externe goedkeuring 
+
+Apparaten voor applicatie:
+- Laptops 
+- Monitoren
+
+Verplichte database velden:
+- Merk
+- Model
+- Serienummer
+- Factuurnummer
+- Werknemer bij uitlening
+- Datum van afgifte
+- Gebruiksstatus
+
+Extra velden database:
+- Specificaties
+- Kelder
+- ...
+
+Filter velden database:
+- users
+- actief
+- type item
+- merk 
+- model
+- serienummer
+
+Basisfunctionaliteit:
+- Login systeem + authenticatie
+- Database met laptops en monitoren opzetten
+- Dashboard view met aantal filters 
+- Apparaten toevoegen + toekennen user
+- Verzoek aanmaken voor uitlening
