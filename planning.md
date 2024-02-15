@@ -18,10 +18,10 @@ Design document vervolg:
 - User stories
 - Current status of development
 
-Applicatie:
+Voor de applicatie:
 
-- Front-end authenticatie laag opstellen (register?)
-- Back-end authenticatie laag opstellen inclusief beveiliging
+- Het opstellen van een eenvoudig ontwerp van de database
+- verder oefenen met de technieken
 
 ## Week 10 04-03 t/m 10-03
 
@@ -31,12 +31,18 @@ Database schema hebben ingericht. Github Hooks & Github Actions opgezet hebben. 
 
 ## Week 11 11-03 t/m 17-03
 
-Begin van de 2e sprint
+Begin van de 2e sprint. Doel van deze sprint:
 
-- Back-end database opzetten voor hardware producten
+> De back-end database voor hardware producten klaar te hebben en de REST APIs voor communicatie met de database klaar te hebben.
+
+Werk voor deze week:
+
+- Back-end database opzetten voor hardware producten (schema uitwerken)
 - starten met het aanroepen/verwerken van de hardware database
 
 ## Week 12 18-03 t/m 24-03
+
+Werk voor deze week:
 
 - back-end aanroepen/verwerken hardware database
 - REST APIs opzetten voor communicatie database
@@ -45,14 +51,17 @@ Begin van de 2e sprint
 
 > Einde van de 2e sprint (end of sprint)
 
-Voor deze sprint is het doel om de back-end database voor hardware producten klaar te hebben en de REST APIs voor communicatie met de database klaar te hebben.
+- back-end database voor hardware producten klaar
+- REST APIs voor communicatie met de database klaar te hebben.
 
 ## Week 14 01-04 t/m 07-04
 
-Begin van de 3e sprint (wellicht korte sprint i.v.m tentamenweek)
+Begin van de 3e sprint. Doel van deze sprint:
+
+> Deze sprint is wellicht wat korter door de tentamenweek. Het doel is om hier aan de frond end te werken. Het opzetten van de dashboard en maken van de eventuele login pagina's. Verder is deze week ook voor het uitlopen van de overige taken.
 
 - Frond-end inrichten met een mogelijke lijst/tabel van hardware producten
-- Front-end aanroepen/verwerken van de REST APIs
+- Front-end aanroepen/verwerken/uitwerken van de REST APIs
 
 ## Week 15 08-04 t/m 14-04
 
@@ -72,8 +81,7 @@ Tentamenweek:
 - Filteren van de database
 - Actieve users toekennen aan verschillende objecten
 
-
-De defenifieve planning voor deze weken zal nog moeten worden aangevuld.
+De definitieve planning voor deze weken zal nog moeten worden aangevuld.
 
 week 18: lesvrije week/meivakantie
 
