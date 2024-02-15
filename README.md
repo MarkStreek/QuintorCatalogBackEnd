@@ -5,13 +5,13 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <div align="center">
-  <a href="https://github.com/MarkStreek/QuintorCatalog">
+  <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">
     <img src="https://quintor.nl/wp-content/uploads/2022/08/logo-square.png" alt="Logo" width="100" height="100">
   </a>
-  <a href="https://github.com/MarkStreek/QuintorCatalog">
+  <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">
     <img src="https://www.heeredwinger.nl/wp-content/uploads/2019/12/Logo-Hanze.jpg" alt="Logo" width="250" height="100">
   </a>
-<h1 align="center">QuintorCatalog</h3>
+<h1 align="center">QuintorCatalogBackEnd</h3>
 
   <p align="center">
     Automated hardware catalog for the software company Quintor
@@ -73,13 +73,13 @@ Fill in...
 
 
 <!-- Markdown Links -->
-[contributors-shield]: https://img.shields.io/github/contributors/MarkStreek/QuintorCatalog.svg?style=for-the-badge
-[contributors-url]: https://github.com/MarkStreek/QuintorCatalog/graphs/contributors
-[stars-shield]: https://img.shields.io/github/stars/MarkStreek/QuintorCatalog.svg?style=for-the-badge
-[stars-url]: https://github.com/MarkStreek/QuintorCatalog/stargazers
-[issues-shield]: https://img.shields.io/github/issues/MarkStreek/QuintorCatalog.svg?style=for-the-badge
-[issues-url]: https://github.com/MarkStreek/QuintorCatalog/issues
+[contributors-shield]: https://img.shields.io/github/contributors/MarkStreek/QuintorCatalogBackEnd.svg?style=for-the-badge
+[contributors-url]: https://github.com/MarkStreek/QuintorCatalogBackEnd/graphs/contributors
+[stars-shield]: https://img.shields.io/github/stars/MarkStreek/QuintorCatalogBackEnd.svg?style=for-the-badge
+[stars-url]: https://github.com/MarkStreek/QuintorCatalogBackEnd/stargazers
+[issues-shield]: https://img.shields.io/github/issues/MarkStreek/QuintorCatalogBackEnd.svg?style=for-the-badge
+[issues-url]: https://github.com/MarkStreek/QuintorCatalogBackEnd/issues
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/company/quintor/
-[forks-shield]: https://img.shields.io/github/forks/MarkStreek/QuintorCatalog.svg?style=for-the-badge
-[forks-url]: https://github.com/MarkStreek/QuintorCatalog/network/members
+[forks-shield]: https://img.shields.io/github/forks/MarkStreek/QuintorCatalogBackEnd.svg?style=for-the-badge
+[forks-url]: https://github.com/MarkStreek/QuintorCatalogBackEnd/network/members
