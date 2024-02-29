@@ -71,7 +71,15 @@ Zoals beschreven zal het bijhouden van apparaten, de hoofdfunctionaliteit van de
 
 ### Technical requirements and maintenance
 
+Voor de applicatie zal gebruik worden gemaakt van de volgende technieken:
+
+- Frontend: REACT.js (Javascript)
+- Backend: Spring Boot (Java)
+- Database: relationele database (MySQL)
+
 ## Current status of development
+
+De huidige status van de ontwikkeling is dat er nog geen begin is gemaakt met de applicatie. De eerste sprint van het project omvatte een leer-sprint. Het doel was om de technieken die gebruikt gaan worden te leren. De volgende stap is om een begin te maken met de applicatie. De eerste stap zal zijn om een backend te maken.
 
 ## Code Repo
 
