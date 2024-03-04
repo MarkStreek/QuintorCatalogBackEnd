@@ -32,8 +32,9 @@
 - [Table of Contents](#table-of-contents)
 - [About Quintor](#about-quintor)
 - [About the project](#about-the-project)
+- [Unit Tests](#unit-tests)
 - [Built with](#built-with)
-- [Getting Started](#getting-started)
+- [React Project](#react-project)
 
 ## About Quintor
 
@@ -54,6 +55,10 @@ This project was created by students bioinformatics at the Hanze University of a
 
 The hardware tools are stored in a database. This information is served to the front end using a REST API.
 
+## Unit Tests
+
+>[![Run Tests](https://github.com/MarkStreek/QuintorCatalogBackEnd/actions/workflows/runTests.yml/badge.svg)](https://github.com/MarkStreek/QuintorCatalogBackEnd/actions/workflows/runTests.yml)
+
 ## Built with
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
@@ -63,9 +68,9 @@ The hardware tools are stored in a database. This information is served to the f
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 
-## Getting Started
+## React Project
 
-Fill in...
+The front end of this project can be found [here](https://github.com/MarkStreek/QuintorCatalogFrontEnd)
 
 
 
