@@ -24,11 +24,11 @@ Datum: 06 maart 2024
 
 ## Management Summary
 
-De Quintor catalogus zal een overzicht geven van alle aanwezige apparaten binnen Quintor. De status van elk apparaat zal live worden geüpdate wanneer de gebruiksstatus veranderd. Daarnaast zal de huidige locatie, huidige gebruiker en de specificaties te zien zijn met de applicatie. De productie van de applicatie is een minor project voor onze opleiding bio-informatica en zal daarom gratis zijn. We verwachten dat de productie van de applicatie een ruime vier/vijf maand zal duren.
+De Quintor catalogus zal een overzicht geven van alle aanwezige apparaten binnen Quintor. Ook zal de huidige locatie, huidige gebruiker en specificaties van apparaten te zien zijn in de applicatie. Op deze manier kan er dus snel gekeken worden welke gebruiker en specifiek apparaat in gebruik heeft. Verder zal de applicatie een functie krijgen waarmee de financieel directeur van Quintor goedkeuring kan geven bij een dubbele uitleen. De productie van de applicatie is een minor project voor onze opleiding bio-informatica en zal daarom gratis zijn. We verwachten dat de productie van de applicatie een ruime vier/vijf maand zal duren.
 
-De tijdlijn van de verschillende features is het volgende.......De release date voor de applicatie staat voor nu gepland in week 24 van 2024.
+De applicatie zal verschillende features bevatten. Deze features zullen over een tijdlijn ontwikkeld worden. Er zal gekeken worden naar de use cases. En aan de hand hiervan, wordt de tijdlijn opgesteld. De deadline van de applicatie staat voor nu gepland in week 24 van 2024.
 
-Aan de hand van onze applicatie zal het voor een systeembeheerder makkelijker zijn om de apparaten te beheren en te lokaliseren. Daarnaast zal het voor de technisch directeur ook makkelijker zijn om verzoeken tot uitleen goed te keuren
+Aan de hand van onze applicatie zal het voor een systeembeheerder makkelijker zijn om de apparaten te beheren en te lokaliseren. Daarnaast zal het voor de technisch directeur ook makkelijker zijn om verzoeken tot uitleen goed te keuren.
 
 ## Background and context
 
@@ -45,7 +45,7 @@ Verder helpt Quintor een groot scala aan studenten bij hun stages en/of afstudee
 
 Bij Quintor in Groningen wordt op dit moment handmatig hardware op een wikipagina bijgehouden. Denk hierbij aan monitoren of laptops die worden uitgeleend aan medewerkers. Uiteraard is dit niet wenselijk. Om te beginnen kost dit de systeembeheerder veel tijd en tevens is het ook erg foutgevoelig. Het is daarom voor hun zeer relevant om een software product te hebben die dit automatisch voor ze kan bijhouden.
 
-De applicatie die ontwikkeld zal worden zal door Quintor breed gebruikt worden om hardware in op te slaan. Verder zal deze applicatie ook worden gebruikt om aan te geven wie een apparaat in gebruikt heeft bij uitleen, of waar het ligt opgeslagen als het niet is uitgeleend. Tot slot zal de applicatie gebruikt worden om verzoeken goed te keuren bij een dubbele uitleen (bij een dubbele uitleen moet een technisch directeur toestemming geven).
+De applicatie die ontwikkeld zal worden, gaat door Quintor breed gebruikt worden om hardware in op te slaan. Verder zal deze applicatie ook worden gebruikt om aan te geven wie een apparaat in gebruikt heeft bij uitleen, of waar het ligt opgeslagen als het niet is uitgeleend. Tot slot zal de applicatie gebruikt worden om verzoeken goed te keuren bij een dubbele uitleen (bij een dubbele uitleen moet een technisch directeur toestemming geven).
 
 ## Requirements specifications
 
