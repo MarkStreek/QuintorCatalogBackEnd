@@ -21,12 +21,19 @@ jobs:
           MYSQL_PASSWORD: QUINTOR
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot_password"
+          --health-interval=5s
+          --health-timeout=10s
+          --health-retries=5
 
     steps:
-
       - name: Wait for MySQL to be ready
-        run: timeout 30 bash -c 'until mysqladmin ping -h mysql --silent; do echo "Waiting for MySQL to start..."; sleep 1; done'
+        run: timeout 60 bash -c 'until mysqladmin ping -h mysql --silent; do echo "Waiting for MySQL to start..."; sleep 1; done'
+
+      - name: Get MySQL logs
+        if: failure()
+        run: docker logs mysql
 
       - name: Check MySQL health
         run: mysql -h mysql -uroot -proot_password -e "SELECT 1" || exit 1
@@ -47,7 +54,6 @@ jobs:
         run: |
           mysql -u root -p$MYSQL_ROOT_PASSWORD -h localhost -e "CREATE DATABASE IF NOT EXISTS spring_db;"
           mysql -u root -p$MYSQL_ROOT_PASSWORD -h localhost spring_db < path/to/init.sql
-
 
       - name: Run tests
         run: cd BackEnd && ./gradlew test --continue --no-daemon --max-workers=2 --no-parallel
