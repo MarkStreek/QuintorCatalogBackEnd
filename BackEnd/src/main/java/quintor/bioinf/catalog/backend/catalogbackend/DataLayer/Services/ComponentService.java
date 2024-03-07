@@ -89,9 +89,7 @@ public class ComponentService {
     private ComponentSpecs createComponentSpecs(
             String storage
     ) {
-        ComponentSpecs componentSpecs = new ComponentSpecs();
-        componentSpecs.setStorage(storage);
-        return componentSpecs;
+        return new ComponentSpecs();
     }
 
     private Component createComponent(

@@ -12,29 +12,42 @@ public class ComponentSpecs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "storage")
-    private String storage;
+    @ManyToOne
+    @JoinColumn(name = "component_id")
+    private Component component;
 
-    @OneToMany(mappedBy = "componentSpecs")
-    private List<Component> components;
+    @ManyToOne
+    @JoinColumn(name = "specs_id")
+    private Specs specs;
+
+    @Column(name = "value")
+    private String value;
 
     public Long getId() {
         return id;
     }
 
-    public String getStorage() {
-        return storage;
+    public Component getComponent() {
+        return component;
     }
 
-    public void setStorage(String storage) {
-        this.storage = storage;
+    public void setComponent(Component component) {
+        this.component = component;
     }
 
-    public List<Component> getComponents() {
-        return components;
+    public Specs getSpecs() {
+        return specs;
     }
 
-    public void setComponents(List<Component> components) {
-        this.components = components;
+    public void setSpecs(Specs specs) {
+        this.specs = specs;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }
