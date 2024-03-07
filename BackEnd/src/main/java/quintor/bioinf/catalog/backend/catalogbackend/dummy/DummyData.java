@@ -1,4 +1,4 @@
-package quintor.bioinf.catalog.backend.catalogbackend.model;
+package quintor.bioinf.catalog.backend.catalogbackend.dummy;
 
 /**
  * DummyData is a simple model class that represents some dummy data

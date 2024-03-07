@@ -1,6 +1,4 @@
-package quintor.bioinf.catalog.backend.catalogbackend.repository;
-
-import quintor.bioinf.catalog.backend.catalogbackend.model.DummyData;
+package quintor.bioinf.catalog.backend.catalogbackend.dummy;
 
 import java.util.Arrays;
 import java.util.List;

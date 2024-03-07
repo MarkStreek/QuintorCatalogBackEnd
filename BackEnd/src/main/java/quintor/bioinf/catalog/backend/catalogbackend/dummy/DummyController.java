@@ -1,7 +1,5 @@
-package quintor.bioinf.catalog.backend.catalogbackend.controller;
+package quintor.bioinf.catalog.backend.catalogbackend.dummy;
 
-import quintor.bioinf.catalog.backend.catalogbackend.repository.DummyRepository;
-import quintor.bioinf.catalog.backend.catalogbackend.model.DummyData;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
