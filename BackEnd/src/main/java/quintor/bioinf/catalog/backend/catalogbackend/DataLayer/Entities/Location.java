@@ -10,11 +10,11 @@ import java.util.Objects;
 public class Location {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
-    private String name;
+    private String city;
 
     @Column(name = "address")
     private String address;
@@ -26,12 +26,12 @@ public class Location {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getCity() {
+        return city;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCity(String name) {
+        this.city = name;
     }
 
     public String getAddress() {
@@ -55,11 +55,11 @@ public class Location {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Location location = (Location) o;
-        return Objects.equals(name, location.name) && Objects.equals(address, location.address);
+        return Objects.equals(city, location.city) && Objects.equals(address, location.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, address);
+        return Objects.hash(city, address);
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public class ComponentSpecs {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "storage")

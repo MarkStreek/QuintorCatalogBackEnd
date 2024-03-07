@@ -1,5 +1,7 @@
 package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Component;
@@ -11,6 +13,8 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.Locati
 
 @Service
 public class ComponentService {
+
+    private static final Logger log = LoggerFactory.getLogger(ComponentService.class);
 
     private final ComponentRepository componentRepository;
     private final ComponentSpecsRepository componentSpecsRepository;
@@ -33,30 +37,72 @@ public class ComponentService {
             String model,
             String serialNumber,
             String invoiceNumber,
-            String locationName,
+            String city,
             String locationAddress,
             String componentSpecsStorage
     ) {
-        Location location = new Location();
-        location.setName(locationName);
-        location.setAddress(locationAddress);
-        try {
-            if (locationRepository.findByAddress(locationAddress) != null) {
-                Location findingLocation = locationRepository.findByAddress(locationAddress);
-
-                if (!findingLocation.equals(location)) {
-                    locationRepository.save(location);
-                } else {
-                    location = findingLocation;
-                }
-            }
-        } catch (Exception e) {
-            // log warn
+        log.info("Trying to add component");
+        log.info("Here");
+        Location location = createLocation(city, locationAddress);
+        if (!checkIfLocationExists(location)) {
+            locationRepository.save(location);
         }
-        locationRepository.save(location);
-        ComponentSpecs componentSpecs = new ComponentSpecs();
-        componentSpecs.setStorage(componentSpecsStorage);
+
+        ComponentSpecs componentSpecs = createComponentSpecs(componentSpecsStorage);
         componentSpecsRepository.save(componentSpecs);
+        componentRepository.save(createComponent(
+                name,
+                brandName,
+                model,
+                serialNumber,
+                invoiceNumber,
+                componentSpecs,
+                location
+        ));
+        log.info("Component Successfully added!");
+    }
+
+    protected Location createLocation(
+            String city,
+            String locationAddress
+    ) {
+        Location location = new Location();
+        if (city.isEmpty() || locationAddress.isEmpty()) {
+            throw new IllegalArgumentException();
+
+        }
+        if (city.matches("^[a-zA-Z]+$") && locationAddress.matches("^[A-z]{1,} [0-9]{1,}")) {
+                location.setCity(city);
+                location.setAddress(locationAddress);
+            } else throw new IllegalArgumentException();
+        return location;
+    }
+
+    protected boolean checkIfLocationExists(Location findingLocation) {
+        if (locationRepository.findByAddress(findingLocation.getAddress()) != null) {
+            Location location = locationRepository.findByAddress(findingLocation.getAddress());
+            return findingLocation.equals(location);
+        }
+        return false;
+    }
+
+    private ComponentSpecs createComponentSpecs(
+            String storage
+    ) {
+        ComponentSpecs componentSpecs = new ComponentSpecs();
+        componentSpecs.setStorage(storage);
+        return componentSpecs;
+    }
+
+    private Component createComponent(
+            String name,
+            String brandName,
+            String model,
+            String serialNumber,
+            String invoiceNumber,
+            ComponentSpecs componentSpecs,
+            Location location
+    ) {
         Component component = new Component();
         component.setName(name);
         component.setBrandName(brandName);
@@ -65,6 +111,8 @@ public class ComponentService {
         component.setInvoiceNumber(invoiceNumber);
         component.setComponentSpecs(componentSpecs);
         component.setLocation(location);
-        componentRepository.save(component);
+
+        return component;
     }
+
 }

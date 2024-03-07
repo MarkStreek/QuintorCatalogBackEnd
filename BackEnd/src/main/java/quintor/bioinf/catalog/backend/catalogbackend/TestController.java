@@ -11,6 +11,11 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.Componen
 @RequestMapping("/test")
 public class TestController {
 
+    /*
+    mysql> create database spring_db; -- Creates the new database
+    mysql> create user 'springuser'@'%' identified by 'QUINTOR';
+    mysql> grant all on db_example.* to 'springuser'@'%';
+     */
 
     private final ComponentService componentService;
 
@@ -31,7 +36,7 @@ public class TestController {
             @RequestParam String model,
             @RequestParam String serialNumber,
             @RequestParam String invoiceNumber,
-            @RequestParam String locationName,
+            @RequestParam String city,
             @RequestParam String locationAddress,
             @RequestParam String componentSpecsStorage
     ) {
@@ -42,7 +47,7 @@ public class TestController {
                     model,
                     serialNumber,
                     invoiceNumber,
-                    locationName,
+                    city,
                     locationAddress,
                     componentSpecsStorage
             );
