@@ -10,8 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: windows-latest
-
+    runs-on: ubuntu-latest
     services:
       mysql:
         image: mysql:latest
