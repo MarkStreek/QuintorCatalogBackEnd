@@ -30,7 +30,7 @@ jobs:
         run: timeout 30 bash -c 'until mysqladmin ping -h mysql --silent; do echo "Waiting for MySQL to start..."; sleep 1; done'
 
       - name: Check MySQL health
-        run: mysql -h mysql -uroot -proot_password -e "SELECT 1" || exit 1
+        run: mysql -h mysql -u root -p root_password -e "SELECT 1" || exit 1
 
       - name: Checkout code
         uses: actions/checkout@v2
