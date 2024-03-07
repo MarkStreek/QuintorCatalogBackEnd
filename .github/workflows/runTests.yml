@@ -12,7 +12,25 @@ jobs:
   test:
     runs-on: windows-latest
 
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: spring_db
+          MYSQL_USER: springuser
+          MYSQL_PASSWORD: QUINTOR
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
+      - name: Wait for MySQL to be ready
+        run: timeout 30 bash -c 'until mysqladmin ping -h mysql --silent; do echo "Waiting for MySQL to start..."; sleep 1; done'
+
+      - name: Check MySQL health
+        run: mysql -h mysql -uroot -proot_password -e "SELECT 1" || exit 1
+
       - name: Checkout code
         uses: actions/checkout@v2
 
