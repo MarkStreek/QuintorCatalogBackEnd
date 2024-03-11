@@ -50,4 +50,5 @@ public class ComponentSpecs {
     public void setValue(String value) {
         this.value = value;
     }
+
 }
