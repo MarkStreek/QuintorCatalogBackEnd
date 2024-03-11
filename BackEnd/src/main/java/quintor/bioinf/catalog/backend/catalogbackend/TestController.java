@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.ComponentService;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.MainComponentService;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.createSpecsService;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -19,11 +21,13 @@ public class TestController {
     mysql> grant all on db_example.* to 'springuser'@'%';
      */
 
-    private final ComponentService componentService;
+    private final MainComponentService mainComponentService;
+    private createSpecsService createSpecsService;
 
     @Autowired
-    public TestController(ComponentService componentService) {
-        this.componentService = componentService;
+    public TestController(MainComponentService mainComponentService, createSpecsService createSpecsService) {
+        this.mainComponentService = mainComponentService;
+        this.createSpecsService = createSpecsService;
     }
 
     @RequestMapping("/test")
@@ -39,20 +43,22 @@ public class TestController {
             @RequestParam String serialNumber,
             @RequestParam String invoiceNumber,
             @RequestParam String city,
-            @RequestParam String locationAddress,
-            @RequestParam Map<String, String> componentSpecsStorage
+            @RequestParam String locationAddress
     ) {
+        Map<String, Object> componentSpecsStorage = new HashMap<>();
+        componentSpecsStorage.put("opslag", "test");
+        componentSpecsStorage.put("snelheid", 4);
         try {
-            componentService.addComponent(
-                    name,
-                    brandName,
-                    model,
-                    serialNumber,
-                    invoiceNumber,
-                    city,
-                    locationAddress,
-                    componentSpecsStorage
-            );
+//            mainComponentService.addComponent(
+//                    name,
+//                    brandName,
+//                    model,
+//                    serialNumber,
+//                    invoiceNumber,
+//                    city,
+//                    locationAddress,
+//                    componentSpecsStorage
+            this.createSpecsService.addComponentSpecs(componentSpecsStorage);
             return "Added component";
         } catch (Exception e) {
             return "Failed to add component";

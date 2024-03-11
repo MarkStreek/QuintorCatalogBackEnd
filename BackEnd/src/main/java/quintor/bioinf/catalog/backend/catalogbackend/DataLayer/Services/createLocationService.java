@@ -11,7 +11,6 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.Locati
 public class createLocationService {
 
     private static final Logger log = LoggerFactory.getLogger(createLocationService.class);
-
     private final LocationRepository locationRepository;
 
     @Autowired
