@@ -35,4 +35,5 @@ public class Specs {
     public void setDatatype(String datatype) {
         this.datatype = datatype;
     }
+
 }

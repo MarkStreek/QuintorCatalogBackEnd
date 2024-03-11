@@ -93,4 +93,5 @@ public class Component {
     public void setComponentSpecs(ComponentSpecs componentSpecs) {
         this.componentSpecs = componentSpecs;
     }
+
 }
