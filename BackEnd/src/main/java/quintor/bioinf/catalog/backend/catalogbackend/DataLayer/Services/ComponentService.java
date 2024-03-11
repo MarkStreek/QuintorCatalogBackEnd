@@ -4,33 +4,47 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Component;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.ComponentSpecs;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Location;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.ComponentRepository;
-import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.ComponentSpecsRepository;
-import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.LocationRepository;
+
+import java.util.Map;
 
 @Service
 public class ComponentService {
 
     private static final Logger log = LoggerFactory.getLogger(ComponentService.class);
-
+    private final createLocationService createLocationService;
+    private final createSpecsService createSpecsService;
     private final ComponentRepository componentRepository;
-    private final ComponentSpecsRepository componentSpecsRepository;
-    private final LocationRepository locationRepository;
 
     @Autowired
     public ComponentService(
             ComponentRepository componentRepository,
-            ComponentSpecsRepository componentSpecsRepository,
-            LocationRepository locationRepository
-    ) {
+            createSpecsService createSpecsService,
+            createLocationService createLocationService)
+    {
         this.componentRepository = componentRepository;
-        this.componentSpecsRepository = componentSpecsRepository;
-        this.locationRepository = locationRepository;
+        this.createSpecsService = createSpecsService;
+        this.createLocationService = createLocationService;
     }
 
+    /**
+     * Main Service method that adds a component to the database.
+     *  1. Location is created and added to the database
+     *  2. Component Specs are created and added to the database
+     *  3. Location, component specs and other characteristics like brand name are added to the component
+     *  4. Component is saved to the database
+     *
+     * @param name Name of the component
+     * @param brandName Brand name of the component
+     * @param model Model of the component
+     * @param serialNumber Serial number of the component
+     * @param invoiceNumber Invoice number of the component
+     * @param city City of the location
+     * @param locationAddress Address of the location
+     * @param componentSpecsStorage Map of component specs
+     */
     public void addComponent(
             String name,
             String brandName,
@@ -39,78 +53,9 @@ public class ComponentService {
             String invoiceNumber,
             String city,
             String locationAddress,
-            String componentSpecsStorage
-    ) {
-        log.info("Trying to add component");
-        log.info("Here");
-        Location location = createLocation(city, locationAddress);
-        if (!checkIfLocationExists(location)) {
-            locationRepository.save(location);
-        }
-
-        ComponentSpecs componentSpecs = createComponentSpecs(componentSpecsStorage);
-        componentSpecsRepository.save(componentSpecs);
-        componentRepository.save(createComponent(
-                name,
-                brandName,
-                model,
-                serialNumber,
-                invoiceNumber,
-                componentSpecs,
-                location
-        ));
-        log.info("Component Successfully added!");
+            Map<String, String> componentSpecsStorage)
+    {
+        Location location = this.createLocationService.addLocation(city, locationAddress);
+        ComponentSpecs componentSpecs = this.createSpecsService.addComponentSpecs(componentSpecsStorage);
     }
-
-    protected Location createLocation(
-            String city,
-            String locationAddress
-    ) {
-        Location location = new Location();
-        if (city.isEmpty() || locationAddress.isEmpty()) {
-            throw new IllegalArgumentException();
-
-        }
-        if (city.matches("^[a-zA-Z]+$") && locationAddress.matches("^[A-z]{1,} [0-9]{1,}")) {
-                location.setCity(city);
-                location.setAddress(locationAddress);
-            } else throw new IllegalArgumentException();
-        return location;
-    }
-
-    protected boolean checkIfLocationExists(Location findingLocation) {
-        if (locationRepository.findByAddress(findingLocation.getAddress()) != null) {
-            Location location = locationRepository.findByAddress(findingLocation.getAddress());
-            return findingLocation.equals(location);
-        }
-        return false;
-    }
-
-    private ComponentSpecs createComponentSpecs(
-            String storage
-    ) {
-        return new ComponentSpecs();
-    }
-
-    private Component createComponent(
-            String name,
-            String brandName,
-            String model,
-            String serialNumber,
-            String invoiceNumber,
-            ComponentSpecs componentSpecs,
-            Location location
-    ) {
-        Component component = new Component();
-        component.setName(name);
-        component.setBrandName(brandName);
-        component.setModel(model);
-        component.setSerialNumber(serialNumber);
-        component.setInvoiceNumber(invoiceNumber);
-        component.setComponentSpecs(componentSpecs);
-        component.setLocation(location);
-
-        return component;
-    }
-
 }

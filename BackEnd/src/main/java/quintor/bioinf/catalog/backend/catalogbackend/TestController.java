@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.ComponentService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/test")
 public class TestController {
@@ -38,7 +40,7 @@ public class TestController {
             @RequestParam String invoiceNumber,
             @RequestParam String city,
             @RequestParam String locationAddress,
-            @RequestParam String componentSpecsStorage
+            @RequestParam Map<String, String> componentSpecsStorage
     ) {
         try {
             componentService.addComponent(
