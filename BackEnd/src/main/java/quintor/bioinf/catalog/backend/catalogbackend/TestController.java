@@ -1,11 +1,11 @@
 package quintor.bioinf.catalog.backend.catalogbackend;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.ComponentService;
+import org.springframework.web.bind.annotation.*;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.MainComponentService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/test")
@@ -17,11 +17,11 @@ public class TestController {
     mysql> grant all on db_example.* to 'springuser'@'%';
      */
 
-    private final ComponentService componentService;
+    private final MainComponentService mainComponentService;
 
     @Autowired
-    public TestController(ComponentService componentService) {
-        this.componentService = componentService;
+    public TestController(MainComponentService mainComponentService) {
+        this.mainComponentService = mainComponentService;
     }
 
     @RequestMapping("/test")
@@ -38,10 +38,10 @@ public class TestController {
             @RequestParam String invoiceNumber,
             @RequestParam String city,
             @RequestParam String locationAddress,
-            @RequestParam String componentSpecsStorage
+            @RequestBody Map<String, Object> specs
     ) {
         try {
-            componentService.addComponent(
+            mainComponentService.addComponent(
                     name,
                     brandName,
                     model,
@@ -49,8 +49,7 @@ public class TestController {
                     invoiceNumber,
                     city,
                     locationAddress,
-                    componentSpecsStorage
-            );
+                    specs);
             return "Added component";
         } catch (Exception e) {
             return "Failed to add component";

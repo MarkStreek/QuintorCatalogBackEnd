@@ -1,8 +1,7 @@
 package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities;
 
 import jakarta.persistence.*;
-
-import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "componentSpecs")
@@ -51,4 +50,16 @@ public class ComponentSpecs {
         this.value = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ComponentSpecs that = (ComponentSpecs) o;
+        return Objects.equals(specs, that.specs) && Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(specs, value);
+    }
 }
