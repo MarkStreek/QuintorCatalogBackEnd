@@ -30,22 +30,6 @@ public class CreateSpecsService {
     }
 
     /**
-     * Main method that adds component specs to the database.
-     * It first checks if the specs already exist. If the specs already exist, it returns the specs.
-     * If the specs do not exist, it creates new specs and saves them to the database.
-     * Then it returns the new created specs.
-     *
-     * @param specs Storage of the component specs
-     * @param component The component to which the specs belong
-     */
-    public void addComponentSpecs(
-            Map<String, Object> specs,
-            Component component)
-    {
-        this.createComponentSpecs(specs, component);
-    }
-
-    /**
      * Method that creates a new ComponentSpecs:
      *  1. The already used specs are retrieved from database
      *  2. The specs are iterated and checked if they already exist:
@@ -57,7 +41,7 @@ public class CreateSpecsService {
      * @param specs All the specs of the component
      * @param component The component to which the specs belong
      */
-    private void createComponentSpecs(Map<String, Object> specs, Component component) {
+    public void createComponentSpecs(Map<String, Object> specs, Component component) {
         Iterable<Specs> specsIterable = this.specsRepository.findAll();
 
         // TODO: Maybe it's better to loop through all the specs and
@@ -67,10 +51,7 @@ public class CreateSpecsService {
 
         for (String key : specs.keySet()) {
             ComponentSpecs componentSpecs = new ComponentSpecs();
-            // Bij het toevoegen van de component aan de componentspecs gaat het fout:
-            //    - FOUTMELDING: Hibernate: insert into component_specs (component_id,specs_id,value) values (?,?,?)
-
-            //componentSpecs.setComponent(component);
+            componentSpecs.setComponent(component);
 
             Specs spec;
             if (this.alreadyUsedSpecs.contains(key)) {

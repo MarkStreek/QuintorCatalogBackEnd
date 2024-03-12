@@ -62,7 +62,7 @@ public class CreateLocationService {
             log.error("City or locationAddress is empty");
             throw new IllegalArgumentException();
         }
-        if (city.matches("^[a-zA-Z]+$") && locationAddress.matches("^[A-z]{1,} [0-9]{1,}")) {
+        if (city.matches("^[a-zA-Z]+$") && locationAddress.matches("^[A-z]+ [0-9]+")) {
             location.setCity(city);
             location.setAddress(locationAddress);
         } else {

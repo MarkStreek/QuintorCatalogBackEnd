@@ -8,4 +8,6 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Specs;
 public interface SpecsRepository extends CrudRepository<Specs, Long> {
 
     Specs findByName(String name);
+
+
 }

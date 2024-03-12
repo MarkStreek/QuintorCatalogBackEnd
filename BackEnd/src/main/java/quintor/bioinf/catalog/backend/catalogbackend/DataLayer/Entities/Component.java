@@ -29,11 +29,6 @@ public class Component {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @ManyToOne
-    @JoinColumn(name = "componentSpecs_id")
-    private ComponentSpecs componentSpecs;
-
-
     public Long getId() {
         return id;
     }
@@ -85,13 +80,4 @@ public class Component {
     public void setLocation(Location location) {
         this.location = location;
     }
-
-    public ComponentSpecs getComponentSpecs() {
-        return componentSpecs;
-    }
-
-    public void setComponentSpecs(ComponentSpecs componentSpecs) {
-        this.componentSpecs = componentSpecs;
-    }
-
 }

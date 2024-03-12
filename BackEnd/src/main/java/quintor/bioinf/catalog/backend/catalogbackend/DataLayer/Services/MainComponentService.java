@@ -32,10 +32,13 @@ public class MainComponentService {
     /**
      * Main Service method that adds a component to the database.
      *  1. Create the component with the give characteristics
-     *  1. Location is created and added to the database
-     *  2. Component Specs are created and added to the database
-     *  3. The Location and Component Specs are added to the component
+     *  2. Location is created and added to the database
+     *  3. The Location is added to the component
      *  4. Component is saved to the database
+     *  5. Component Specs are created and added to the database
+     *  <br>
+     *  The Component must first be stored in the database,
+     *  before it can be used in the ComponentSpecs
      *
      * @param name Name of the component
      * @param brandName Brand name of the component
@@ -60,13 +63,13 @@ public class MainComponentService {
         Component component = this.createComponent(name, brandName, model, serialNumber, invoiceNumber);
         // 2 - Create the location
         Location location = this.createLocationService.addLocation(city, locationAddress);
-        // 2 - Create component specs
-        this.createSpecsService.addComponentSpecs(specs, component);
-        // 3 - Add location and ComponentSpecs to the component
+        // 3 - Add location to the component
         component.setLocation(location);
-        // Voeg de componentSpec toe aan de component
-        // component.setComponentSpecs(componentSpecs);
+        // 4 - Save the component to the database
         this.saveComponent(component);
+        // 5 - Create component specs
+        //this.createSpecsService.addComponentSpecs(specs, component);
+        this.createSpecsService.createComponentSpecs(specs,component);
     }
 
 
