@@ -8,13 +8,13 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Location
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.LocationRepository;
 
 @Service
-public class createLocationService {
+public class CreateLocationService {
 
-    private static final Logger log = LoggerFactory.getLogger(createLocationService.class);
+    private static final Logger log = LoggerFactory.getLogger(CreateLocationService.class);
     private final LocationRepository locationRepository;
 
     @Autowired
-    public createLocationService(LocationRepository locationRepository) {
+    public CreateLocationService(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 

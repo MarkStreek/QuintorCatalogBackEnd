@@ -1,12 +1,13 @@
 package quintor.bioinf.catalog.backend.catalogbackend;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.CreateSpecsService;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.MainComponentService;
-import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.createSpecsService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,10 +23,10 @@ public class TestController {
      */
 
     private final MainComponentService mainComponentService;
-    private createSpecsService createSpecsService;
+    private CreateSpecsService createSpecsService;
 
     @Autowired
-    public TestController(MainComponentService mainComponentService, createSpecsService createSpecsService) {
+    public TestController(MainComponentService mainComponentService, CreateSpecsService createSpecsService) {
         this.mainComponentService = mainComponentService;
         this.createSpecsService = createSpecsService;
     }
@@ -43,22 +44,21 @@ public class TestController {
             @RequestParam String serialNumber,
             @RequestParam String invoiceNumber,
             @RequestParam String city,
-            @RequestParam String locationAddress
+            @RequestParam String locationAddress,
+            @RequestParam String storage
     ) {
-        Map<String, Object> componentSpecsStorage = new HashMap<>();
-        componentSpecsStorage.put("opslag", "test");
-        componentSpecsStorage.put("snelheid", 4);
+        Map<String, Object> specs = new HashMap<>();
+        specs.put("storage", storage);
         try {
-//            mainComponentService.addComponent(
-//                    name,
-//                    brandName,
-//                    model,
-//                    serialNumber,
-//                    invoiceNumber,
-//                    city,
-//                    locationAddress,
-//                    componentSpecsStorage
-            this.createSpecsService.addComponentSpecs(componentSpecsStorage);
+            mainComponentService.addComponent(
+                    name,
+                    brandName,
+                    model,
+                    serialNumber,
+                    invoiceNumber,
+                    city,
+                    locationAddress,
+                    specs);
             return "Added component";
         } catch (Exception e) {
             return "Failed to add component";
