@@ -68,7 +68,6 @@ public class MainComponentService {
         // 4 - Save the component to the database
         this.saveComponent(component);
         // 5 - Create component specs
-        //this.createSpecsService.addComponentSpecs(specs, component);
         this.createSpecsService.createComponentSpecs(specs,component);
     }
 

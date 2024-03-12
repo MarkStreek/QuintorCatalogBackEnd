@@ -1,10 +1,7 @@
 package quintor.bioinf.catalog.backend.catalogbackend;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.MainComponentService;
 
 import java.util.HashMap;
@@ -41,11 +38,8 @@ public class TestController {
             @RequestParam String invoiceNumber,
             @RequestParam String city,
             @RequestParam String locationAddress,
-            @RequestParam String storage
+            @RequestBody Map<String, Object> specs
     ) {
-        Map<String, Object> specs = new HashMap<>();
-        specs.put("storage", storage);
-        specs.put("memory", "8GB");
         try {
             mainComponentService.addComponent(
                     name,
