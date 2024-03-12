@@ -71,34 +71,39 @@ public class MainComponentService {
         this.createSpecsService.createComponentSpecs(specs,component);
     }
 
-
     /**
-     * Method that creates a component object
-     * It uses the location and specs that are created in:
-     *  1. CreateLocationService
-     *  2. CreateSpecsService
+     * This method creates a new Component object and sets its properties based on the provided arguments.
+     * It uses varargs to accept an arbitrary number of arguments,
+     * which should correspond to the properties of the Component.
+     * The order of the arguments should be: name, brandName, model, serialNumber, invoiceNumber.
      *
-     * @param name Name of the component
-     * @param brandName Brand name of the component
-     * @param model Model of the component
-     * @param serialNumber Serial number of the component
-     * @param invoiceNumber Invoice number of the component
-     * @return component the newly created component
+     * @param args The properties of the Component.
+     * @return A new Component object with its properties set to the provided arguments.
+     * @throws IllegalArgumentException If any of the provided arguments are null or empty.
      */
-    private Component createComponent(
-            String name,
-            String brandName,
-            String model,
-            String serialNumber,
-            String invoiceNumber)
-    {
-        Component component = new Component();
-        component.setName(name);
-        component.setBrandName(brandName);
-        component.setModel(model);
-        component.setSerialNumber(serialNumber);
-        component.setInvoiceNumber(invoiceNumber);
+    public Component createComponent(String... args) {
+        // The names of the arguments, used for the exception message.
+        String[] argNames = {"name", "brandName", "model", "serialNumber", "invoiceNumber"};
 
+        // Create a new Component object.
+        Component component = new Component();
+
+        // Iterate over the provided arguments.
+        for (int i = 0; i < args.length; i++) {
+            // If the argument is null or empty, throw an IllegalArgumentException.
+            if (args[i] == null || args[i].isEmpty()) {
+                throw new IllegalArgumentException(argNames[i] + " cannot be null or empty");
+            }
+        }
+
+        // Set the properties of the Component object based on the provided arguments.
+        component.setName(args[0]);
+        component.setBrandName(args[1]);
+        component.setModel(args[2]);
+        component.setSerialNumber(args[3]);
+        component.setInvoiceNumber(args[4]);
+
+        // Return the created Component object.
         return component;
     }
 

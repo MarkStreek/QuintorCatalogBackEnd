@@ -60,10 +60,12 @@ public class CreateSpecsService {
                 spec = new Specs();
                 spec.setName(key);
                 this.specsRepository.save(spec);
+                log.info("A new Spec is created and saved to the database");
             }
             componentSpecs.setSpecs(spec);
             componentSpecs.setValue(specs.get(key).toString());
             this.saveComponentSpecs(componentSpecs);
+            log.info("ComponentSpec is successfully saved to the database");
         }
     }
 
