@@ -1,6 +1,5 @@
 package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
         "spring.datasource.password=",
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
 })
-class CreateLocationServiceTest {
+class LocationServiceTest {
 
     @Autowired
-    private CreateLocationService createLocationService;
+    private LocationService locationService;
 
     @Test
     void createLocation_ValidCityAndAddress_ReturnsLocation() {
-        Location location = createLocationService.createLocation("Basement","City", "Street 123");
+        Location location = locationService.createLocation("Basement","City", "Street 123");
         assertNotNull(location);
         assertEquals("City", location.getCity());
         assertEquals("Street 123", location.getAddress());
@@ -31,21 +30,21 @@ class CreateLocationServiceTest {
     @Test
     void createLocation_EmptyCity_ThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            createLocationService.createLocation("Server Room","", "Street 123");
+            locationService.createLocation("Server Room","", "Street 123");
         });
     }
 
     @Test
     void createLocation_EmptyAddress_ThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            createLocationService.createLocation("Server Room","City", "");
+            locationService.createLocation("Server Room","City", "");
         });
     }
 
     @Test
     void createLocation_InvalidAddress_ThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            createLocationService.createLocation("", "", "");
+            locationService.createLocation("", "", "");
         });
     }
 }

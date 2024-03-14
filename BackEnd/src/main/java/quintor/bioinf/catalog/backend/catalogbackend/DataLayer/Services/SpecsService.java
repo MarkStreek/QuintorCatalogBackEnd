@@ -23,16 +23,16 @@ import java.util.Map;
  * @see SpecsRepository
  */
 @Service
-public class CreateSpecsService {
+public class SpecsService {
 
-    private static final Logger log = LoggerFactory.getLogger(CreateSpecsService.class);
+    private static final Logger log = LoggerFactory.getLogger(SpecsService.class);
     private final ComponentSpecsRepository componentSpecsRepository;
     private final SpecsRepository specsRepository;
 
     private final List<String> alreadyUsedSpecs = new ArrayList<>();
 
     @Autowired
-    public CreateSpecsService(ComponentSpecsRepository componentSpecsRepository, SpecsRepository specsRepository) {
+    public SpecsService(ComponentSpecsRepository componentSpecsRepository, SpecsRepository specsRepository) {
         this.componentSpecsRepository = componentSpecsRepository;
         this.specsRepository = specsRepository;
     }

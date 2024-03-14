@@ -3,9 +3,6 @@ package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Component;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.ComponentSpecs;
@@ -26,7 +23,7 @@ import static org.mockito.Mockito.*;
         "spring.datasource.password=",
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
 })
-public class CreateSpecsServiceTests {
+public class SpecsServiceTests {
 
     @Mock
     private ComponentSpecsRepository componentSpecsRepository;
@@ -35,7 +32,7 @@ public class CreateSpecsServiceTests {
     private SpecsRepository specsRepository;
 
     @InjectMocks
-    private CreateSpecsService createSpecsService;
+    private SpecsService specsService;
 
     @Test
     public void testCreateComponentSpecs() {
@@ -53,7 +50,7 @@ public class CreateSpecsServiceTests {
         when(specsRepository.findByName(anyString())).thenReturn(spec1);
         when(componentSpecsRepository.save(any(ComponentSpecs.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        createSpecsService.createComponentSpecs(specsMap, component);
+        specsService.createComponentSpecs(specsMap, component);
 
         verify(specsRepository, times(2)).findByName(anyString());
         verify(componentSpecsRepository, times(2)).save(any(ComponentSpecs.class));
@@ -76,7 +73,7 @@ public class CreateSpecsServiceTests {
         when(specsRepository.findAll()).thenReturn(specsList);
         when(specsRepository.findByName(anyString())).thenReturn(spec1);
         when(componentSpecsRepository.save(any(ComponentSpecs.class))).thenAnswer(i -> i.getArguments()[0]);
-        createSpecsService.createComponentSpecs(specsMap, component);
+        specsService.createComponentSpecs(specsMap, component);
 
         verify(specsRepository, times(2)).findByName(anyString());
         verify(specsRepository, times(1)).save(any(Specs.class));
@@ -101,7 +98,7 @@ public class CreateSpecsServiceTests {
         when(specsRepository.findByName(anyString())).thenReturn(spec1);
         when(componentSpecsRepository.save(any(ComponentSpecs.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        createSpecsService.createComponentSpecs(specsMap, component);
+        specsService.createComponentSpecs(specsMap, component);
 
         verify(specsRepository, times(1)).findByName(anyString());
         verify(specsRepository, times(3)).save(any(Specs.class));
@@ -122,7 +119,7 @@ public class CreateSpecsServiceTests {
 
         when(specsRepository.findAll()).thenReturn(specsList);
         when(componentSpecsRepository.save(any(ComponentSpecs.class))).thenAnswer(i -> i.getArguments()[0]);
-        createSpecsService.createComponentSpecs(specsMap, component);
+        specsService.createComponentSpecs(specsMap, component);
 
         verify(specsRepository, times(4)).save(any(Specs.class));
         verify(componentSpecsRepository, times(4)).save(any(ComponentSpecs.class));
@@ -134,7 +131,7 @@ public class CreateSpecsServiceTests {
         Component component = new Component();
 
         assertThrows(IllegalArgumentException.class,
-                () -> createSpecsService.createComponentSpecs(specsMap, component));
+                () -> specsService.createComponentSpecs(specsMap, component));
     }
 
     @Test
@@ -147,7 +144,7 @@ public class CreateSpecsServiceTests {
         componentSpecs.setComponent(com);
 
         when(componentSpecsRepository.findByComponent(com)).thenReturn(List.of(componentSpecs));
-        createSpecsService.deleteComponentSpecs(com);
+        specsService.deleteComponentSpecs(com);
         verify(componentSpecsRepository, times(1)).deleteAll(any());
     }
 }

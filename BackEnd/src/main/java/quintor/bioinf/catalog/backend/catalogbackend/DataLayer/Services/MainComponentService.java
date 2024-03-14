@@ -16,29 +16,29 @@ import java.util.Optional;
  * The main service method of the application. The service class is autowired by a controller class.
  * <p>
  * The service class is responsible for adding, deleting and updating components in the database.
- * For these operations, CreateLocationService and CreateComponentSpecs are required as well.
+ * For these operations, LocationService and CreateComponentSpecs are required as well.
  * Therefore, the service class uses methods from these services to add, delete and update the components.
  *
- * @see CreateLocationService
- * @see CreateSpecsService
+ * @see LocationService
+ * @see SpecsService
  */
 @Service
 public class MainComponentService {
 
     private static final Logger log = LoggerFactory.getLogger(MainComponentService.class);
-    private final CreateLocationService createLocationService;
-    private final CreateSpecsService createSpecsService;
+    private final LocationService locationService;
+    private final SpecsService specsService;
     private final ComponentRepository componentRepository;
 
     @Autowired
     public MainComponentService(
             ComponentRepository componentRepository,
-            CreateSpecsService createSpecsService,
-            CreateLocationService createLocationService)
+            SpecsService specsService,
+            LocationService locationService)
     {
         this.componentRepository = componentRepository;
-        this.createSpecsService = createSpecsService;
-        this.createLocationService = createLocationService;
+        this.specsService = specsService;
+        this.locationService = locationService;
     }
 
     /**
@@ -77,13 +77,13 @@ public class MainComponentService {
         // 1 - Create the component
         Component component = this.createComponent(name, brandName, model, serialNumber, invoiceNumber);
         // 2 - Create the location
-        Location location = this.createLocationService.addLocation(locationName, city, locationAddress);
+        Location location = this.locationService.addLocation(locationName, city, locationAddress);
         // 3 - Add location to the component
         component.setLocation(location);
         // 4 - Save the component to the database
         this.saveComponent(component);
         // 5 - Create component specs
-        this.createSpecsService.createComponentSpecs(specs,component);
+        this.specsService.createComponentSpecs(specs,component);
     }
 
     /**
@@ -147,7 +147,7 @@ public class MainComponentService {
             Optional<Component> optionalComponent = this.componentRepository.findById(Id);
             if (optionalComponent.isPresent()) {
                 Component component = optionalComponent.get();
-                this.createSpecsService.deleteComponentSpecs(component);
+                this.specsService.deleteComponentSpecs(component);
                 this.componentRepository.deleteById(Id);
             } else {
                 log.error("No component found with the given ID");
