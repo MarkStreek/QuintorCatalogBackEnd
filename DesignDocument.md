@@ -19,14 +19,28 @@ Datum: 06 maart 2024
     - [User stories](#user-stories)
     - [Use cases](#use-cases)
     - [Technical requirements and maintenance](#technical-requirements-and-maintenance)
+      - [Maintenance](#maintenance)
   - [Current status of development](#current-status-of-development)
   - [Code Repo](#code-repo)
 
 ## Management Summary
 
-De Quintor catalogus zal een overzicht geven van alle aanwezige apparaten binnen Quintor. Ook zal de huidige locatie, huidige gebruiker en specificaties van apparaten te zien zijn in de applicatie. Op deze manier kan er dus snel gekeken worden welke gebruiker en specifiek apparaat in gebruik heeft. Verder zal de applicatie een functie krijgen waarmee de financieel directeur van Quintor goedkeuring kan geven bij een dubbele uitleen. De productie van de applicatie is een minor project voor onze opleiding bio-informatica en zal daarom gratis zijn. We verwachten dat de productie van de applicatie een ruime vier/vijf maand zal duren.
+De Quintor catalogus zal een overzicht geven van alle aanwezige apparaten binnen Quintor. Ook zal de huidige locatie, gebruiker en specificaties van apparaten te zien zijn in de applicatie. Op deze manier kan er dus snel gekeken worden welke gebruiker en specifiek apparaat in gebruik heeft. Verder zal de applicatie een functie krijgen waarmee de financieel directeur (CTO) van Quintor goedkeuring kan geven bij een dubbele uitleen, want als een medewerker een tweede apparaat in gebruik wil nemen, moet daar goedkeuring voor gegeven worden.
 
-De applicatie zal verschillende features bevatten. Deze features zullen over een tijdlijn ontwikkeld worden. Er zal gekeken worden naar de use cases. En aan de hand hiervan, wordt de tijdlijn opgesteld. De deadline van de applicatie staat voor nu gepland in week 24 van 2024.
+Om een globale schatting te geven van de kosten van de applicatie, zal er een simpele rekensom worden gemaakt. De kosten van de applicatie zullen bestaan uit de uren die de ontwikkelaars aan de applicatie werken. De kosten van een junior software developer zijn ongeveer € 50,- per uur.
+
+Het project zal ongeveer 18 weken in beslag nemen. Beiden zullen we ongeveer 25-30 uur per week aan het project werken. Dit betekent dat er in totaal ongeveer 900-1080 uur aan het project zal worden gewerkt. Dit betekent dat de kosten van de applicatie ongeveer € 45.000,- tot € 54.000,- zullen zijn.
+
+De applicatie zal verschillende features bevatten. Deze features zullen over een tijdlijn ontwikkeld worden. Er zal gekeken worden naar de use cases.
+
+De milestones van de applicatie zullen zijn:
+
+1. Een eenvoudige pagina waarop alle hardware componenten getoond worden.
+2. Een pagina waarop hardware componenten toegevoegd, verwijderd, aangepast en gefilterd kan worden.
+3. Een authenticatielaag die de gebruiker toegang geeft tot de verschillende pagina's.
+4. Een uitleen verzoek kunnen aanmaken voor een CTO goedkeuring.
+
+ De deadline van de applicatie staat voor nu gepland in week 24 van 2024.
 
 Aan de hand van onze applicatie zal het voor een systeembeheerder makkelijker zijn om de apparaten te beheren en te lokaliseren. Daarnaast zal het voor de technisch directeur ook makkelijker zijn om verzoeken tot uitleen goed te keuren.
 
@@ -45,7 +59,7 @@ Verder helpt Quintor een groot scala aan studenten bij hun stages en/of afstudee
 
 Bij Quintor in Groningen wordt op dit moment handmatig hardware op een wikipagina bijgehouden. Denk hierbij aan monitoren of laptops die worden uitgeleend aan medewerkers. Uiteraard is dit niet wenselijk. Om te beginnen kost dit de systeembeheerder veel tijd en tevens is het ook erg foutgevoelig. Het is daarom voor hun zeer relevant om een software product te hebben die dit automatisch voor ze kan bijhouden.
 
-De applicatie die ontwikkeld zal worden, gaat door Quintor breed gebruikt worden om hardware in op te slaan. Verder zal deze applicatie ook worden gebruikt om aan te geven wie een apparaat in gebruikt heeft bij uitleen, of waar het ligt opgeslagen als het niet is uitgeleend. Tot slot zal de applicatie gebruikt worden om verzoeken goed te keuren bij een dubbele uitleen (bij een dubbele uitleen moet een technisch directeur toestemming geven).
+De applicatie die ontwikkeld zal worden, gaat door Quintor breed gebruikt worden om hardware bij te houden. Verder zal deze applicatie ook worden gebruikt om aan te geven wie een apparaat in gebruikt heeft bij uitleen, of waar het ligt opgeslagen als het niet is uitgeleend. Tot slot zal de applicatie gebruikt worden om verzoeken goed te keuren bij een dubbele uitleen.
 
 ## Requirements specifications
 
@@ -69,23 +83,23 @@ Zoals beschreven zal het bijhouden van apparaten, de hoofdfunctionaliteit van de
 
 ### User stories
 
-1. Als een systeembeheerder, wil ik kunnen zien welke apparaten wij bij Quintor allemaal in beheer hebben, zodat overzichtelijk wordt wat we hebben en wat eventueel uitgeleend zou kunnen worden.
+1. Als systeembeheerder wil ik kunnen zien welke apparaten wij bij Quintor allemaal in beheer hebben, zodat overzichtelijk wordt wat we hebben en wat eventueel uitgeleend zou kunnen worden.
 
-2. Als een systeembeheerder, wil ik apparaten aan de catalogus toe kunnen voegen, zodat wanneer we nieuwe hardware binnen krijgen dit gelijk bij de huidige hardware kunnen zetten.
+2. Als systeembeheerder wil ik apparaten aan de catalogus toe kunnen voegen, zodat wanneer we nieuwe hardware binnen krijgen dit gelijk bij de huidige hardware kunnen zetten.
 
-3. Als een systeembeheerder, wil ik een hardware product kunnen uitlenen aan een werknemer via de catalogus, zodat de gebruiksstatus van het hardware product automatisch wordt geüpdate en aan de desbetreffende werknemer wordt toegevoegd.
+3. Als systeembeheerder wil ik een hardware product kunnen uitlenen aan een werknemer via de catalogus, zodat de gebruiksstatus van het hardware product automatisch wordt geüpdate en aan de desbetreffende werknemer wordt toegevoegd.
 
-4. Als een systeembeheerder, wil ik kunnen zien wat de gebruiksstatus in van alle apparaten in de catalogus, zodat overzichtelijk wordt welke apparaten kunnen worden uitgeleend en wie wat in bezit heeft.
+4. Als een systeembeheerder wil ik kunnen zien wat de gebruiksstatus in van alle apparaten in de catalogus, zodat overzichtelijk wordt welke apparaten kunnen worden uitgeleend en wie wat in bezit heeft.
 
-5. Als systeembeheerder, wil ik kunnen zoeken binnen de catalogus op verschillende specs, zodat wanneer een werknemer een speciaal verzoek heeft ik makkelijk kan checken of zo’n apparaat beschikbaar is.
+5. Als systeembeheerder wil ik kunnen zoeken binnen de catalogus op verschillende specs, zodat wanneer een werknemer een speciaal verzoek heeft ik makkelijk kan checken of zo’n apparaat beschikbaar is.
 
-6. Als systeembeheerder, wil ik kunnen zien hoeveel hardware we van een bepaalde spec hebben, zodat er bij gebrek een verzoek kan worden ingediend om nieuwe hardware te kopen.
+6. Als systeembeheerder wil ik kunnen zien hoeveel hardware we van een bepaalde spec hebben, zodat er bij gebrek een verzoek kan worden ingediend om nieuwe hardware te kopen.
 
-7. Als systeembeheerder, wil ik kunnen zien wanneer een uitgeleend product weer terug is en door wie, zodat ik weet wanneer een hardware product weer opnieuw uitgeleend kan worden.
+7. Als systeembeheerder wil ik kunnen zien wanneer een uitgeleend product weer terug is en door wie, zodat ik weet wanneer een hardware product weer opnieuw uitgeleend kan worden.
 
-8. Als systeembeheerder, wil ik een uitleenverzoek kunnen doen aan de CTO wanneer een werknemer een tweede hardware product wil uitlenen, zodat dat goed of afgekeurd kan worden.
+8. Als systeembeheerder wil ik een uitleenverzoek kunnen doen aan de CTO wanneer een werknemer een tweede hardware product wil uitlenen, zodat dat goed of afgekeurd kan worden.
 
-9. Als een Chief technical officer, wil ik een melding krijgen wanneer de systeembeheerder iets uit wil lenen, zodat ik daar goedkeuring voor kan geven.
+9. Als Chief technical officer (CTO) wil ik een melding krijgen wanneer de systeembeheerder iets uit wil lenen, zodat ik daar goedkeuring voor kan geven.
 
 ### Use cases
 
@@ -121,9 +135,31 @@ Zoals beschreven zal het bijhouden van apparaten, de hoofdfunctionaliteit van de
 
 Voor de applicatie zal gebruik worden gemaakt van de volgende technieken:
 
-- Frontend: REACT.js (Javascript)
-- Backend: Spring Boot (Java)
-- Database: relationele database (MySQL)
+- REACT.js - minimaal versie 18.2
+- Node.js - minimaal versie 20.11.0
+- MySQL - minimaal versie 8.3.0
+- Spring Boot - versie 3.2.3
+- Java - minimaal versie 21
+- CSS Tailwind - versie 3.4.1
+- HTML5
+- CSS3
+
+Om het project te kunnen hosten, zullen de volgende eisen moeten worden voldaan:
+
+1. De applicatie moet gehost worden op een server die 24/7 online is.
+2. De server moet een database kunnen hosten. Deze database moet een MySQL database zijn (versie 8.3.0).
+3. De server moet Java draaiend hebben (minimaal versie 21)
+4. De server moet Node.js draaiend hebben (minimaal versie 20.11.0)
+5. De server moet een webserver hebben die de frontend kan hosten.
+6. De server moet een webserver hebben die de backend kan hosten.
+7. De server moet een SSL certificaat hebben.
+8. De server moet een domeinnaam hebben.
+
+#### Maintenance
+
+De applicatie zal zo gebouwd worden, dat het weinig aanpassingen nodig heeft in de toekomst. Dit wordt bijvoorbeeld gedaan door de applicatie zo te bouwen dat het makkelijk uit te breiden is.
+
+Ook zal er aan het eind van het project overzichtelijke en uitgebreid documentatie worden gemaakt. Dit zal ervoor zorgen dat het makkelijk is om de applicatie te onderhouden.
 
 ## Current status of development
 
