@@ -4,6 +4,19 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
+/**
+ * This class represents the BorrowedStatus table in the database.
+ * <p>
+ * The Component table is the main table in the database,
+ * it contains all the information about the components.
+ * It holds certain objects that points to other tables in the database:
+ *  - Location
+ *  - BorrowedStatus
+ *
+ * @see Location
+ * @see BorrowedStatus
+ *
+ */
 @Entity
 @Table(name = "components")
 public class Component {

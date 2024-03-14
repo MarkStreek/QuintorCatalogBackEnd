@@ -5,6 +5,13 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class represents the Location table in the database.
+ * <p>
+ * The Location table is used to keep track of the locations of the components.
+ *
+ * @see Component
+ */
 @Entity
 @Table(name = "locations")
 public class Location {

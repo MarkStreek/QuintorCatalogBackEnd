@@ -16,8 +16,11 @@ import java.util.Optional;
  * The main service method of the application. The service class is autowired by a controller class.
  * <p>
  * The service class is responsible for adding, deleting and updating components in the database.
- * For these operations, Locations and Specs are required as well.
+ * For these operations, CreateLocationService and CreateComponentSpecs are required as well.
  * Therefore, the service class uses methods from these services to add, delete and update the components.
+ *
+ * @see CreateLocationService
+ * @see CreateSpecsService
  */
 @Service
 public class MainComponentService {
@@ -45,7 +48,7 @@ public class MainComponentService {
      *  3. The Location is added to the component
      *  4. Component is saved to the database
      *  5. Component Specs are created and added to the database
-     *  <br>
+     *  <p>
      *  The Component must first be stored in the database,
      *  before it can be used in the ComponentSpecs
      *
@@ -120,6 +123,7 @@ public class MainComponentService {
     /**
      * Method that saves a component to the database.
      * It uses the componentRepository to save the component
+     *
      * @param component the component that needs to be saved
      */
     public void saveComponent(Component component) {
@@ -136,7 +140,7 @@ public class MainComponentService {
      * It also deletes the component specs from the database,
      * with calling the deleteComponentSpecs method
      *
-     * @param Id The i of the component that needs to be deleted
+     * @param Id The id of the component that needs to be deleted
      */
     public void deleteComponent(Long Id) {
         try {

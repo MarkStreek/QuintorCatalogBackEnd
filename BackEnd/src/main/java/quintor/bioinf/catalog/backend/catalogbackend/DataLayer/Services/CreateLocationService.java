@@ -9,11 +9,10 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.Locati
 
 /**
  * Service class that is responsible for adding a location to the database.
- * <p>
- * The service class is responsible for adding a location to the database.
- * It first creates a location and then checks if the location already exists.
- * If the location does not exist, it is saved to the database.
- * Otherwise, The already used location is not added again.
+ * <br>
+ * The service class is using the LocationRepository to interact with the database.
+ *
+ * @see LocationRepository
  */
 @Service
 public class CreateLocationService {
@@ -35,6 +34,7 @@ public class CreateLocationService {
      * @param name Name of the location (i.e. "Server room")
      * @param city City of the location
      * @param locationAddress Address of the location
+     * @return Location that is added to the database
      */
     public Location addLocation(
             String name,
@@ -53,15 +53,16 @@ public class CreateLocationService {
 
 
     /**
-     * Method that creates a location and checks the input for validity:
-     *  - It checks if the city and locationAddress are not empty
+     * Method that creates a location and checks the input for validity
      * <p>
-     *  It then sets the name, city and address of the location
+     * The input is checked for emptiness of the city and address.
+     * It then sets the name, city and address of the location
      *
      * @param name Name of the location
      * @param city City of the location
      * @param locationAddress Address of the location
-     * @return Location
+     * @return Location that is created
+     * @throws IllegalArgumentException if the city or locationAddress is empty
      */
     public Location createLocation(
             String name,
@@ -85,7 +86,7 @@ public class CreateLocationService {
      * If the location is equal, the location already exists
      *
      * @param findingLocation Location to be checked
-     * @return boolean
+     * @return boolean if the location already exists
      */
     public boolean checkIfLocationExists(Location findingLocation) {
         if (locationRepository.findByAddress(findingLocation.getAddress()) != null) {

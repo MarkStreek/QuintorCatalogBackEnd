@@ -2,6 +2,14 @@ package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities;
 
 import jakarta.persistence.*;
 
+/**
+ * This class represents the BorrowedStatus table in the database.
+ * <p>
+ * The BorrowedStatus table is used to keep track of which user has borrowed which component.
+ *
+ * @see Component
+ * @see User
+ */
 @Entity
 @Table(name = "borrowedStatus")
 public class BorrowedStatus {

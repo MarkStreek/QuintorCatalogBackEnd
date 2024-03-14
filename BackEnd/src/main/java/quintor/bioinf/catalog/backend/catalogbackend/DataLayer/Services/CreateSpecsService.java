@@ -15,13 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This service class is the service that provides the main functionality for creating specs.
+ * This service class is the service that provides the main functionality for creating,
+ * updating and deleting specs.
  * It is used to interact with two dataRepositories: (1) ComponentSpecsRepository and (2) SpecsRepository.
  * <p>
- * ComponentSpecs: The table in the database that contains the spec number and the value of the spec.
- * Specs: The table in the database that contains the name of the spec and the datatype.
- * <p>
- * Every componentSpecs entry is linked to a spec entry with an SpecID.
+ * @see ComponentSpecsRepository
+ * @see SpecsRepository
  */
 @Service
 public class CreateSpecsService {
@@ -50,6 +49,7 @@ public class CreateSpecsService {
      *
      * @param specs All the specs of the component
      * @param component The component to which the specs belong
+     * @throws IllegalArgumentException if the specs or component are null or empty
      */
     public void createComponentSpecs(Map<String, Object> specs, Component component) {
         // Check if the specs and component are not null or empty
