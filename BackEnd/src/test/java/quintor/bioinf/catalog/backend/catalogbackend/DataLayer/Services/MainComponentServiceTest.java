@@ -10,7 +10,13 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Componen
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+        "spring.datasource.driverClassName=org.h2.Driver",
+        "spring.datasource.username=sa",
+        "spring.datasource.password=",
+        "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
+})
 @AutoConfigureMockMvc
 public class MainComponentServiceTest {
 

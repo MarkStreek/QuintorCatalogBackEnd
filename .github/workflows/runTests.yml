@@ -11,27 +11,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: root_password
-          MYSQL_DATABASE: spring_db
-          MYSQL_USER: springuser
-          MYSQL_PASSWORD: QUINTOR
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=60s --health-retries=3
-
 
     steps:
-
-      - name: Wait for MySQL to be ready
-        run: timeout 30 bash -c 'until mysqladmin ping -h mysql --silent; do echo "Waiting for MySQL to start..."; sleep 1; done'
-
-      - name: Check MySQL health
-        run: mysql -h mysql -uroot -proot_password -e "SELECT 1" || exit 1
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -43,12 +24,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x BackEnd/gradlew
-
-      - name: Setup MySQL database
-        run: |
-          mysql -u root -p$MYSQL_ROOT_PASSWORD -h localhost -e "CREATE DATABASE IF NOT EXISTS spring_db;"
-          mysql -u root -p$MYSQL_ROOT_PASSWORD -h localhost spring_db < path/to/init.sql
-
 
       - name: Run tests
         run: cd BackEnd && ./gradlew test --continue --no-daemon --max-workers=2 --no-parallel
