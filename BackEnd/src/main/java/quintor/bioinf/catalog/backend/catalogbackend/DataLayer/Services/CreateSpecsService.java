@@ -40,22 +40,27 @@ public class CreateSpecsService {
 
     /**
      * Method that creates a new ComponentSpecs:
-     *  1. The already used specs are retrieved from database
-     *  2. The specs are iterated and checked if they already exist:
-     *      2a. If the spec does not exist, it is created and saved to the database
-     *      2b. If the spec already exists, it is not added again
-     *  3. The given value is added to the new or existing spec
-     *  4. new ComponentSpecs is saved to the database using the saveComponentSpecs method
+     *  1. The input specs are checked if they are not null or empty
+     *  2. The already used specs are retrieved from database
+     *  3. The specs are iterated and checked if they already exist:
+     *      3a. If the spec does not exist, it is created and saved to the database
+     *      3b. If the spec already exists, it is not added again
+     *  4. The given value is added to the new or existing spec
+     *  5. new ComponentSpecs is saved to the database using the saveComponentSpecs method
      *
      * @param specs All the specs of the component
      * @param component The component to which the specs belong
      */
     public void createComponentSpecs(Map<String, Object> specs, Component component) {
+        // Check if the specs and component are not null or empty
+        if (specs == null || specs.isEmpty() || component == null) {
+            log.error("Error with parameters: specs or component is null or empty.");
+            throw new IllegalArgumentException();
+        }
+        // Retrieve all the already used specs from the database
         Iterable<Specs> specsIterable = this.specsRepository.findAll();
 
-        // TODO: Maybe it's better to loop through all the specs and
-        //  check directly if the spec exists in the specs HashMap,
-        //  Then we have only one nest loop...?
+        // TODO: Maybe it's better to loop through all the specs and check directly if the spec exists in the specs HashMap, Then we have only one nest loop...?
         specsIterable.forEach(spec -> this.alreadyUsedSpecs.add(spec.getName()));
 
         for (String key : specs.keySet()) {
