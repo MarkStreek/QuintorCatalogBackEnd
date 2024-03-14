@@ -106,7 +106,9 @@ public class SpecsService {
      */
     public void deleteComponentSpecs(Component component) {
         try {
+            // Retrieve all the component specs from the database
             List<ComponentSpecs> componentSpecsList = this.componentSpecsRepository.findByComponent(component);
+            // Delete all the component specs from the database
             this.componentSpecsRepository.deleteAll(componentSpecsList);
         } catch (Exception e) {
             log.error("Failed to delete component specs: " + e.getMessage());

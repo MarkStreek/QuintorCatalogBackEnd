@@ -11,7 +11,6 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.Compon
 import java.util.Map;
 import java.util.Optional;
 
-
 /**
  * The main service method of the application. The service class is autowired by a controller class.
  * <p>
@@ -61,7 +60,6 @@ public class MainComponentService {
      * @param locationAddress Address of the location
      * @param locationName Name of the location (i.e. "Server room")
      * @param specs The specifications of the component
-     *
      */
     public void addComponent(
             String name,
@@ -143,17 +141,20 @@ public class MainComponentService {
      * @param Id The id of the component that needs to be deleted
      */
     public void deleteComponent(Long Id) {
-        try {
-            Optional<Component> optionalComponent = this.componentRepository.findById(Id);
-            if (optionalComponent.isPresent()) {
-                Component component = optionalComponent.get();
-                this.specsService.deleteComponentSpecs(component);
-                this.componentRepository.deleteById(Id);
-            } else {
-                log.error("No component found with the given ID");
-            }
-        } catch (Exception e) {
-            log.error("Failed to delete component: " + e.getMessage());
-        }
+        // Check if the component exists in the database
+        this.componentRepository.findById(Id).ifPresentOrElse(
+                component -> {
+                    try {
+                        // Delete the component specs
+                        this.specsService.deleteComponentSpecs(component);
+                        // Delete the component from the database
+                        this.componentRepository.deleteById(Id);
+                    } catch (Exception e) {
+                        log.error("Failed to delete component: " + e.getMessage());
+                    }
+                },
+                // Log an error if the component does not exist
+                () -> log.error("No component found with the given ID")
+        );
     }
 }
