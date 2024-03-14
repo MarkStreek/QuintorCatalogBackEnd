@@ -6,4 +6,5 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Componen
 
 @Repository
 public interface ComponentRepository extends CrudRepository<Component, Long>{
+
 }

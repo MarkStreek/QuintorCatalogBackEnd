@@ -16,7 +16,7 @@ class CreateLocationServiceTest {
 
     @Test
     void createLocation_ValidCityAndAddress_ReturnsLocation() {
-        Location location = createLocationService.createLocation("City", "Street 123");
+        Location location = createLocationService.createLocation("Basement","City", "Street 123");
         assertNotNull(location);
         assertEquals("City", location.getCity());
         assertEquals("Street 123", location.getAddress());
@@ -25,28 +25,21 @@ class CreateLocationServiceTest {
     @Test
     void createLocation_EmptyCity_ThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            createLocationService.createLocation("", "Street 123");
+            createLocationService.createLocation("Server Room","", "Street 123");
         });
     }
 
     @Test
     void createLocation_EmptyAddress_ThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            createLocationService.createLocation("City", "");
-        });
-    }
-
-    @Test
-    void createLocation_InvalidCity_ThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            createLocationService.createLocation("123", "Street 123");
+            createLocationService.createLocation("Server Room","City", "");
         });
     }
 
     @Test
     void createLocation_InvalidAddress_ThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            createLocationService.createLocation("", "");
+            createLocationService.createLocation("", "", "");
         });
     }
 }

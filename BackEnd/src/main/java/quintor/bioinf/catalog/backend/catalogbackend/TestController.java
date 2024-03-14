@@ -38,6 +38,7 @@ public class TestController {
             @RequestParam String invoiceNumber,
             @RequestParam String city,
             @RequestParam String locationAddress,
+            @RequestParam String locationName,
             @RequestBody Map<String, Object> specs
     ) {
         try {
@@ -49,10 +50,24 @@ public class TestController {
                     invoiceNumber,
                     city,
                     locationAddress,
+                    locationName,
                     specs);
             return "Added component";
         } catch (Exception e) {
             return "Failed to add component";
         }
     }
+
+    @RequestMapping("/delete/{Id}")
+    public @ResponseBody String deleteById(
+            @PathVariable Long Id
+    ) {
+        try {
+            mainComponentService.deleteComponent(Id);
+            return "Deleted component";
+        } catch (Exception e) {
+            return "Failed to delete component";
+        }
+    }
+
 }

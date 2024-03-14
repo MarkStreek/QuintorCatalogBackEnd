@@ -9,7 +9,16 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Location
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.ComponentRepository;
 
 import java.util.Map;
+import java.util.Optional;
 
+
+/**
+ * The main service method of the application. The service class is autowired by a controller class.
+ * <p>
+ * The service class is responsible for adding, deleting and updating components in the database.
+ * For these operations, Locations and Specs are required as well.
+ * Therefore, the service class uses methods from these services to add, delete and update the components.
+ */
 @Service
 public class MainComponentService {
 
@@ -47,6 +56,8 @@ public class MainComponentService {
      * @param invoiceNumber Invoice number of the component
      * @param city City of the location
      * @param locationAddress Address of the location
+     * @param locationName Name of the location (i.e. "Server room")
+     * @param specs The specifications of the component
      *
      */
     public void addComponent(
@@ -57,12 +68,13 @@ public class MainComponentService {
             String invoiceNumber,
             String city,
             String locationAddress,
+            String locationName,
             Map<String, Object> specs)
     {
         // 1 - Create the component
         Component component = this.createComponent(name, brandName, model, serialNumber, invoiceNumber);
         // 2 - Create the location
-        Location location = this.createLocationService.addLocation(city, locationAddress);
+        Location location = this.createLocationService.addLocation(locationName, city, locationAddress);
         // 3 - Add location to the component
         component.setLocation(location);
         // 4 - Save the component to the database
@@ -90,7 +102,6 @@ public class MainComponentService {
 
         // Iterate over the provided arguments.
         for (int i = 0; i < args.length; i++) {
-            // If the argument is null or empty, throw an IllegalArgumentException.
             if (args[i] == null || args[i].isEmpty()) {
                 throw new IllegalArgumentException(argNames[i] + " cannot be null or empty");
             }
@@ -103,7 +114,6 @@ public class MainComponentService {
         component.setSerialNumber(args[3]);
         component.setInvoiceNumber(args[4]);
 
-        // Return the created Component object.
         return component;
     }
 
@@ -118,6 +128,28 @@ public class MainComponentService {
             log.info("Component successfully saved to the database");
         } catch (Exception e) {
             log.error("Error saving component to the database: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Method that deletes a component from the database.
+     * It also deletes the component specs from the database,
+     * with calling the deleteComponentSpecs method
+     *
+     * @param Id The i of the component that needs to be deleted
+     */
+    public void deleteComponent(Long Id) {
+        try {
+            Optional<Component> optionalComponent = this.componentRepository.findById(Id);
+            if (optionalComponent.isPresent()) {
+                Component component = optionalComponent.get();
+                this.createSpecsService.deleteComponentSpecs(component);
+                this.componentRepository.deleteById(Id);
+            } else {
+                log.error("No component found with the given ID");
+            }
+        } catch (Exception e) {
+            log.error("Failed to delete component: " + e.getMessage());
         }
     }
 }

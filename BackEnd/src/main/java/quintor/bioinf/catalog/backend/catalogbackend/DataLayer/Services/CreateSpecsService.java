@@ -14,6 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This service class is the service that provides the main functionality for creating specs.
+ * It is used to interact with two dataRepositories: (1) ComponentSpecsRepository and (2) SpecsRepository.
+ * <p>
+ * ComponentSpecs: The table in the database that contains the spec number and the value of the spec.
+ * Specs: The table in the database that contains the name of the spec and the datatype.
+ * <p>
+ * Every componentSpecs entry is linked to a spec entry with an SpecID.
+ */
 @Service
 public class CreateSpecsService {
 
@@ -52,7 +61,7 @@ public class CreateSpecsService {
         for (String key : specs.keySet()) {
             ComponentSpecs componentSpecs = new ComponentSpecs();
             componentSpecs.setComponent(component);
-
+            key = key.toLowerCase();
             Specs spec;
             if (this.alreadyUsedSpecs.contains(key)) {
                 spec = this.specsRepository.findByName(key);
@@ -80,6 +89,22 @@ public class CreateSpecsService {
             this.componentSpecsRepository.save(componentSpecs);
         } catch (Exception e) {
             log.error("Failed to save component specs: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Method that deletes the component specs from the database.
+     * All the possible component specs are retrieved from the database,
+     * and then deleted using the componentSpecsRepository.
+     *
+     * @param component The component of which the specs need to be deleted
+     */
+    public void deleteComponentSpecs(Component component) {
+        try {
+            List<ComponentSpecs> componentSpecsList = this.componentSpecsRepository.findByComponent(component);
+            this.componentSpecsRepository.deleteAll(componentSpecsList);
+        } catch (Exception e) {
+            log.error("Failed to delete component specs: " + e.getMessage());
         }
     }
 }
