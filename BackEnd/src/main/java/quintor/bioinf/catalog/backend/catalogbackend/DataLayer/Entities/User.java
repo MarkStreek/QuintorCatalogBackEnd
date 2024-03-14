@@ -2,6 +2,12 @@ package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities;
 
 import jakarta.persistence.*;
 
+/**
+ * This class represents the User table in the database.
+ *
+ * @see BorrowedStatus
+ * @see Component
+ */
 @Entity
 @Table(name = "users")
 public class User {

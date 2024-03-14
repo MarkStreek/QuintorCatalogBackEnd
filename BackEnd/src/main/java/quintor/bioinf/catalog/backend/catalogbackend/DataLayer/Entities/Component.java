@@ -2,6 +2,21 @@ package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
+/**
+ * This class represents the BorrowedStatus table in the database.
+ * <p>
+ * The Component table is the main table in the database,
+ * it contains all the information about the components.
+ * It holds certain objects that points to other tables in the database:
+ *  - Location
+ *  - BorrowedStatus
+ *
+ * @see Location
+ * @see BorrowedStatus
+ *
+ */
 @Entity
 @Table(name = "components")
 public class Component {
@@ -79,5 +94,18 @@ public class Component {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Component component = (Component) o;
+        return Objects.equals(name, component.name) && Objects.equals(brandName, component.brandName) && Objects.equals(model, component.model) && Objects.equals(serialNumber, component.serialNumber) && Objects.equals(invoiceNumber, component.invoiceNumber) && Objects.equals(location, component.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, brandName, model, serialNumber, invoiceNumber, location);
     }
 }

@@ -5,6 +5,13 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class represents the Location table in the database.
+ * <p>
+ * The Location table is used to keep track of the locations of the components.
+ *
+ * @see Component
+ */
 @Entity
 @Table(name = "locations")
 public class Location {
@@ -14,6 +21,9 @@ public class Location {
     private Long id;
 
     @Column(name = "name")
+    private String name;
+
+    @Column(name = "city")
     private String city;
 
     @Column(name = "address")
@@ -48,6 +58,14 @@ public class Location {
 
     public void setComponents(List<Component> components) {
         this.components = components;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
