@@ -36,7 +36,7 @@ De applicatie zal verschillende features bevatten. Deze features zullen over een
 De milestones van de applicatie zullen zijn:
 
 1. Een eenvoudige pagina waarop alle hardware componenten getoond worden.
-2. Een pagina waarop hardware componenten toegevoegd, verwijderd, aangepast en gefilterd kan worden.
+2. Halverwege het proces, een pagina waarop hardware componenten toegevoegd, verwijderd, aangepast en gefilterd kan worden.
 3. Een authenticatielaag die de gebruiker toegang geeft tot de verschillende pagina's.
 4. Een uitleen verzoek kunnen aanmaken voor een CTO goedkeuring.
 
