@@ -148,6 +148,6 @@ public class CreateSpecsServiceTests {
 
         when(componentSpecsRepository.findByComponent(com)).thenReturn(List.of(componentSpecs));
         createSpecsService.deleteComponentSpecs(com);
-        verify(componentSpecsRepository, times(11)).deleteAll(any());
+        verify(componentSpecsRepository, times(1)).deleteAll(any());
     }
 }
