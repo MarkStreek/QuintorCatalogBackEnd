@@ -1,4 +1,4 @@
-package quintor.bioinf.catalog.backend.catalogbackend;
+package quintor.bioinf.catalog.backend.catalogbackend.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

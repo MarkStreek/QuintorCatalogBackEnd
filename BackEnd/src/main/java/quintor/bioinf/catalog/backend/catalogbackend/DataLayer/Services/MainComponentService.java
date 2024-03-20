@@ -8,6 +8,7 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Componen
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Location;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.ComponentRepository;
 
+import java.nio.channels.FileChannel;
 import java.util.Map;
 import java.util.Optional;
 
