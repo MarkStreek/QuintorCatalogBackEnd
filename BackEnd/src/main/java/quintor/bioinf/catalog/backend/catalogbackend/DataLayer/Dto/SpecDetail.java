@@ -5,10 +5,10 @@ public class SpecDetail {
     private String value;
     private String datatype;
 
-    public SpecDetail(String specName, String datatype, String value) {
+    public SpecDetail(String specName, String value, String datatype) {
         this.specName = specName;
-        this.datatype = datatype;
         this.value = value;
+        this.datatype = datatype;
     }
 
     // Getters en setters

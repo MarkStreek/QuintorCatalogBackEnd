@@ -4,16 +4,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Dto.SpecDetail;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Component;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.ComponentSpecs;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Specs;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.ComponentSpecsRepository;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.SpecsRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(properties = {
@@ -35,116 +37,71 @@ public class SpecsServiceTests {
     private SpecsService specsService;
 
     @Test
-    public void testCreateComponentSpecs() {
-        Map<String, Object> specsMap = new HashMap<>();
-        specsMap.put("spec1", "value1");
-        specsMap.put("spec2", "value2");
+    public void createComponentSpecs_ValidSpecDetails() {
+        List<SpecDetail> specDetails = new ArrayList<>();
+        specDetails.add(new SpecDetail("specName1", "value1", "String"));
+        specDetails.add(new SpecDetail("specName2", "value2", "String"));
+
         Component component = new Component();
         Specs spec1 = new Specs();
-        spec1.setName("spec1");
+        spec1.setName("specName1");
         Specs spec2 = new Specs();
-        spec2.setName("spec2");
-        List<Specs> specsList = Arrays.asList(spec1, spec2);
+        spec2.setName("specName2");
 
-        when(specsRepository.findAll()).thenReturn(specsList);
-        when(specsRepository.findByName(anyString())).thenReturn(spec1);
-        when(componentSpecsRepository.save(any(ComponentSpecs.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(specsRepository.findByName("specName1")).thenReturn(null);  // First call, spec does not exist
+        when(specsRepository.findByName("specName2")).thenReturn(null);  // Second call, spec also does not exist
+        // Assuming that saving a spec just returns it for simplification; adjust as needed for your logic.
+        when(specsRepository.save(any(Specs.class))).then(returnsFirstArg());
 
-        specsService.createComponentSpecs(specsMap, component);
+        specsService.createComponentSpecs(specDetails, component);
 
-        verify(specsRepository, times(2)).findByName(anyString());
+        // Verify that save was called for each unique spec name.
+        verify(specsRepository, times(2)).save(any(Specs.class));
+
+        // Verify save on componentSpecsRepository for each spec detail
         verify(componentSpecsRepository, times(2)).save(any(ComponentSpecs.class));
     }
 
     @Test
-    public void testCreateComponentSpecsWhenSpecAlreadyExists() {
-        Map<String, Object> specsMap = new HashMap<>();
-        specsMap.put("spec1", "value1");
-        specsMap.put("spec2", "value2");
-        specsMap.put("spec3", "value3");
+    public void createComponentSpecs_WhenSpecAlreadyExists() {
+        List<SpecDetail> specDetails = new ArrayList<>();
+        specDetails.add(new SpecDetail("specName", "value1", "String"));
 
         Component component = new Component();
-        Specs spec1 = new Specs();
-        spec1.setName("spec1");
-        Specs spec2 = new Specs();
-        spec2.setName("spec2");
-        List<Specs> specsList = List.of(spec1, spec2);
+        Specs existingSpec = new Specs();
+        existingSpec.setName("specName");
 
-        when(specsRepository.findAll()).thenReturn(specsList);
-        when(specsRepository.findByName(anyString())).thenReturn(spec1);
-        when(componentSpecsRepository.save(any(ComponentSpecs.class))).thenAnswer(i -> i.getArguments()[0]);
-        specsService.createComponentSpecs(specsMap, component);
+        when(specsRepository.findByName("specName")).thenReturn(existingSpec);
+        specsService.createComponentSpecs(specDetails, component);
 
-        verify(specsRepository, times(2)).findByName(anyString());
-        verify(specsRepository, times(1)).save(any(Specs.class));
-        verify(componentSpecsRepository, times(3)).save(any(ComponentSpecs.class));
+        verify(specsRepository, times(1)).findByName("specName");
+        verify(specsRepository, never()).save(existingSpec);
+        verify(componentSpecsRepository, times(1)).save(any(ComponentSpecs.class));
     }
 
     @Test
-    public void testCreateComponentSpecsWhenSpecAlreadyExists2() {
-        Map<String, Object> specsMap = new HashMap<>();
-        specsMap.put("specs", "value1");
-        specsMap.put("spec2", "value2");
-        specsMap.put("spec3", "value3");
-        specsMap.put("spec4", "value4");
-
+    public void createComponentSpecs_EmptySpecDetailsList() {
+        List<SpecDetail> specDetails = new ArrayList<>();
         Component component = new Component();
-        Specs spec1 = new Specs();
-        spec1.setName("spec1");
-        Specs spec2 = new Specs();
-        spec2.setName("spec4");
-        List<Specs> specsList = List.of(spec1, spec2);
-        when(specsRepository.findAll()).thenReturn(specsList);
-        when(specsRepository.findByName(anyString())).thenReturn(spec1);
-        when(componentSpecsRepository.save(any(ComponentSpecs.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        specsService.createComponentSpecs(specsMap, component);
-
-        verify(specsRepository, times(1)).findByName(anyString());
-        verify(specsRepository, times(3)).save(any(Specs.class));
-        verify(componentSpecsRepository, times(4)).save(any(ComponentSpecs.class));
+        assertThrows(IllegalArgumentException.class, () -> specsService.createComponentSpecs(specDetails, component));
     }
 
     @Test
-    public void testCreateComponentSpecsWhenNoneExist() {
-        Map<String, Object> specsMap = new HashMap<>();
-        specsMap.put("specs", "value1");
-        specsMap.put("spec2", "value2");
-        specsMap.put("spec3", "value3");
-        specsMap.put("spec4", "value4");
-        Component component = new Component();
-        Specs spec1 = new Specs();
-        spec1.setName("spec1");
-        List<Specs> specsList = List.of(spec1);
-
-        when(specsRepository.findAll()).thenReturn(specsList);
-        when(componentSpecsRepository.save(any(ComponentSpecs.class))).thenAnswer(i -> i.getArguments()[0]);
-        specsService.createComponentSpecs(specsMap, component);
-
-        verify(specsRepository, times(4)).save(any(Specs.class));
-        verify(componentSpecsRepository, times(4)).save(any(ComponentSpecs.class));
+    public void createComponentSpecs_NullSpecDetailsList() {
+        assertThrows(IllegalArgumentException.class, () -> specsService.createComponentSpecs(null, new Component()));
     }
 
     @Test
-    public void testCreateComponentSpecsWhenSpecsAreEmpty() {
-        Map<String, Object> specsMap = new HashMap<>();
+    public void deleteComponentSpecs_Success() {
         Component component = new Component();
-
-        assertThrows(IllegalArgumentException.class,
-                () -> specsService.createComponentSpecs(specsMap, component));
-    }
-
-    @Test
-    public void testDeleteComponentSpecs() {
-        Component com = new Component();
         ComponentSpecs componentSpecs = new ComponentSpecs();
-        componentSpecs.setId(1L);
-        componentSpecs.setValue("value");
-        componentSpecs.setSpecs(new Specs());
-        componentSpecs.setComponent(com);
+        List<ComponentSpecs> componentSpecsList = new ArrayList<>();
+        componentSpecsList.add(componentSpecs);
 
-        when(componentSpecsRepository.findByComponent(com)).thenReturn(List.of(componentSpecs));
-        specsService.deleteComponentSpecs(com);
-        verify(componentSpecsRepository, times(1)).deleteAll(any());
+        when(componentSpecsRepository.findByComponent(component)).thenReturn(componentSpecsList);
+        specsService.deleteComponentSpecs(component);
+
+        verify(componentSpecsRepository, times(1)).deleteAll(componentSpecsList);
     }
 }

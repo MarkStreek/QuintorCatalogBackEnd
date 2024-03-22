@@ -49,7 +49,7 @@ public class SpecsService {
      *  4. The given value is added to the new or existing spec
      *  5. new ComponentSpecs is saved to the database using the saveComponentSpecs method
      *
-     * @param specs All the specs of the component
+     * @param specDetails Object with name, value and datatype of the specs
      * @param component The component to which the specs belong
      * @throws IllegalArgumentException if the specs or component are null or empty
      */
