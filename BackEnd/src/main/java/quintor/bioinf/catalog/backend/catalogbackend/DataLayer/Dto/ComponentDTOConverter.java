@@ -54,8 +54,8 @@ public class ComponentDTOConverter implements Function<Component, ComponentDTO> 
                 log.error("Spec is null for component spec ID: {}", compSpec.getId());
                 continue;
             }
-            SpecDetail specDetail = new SpecDetail(spec.getName(), spec.getDatatype(), compSpec.getValue());
-            log.info("Adding spec detail: name={}, datatype={}, value={}", spec.getName(), spec.getDatatype(), compSpec.getValue());
+            SpecDetail specDetail = new SpecDetail(spec.getName(), compSpec.getValue(), spec.getDatatype());
+            log.info("Adding spec detail: name={}, value={}, datatype={}", spec.getName(), compSpec.getValue(), spec.getDatatype());
             specDetails.add(specDetail);
         }
         log.info("Converted component: {}", componentDTO);
