@@ -41,8 +41,13 @@ public class ComponentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ComponentDTO> getComponent(@PathVariable Long id) {
-        return null;
+    public ComponentDTO getComponent(@PathVariable Long id) {
+        return mainComponentService.getComponent(id);
+    }
+
+    @GetMapping
+    public List<ComponentDTO> getAllComponents() {
+        return mainComponentService.getAllComponents();
     }
 
     @PutMapping("/{id}")
@@ -55,8 +60,4 @@ public class ComponentController {
         return null;
     }
 
-    @GetMapping
-    public ResponseEntity<List<ComponentDTO>> getAllComponents() {
-        return null;
-    }
 }

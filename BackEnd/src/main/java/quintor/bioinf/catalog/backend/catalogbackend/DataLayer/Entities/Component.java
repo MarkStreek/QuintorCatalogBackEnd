@@ -2,6 +2,7 @@ package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -108,4 +109,5 @@ public class Component {
     public int hashCode() {
         return Objects.hash(name, brandName, model, serialNumber, invoiceNumber, location);
     }
+
 }

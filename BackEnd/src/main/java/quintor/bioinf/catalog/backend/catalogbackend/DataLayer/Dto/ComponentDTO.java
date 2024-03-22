@@ -1,5 +1,8 @@
 package quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Dto;
 
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Specs;
+
+import java.util.List;
 import java.util.Map;
 
 public class ComponentDTO {
@@ -12,7 +15,7 @@ public class ComponentDTO {
     private String locationCity;
     private String locationAddress;
     private String locationName;
-    private Map<String, Object> specs;
+    private List<SpecDetail> specs;
 
     public Long getId() {
         return id;
@@ -86,13 +89,14 @@ public class ComponentDTO {
         this.locationName = locationName;
     }
 
-    public Map<String, Object> getSpecs() {
+    public List<SpecDetail> getSpecs() {
         return specs;
     }
 
-    public void setSpecs(Map<String, Object> specs) {
+    public void setSpecs(List<SpecDetail> specs) {
         this.specs = specs;
     }
+
 
     // Getters and setters omitted for brevity
 }
