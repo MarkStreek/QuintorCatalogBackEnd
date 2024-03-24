@@ -4,6 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Specs;
 
+import java.util.Map;
+
 /**
  * This interface is used to interact with the Specs table in the database.
  * <p>
@@ -21,6 +23,5 @@ public interface SpecsRepository extends CrudRepository<Specs, Long> {
      * @return The specs with the given name
      */
     Specs findByName(String name);
-
 
 }

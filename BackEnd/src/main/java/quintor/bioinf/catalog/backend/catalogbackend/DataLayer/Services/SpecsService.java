@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Dto.ComponentDTO;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Dto.SpecDetail;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Component;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.ComponentSpecs;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Specs;
@@ -47,41 +49,40 @@ public class SpecsService {
      *  4. The given value is added to the new or existing spec
      *  5. new ComponentSpecs is saved to the database using the saveComponentSpecs method
      *
-     * @param specs All the specs of the component
+     * @param specDetails Object with name, value and datatype of the specs
      * @param component The component to which the specs belong
      * @throws IllegalArgumentException if the specs or component are null or empty
      */
-    public void createComponentSpecs(Map<String, Object> specs, Component component) {
-        // Check if the specs and component are not null or empty
-        if (specs == null || specs.isEmpty() || component == null) {
-            log.error("Error with parameters: specs or component is null or empty.");
+    public void createComponentSpecs(List<SpecDetail> specDetails, Component component) {
+        if (specDetails == null || specDetails.isEmpty() || component == null) {
+            log.error("Error with parameters: specDetails or component is null or empty.");
             throw new IllegalArgumentException();
         }
-        // Retrieve all the already used specs from the database
-        Iterable<Specs> specsIterable = this.specsRepository.findAll();
 
-        // TODO: Maybe it's better to loop through all the specs and check directly if the spec exists in the specs HashMap, Then we have only one nest loop...?
-        specsIterable.forEach(spec -> this.alreadyUsedSpecs.add(spec.getName()));
-
-        for (String key : specs.keySet()) {
+        for (SpecDetail detail : specDetails) {
             ComponentSpecs componentSpecs = new ComponentSpecs();
             componentSpecs.setComponent(component);
-            key = key.toLowerCase();
-            Specs spec;
-            if (this.alreadyUsedSpecs.contains(key)) {
-                spec = this.specsRepository.findByName(key);
-            } else {
+
+            // Check if the spec already exists
+            Specs spec = specsRepository.findByName(detail.getSpecName());
+            if (spec == null) {
+                // If the spec does not exist, create and save a new one
                 spec = new Specs();
-                spec.setName(key);
-                this.specsRepository.save(spec);
-                log.info("A new Spec is created and saved to the database");
+                spec.setName(detail.getSpecName());
+                spec.setDatatype(detail.getDatatype());
+                specsRepository.save(spec);
+                log.info("A new Spec has been created and saved: " + detail.getSpecName());
             }
+
+            // Now, associate the spec and its value with the component spec
             componentSpecs.setSpecs(spec);
-            componentSpecs.setValue(specs.get(key).toString());
-            this.saveComponentSpecs(componentSpecs);
-            log.info("ComponentSpec is successfully saved to the database");
+            componentSpecs.setValue(detail.getValue());
+
+            // Save the component spec
+            saveComponentSpecs(componentSpecs);
         }
     }
+
 
     /**
      * Method that saves the component specs to the database.

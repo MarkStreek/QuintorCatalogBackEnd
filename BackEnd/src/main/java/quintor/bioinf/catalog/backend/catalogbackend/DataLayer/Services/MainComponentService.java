@@ -4,12 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Dto.ComponentDTO;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Dto.ComponentDTOConverter;
+import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Dto.SpecDetail;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Component;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Location;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.ComponentRepository;
 
+import java.nio.channels.FileChannel;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * The main service method of the application. The service class is autowired by a controller class.
@@ -28,16 +35,20 @@ public class MainComponentService {
     private final LocationService locationService;
     private final SpecsService specsService;
     private final ComponentRepository componentRepository;
+    private final ComponentDTOConverter componentDTOConverter;
 
     @Autowired
     public MainComponentService(
             ComponentRepository componentRepository,
             SpecsService specsService,
-            LocationService locationService)
+            LocationService locationService,
+            ComponentDTOConverter componentDTOConverter
+    )
     {
         this.componentRepository = componentRepository;
         this.specsService = specsService;
         this.locationService = locationService;
+        this.componentDTOConverter = componentDTOConverter;
     }
 
     /**
@@ -70,7 +81,7 @@ public class MainComponentService {
             String city,
             String locationAddress,
             String locationName,
-            Map<String, Object> specs)
+            List<SpecDetail> specs)
     {
         // 1 - Create the component
         Component component = this.createComponent(name, brandName, model, serialNumber, invoiceNumber);
@@ -156,5 +167,18 @@ public class MainComponentService {
                 // Log an error if the component does not exist
                 () -> log.error("No component found with the given ID")
         );
+    }
+
+    public ComponentDTO getComponent(Long id) {
+        return componentRepository.findById(id)
+                .map(componentDTOConverter)
+                .orElseThrow(() -> new RuntimeException("Component not found with id: " + id));
+    }
+
+    public List<ComponentDTO> getAllComponents() {
+        Iterable<Component> components = componentRepository.findAll();
+        return StreamSupport.stream(components.spliterator(), false)
+                .map(componentDTOConverter)
+                .collect(Collectors.toList());
     }
 }
