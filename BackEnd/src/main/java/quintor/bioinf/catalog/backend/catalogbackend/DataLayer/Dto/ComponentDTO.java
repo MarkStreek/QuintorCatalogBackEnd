@@ -96,7 +96,4 @@ public class ComponentDTO {
     public void setSpecs(List<SpecDetail> specs) {
         this.specs = specs;
     }
-
-
-    // Getters and setters omitted for brevity
 }

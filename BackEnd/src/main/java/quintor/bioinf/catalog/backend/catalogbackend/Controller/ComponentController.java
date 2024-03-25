@@ -18,6 +18,7 @@ public class ComponentController {
     @Autowired
     public ComponentController(MainComponentService mainComponentService) {
         this.mainComponentService = mainComponentService;
+
     }
 
     @PostMapping
