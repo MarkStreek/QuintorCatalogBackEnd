@@ -116,6 +116,12 @@ public class SpecsService {
         }
     }
 
+    /**
+     * Method that retrieves all the specs from the database.
+     * It retrieves all the specs from the database using the specsRepository.
+     *
+     * @return List of all the specs
+     */
     public List<Specs> getAllSpecs() {
         Iterable<Specs> specsIterable = specsRepository.findAll();
         return StreamSupport.stream(specsIterable.spliterator(), false)
