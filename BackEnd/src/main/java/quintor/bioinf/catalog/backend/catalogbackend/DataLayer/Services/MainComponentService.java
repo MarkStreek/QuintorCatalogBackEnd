@@ -11,10 +11,7 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Componen
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Location;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.ComponentRepository;
 
-import java.nio.channels.FileChannel;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -35,6 +32,7 @@ public class MainComponentService {
     private final LocationService locationService;
     private final SpecsService specsService;
     private final ComponentRepository componentRepository;
+
     private final ComponentDTOConverter componentDTOConverter;
 
     @Autowired

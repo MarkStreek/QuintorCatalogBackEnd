@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
      * @param registry The CORS registry to configure
      */
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/components")
+        registry.addMapping("/components, /specs")
                 .allowedOrigins("http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
     }

@@ -15,6 +15,8 @@ import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Repository.SpecsR
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * This service class is the service that provides the main functionality for creating,
@@ -30,8 +32,6 @@ public class SpecsService {
     private static final Logger log = LoggerFactory.getLogger(SpecsService.class);
     private final ComponentSpecsRepository componentSpecsRepository;
     private final SpecsRepository specsRepository;
-
-    private final List<String> alreadyUsedSpecs = new ArrayList<>();
 
     @Autowired
     public SpecsService(ComponentSpecsRepository componentSpecsRepository, SpecsRepository specsRepository) {
@@ -114,5 +114,11 @@ public class SpecsService {
         } catch (Exception e) {
             log.error("Failed to delete component specs: " + e.getMessage());
         }
+    }
+
+    public List<Specs> getAllSpecs() {
+        Iterable<Specs> specsIterable = specsRepository.findAll();
+        return StreamSupport.stream(specsIterable.spliterator(), false)
+                .collect(Collectors.toList());
     }
 }
