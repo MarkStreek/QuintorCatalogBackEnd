@@ -79,7 +79,7 @@ public class MainComponentService {
             String city,
             String locationAddress,
             String locationName,
-            List<SpecDetail> specs)
+            List<SpecDetail> specs) throws RuntimeException
     {
         // 1 - Create the component
         Component component = this.createComponent(name, brandName, model, serialNumber, invoiceNumber);

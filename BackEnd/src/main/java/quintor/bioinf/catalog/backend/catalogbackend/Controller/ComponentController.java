@@ -1,6 +1,7 @@
 package quintor.bioinf.catalog.backend.catalogbackend.Controller;
 
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,8 @@ public class ComponentController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addComponent(@RequestBody ComponentDTO componentDTO) {
-        try {
+    public ResponseEntity<String> addComponent(@RequestBody @Valid ComponentDTO componentDTO) {
+//        try {
             mainComponentService.addComponent(
                     componentDTO.getName(),
                     componentDTO.getBrandName(),
@@ -36,9 +37,9 @@ public class ComponentController {
                     componentDTO.getSpecs()
             );
             return ResponseEntity.ok("Added component");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to add component");
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body("Failed to add component");
+//        }
     }
 
     @GetMapping("/{id}")
