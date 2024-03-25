@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Dto.ComponentDTO;
-import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Entities.Specs;
 import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.MainComponentService;
-import quintor.bioinf.catalog.backend.catalogbackend.DataLayer.Services.SpecsService;
 
 import java.util.List;
 
