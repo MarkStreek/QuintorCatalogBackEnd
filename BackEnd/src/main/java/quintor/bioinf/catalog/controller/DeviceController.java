@@ -18,27 +18,22 @@ public class DeviceController {
     @Autowired
     public DeviceController(MainDeviceService mainDeviceService) {
         this.mainDeviceService = mainDeviceService;
-
     }
 
     @PostMapping
     public ResponseEntity<String> addDevice(@RequestBody @Valid DeviceDTO deviceDTO) {
-        try {
-            mainDeviceService.addDevice(
-                    deviceDTO.getName(),
-                    deviceDTO.getBrandName(),
-                    deviceDTO.getModel(),
-                    deviceDTO.getSerialNumber(),
-                    deviceDTO.getInvoiceNumber(),
-                    deviceDTO.getLocationCity(),
-                    deviceDTO.getLocationAddress(),
-                    deviceDTO.getLocationName(),
-                    deviceDTO.getSpecs()
-            );
-            return ResponseEntity.ok("Added component");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to add component");
-        }
+        mainDeviceService.addDevice(
+                deviceDTO.getName(),
+                deviceDTO.getBrandName(),
+                deviceDTO.getModel(),
+                deviceDTO.getSerialNumber(),
+                deviceDTO.getInvoiceNumber(),
+                deviceDTO.getLocationCity(),
+                deviceDTO.getLocationAddress(),
+                deviceDTO.getLocationName(),
+                deviceDTO.getSpecs()
+        );
+        return ResponseEntity.ok("Added component");
     }
 
     @GetMapping("/{id}")

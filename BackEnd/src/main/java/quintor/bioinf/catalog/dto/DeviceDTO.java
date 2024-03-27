@@ -12,7 +12,7 @@ public class DeviceDTO {
     private String name;
     private String brandName;
     private String model;
-    @Length(min = 1, max = 255)
+    @Length(min = 1, max = 15)
     private String serialNumber;
     private String invoiceNumber;
     private String locationCity;
