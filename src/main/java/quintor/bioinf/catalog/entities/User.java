@@ -1,6 +1,8 @@
 package quintor.bioinf.catalog.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class represents the User table in the database.
@@ -8,6 +10,8 @@ import jakarta.persistence.*;
  * @see BorrowedStatus
  * @see Device
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -21,25 +25,4 @@ public class User {
 
     @Column(name = "role")
     private String role;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
 }

@@ -35,7 +35,7 @@ public class Device {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "brandName")
+    @Column(name = "brand_name")
     @NotEmpty
     @NotNull
     private String brandName;
@@ -43,10 +43,10 @@ public class Device {
     @Column(name = "model")
     private String model;
 
-    @Column(name = "serialNumber")
+    @Column(name = "serial_number")
     private String serialNumber;
 
-    @Column(name = "invoiceNumber")
+    @Column(name = "invoice_number")
     private String invoiceNumber;
 
     @ManyToOne

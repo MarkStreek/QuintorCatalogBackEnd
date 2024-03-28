@@ -53,7 +53,7 @@ public class DeviceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDevices(@PathVariable Long id) {
-        return null;
+        return mainDeviceService.deleteDevice(id);
     }
 
 }

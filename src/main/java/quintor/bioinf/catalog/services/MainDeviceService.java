@@ -3,6 +3,7 @@ package quintor.bioinf.catalog.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.dto.DeviceDTOConverter;
@@ -12,6 +13,7 @@ import quintor.bioinf.catalog.entities.Location;
 import quintor.bioinf.catalog.repository.DeviceRepository;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -81,16 +83,15 @@ public class MainDeviceService {
             String locationName,
             List<SpecDetail> specs)
     {
-        // 1 - Create the device
-        Device device = this.createDevice(name, brandName, model, serialNumber, invoiceNumber);
+        // 1 - Create the device, so it can be added to the spec
         // 2 - Create the location
         Location location = this.locationService.addLocation(locationName, city, locationAddress);
+        Long LocationId = location.getId();
+        this.deviceRepository.addDevice(name, brandName, model, serialNumber, invoiceNumber, LocationId);
         // 3 - Add location to the device
-        device.setLocation(location);
-        // 4 - Save the device to the database
-        this.saveDevice(device);
-        // 5 - Create device specs
-        this.specsService.createDeviceSpecs(specs, device);
+        // 4 - Create device specs
+        // 5 - Save the device to the database
+
     }
 
     /**
@@ -126,21 +127,21 @@ public class MainDeviceService {
 
         return device;
     }
-
-    /**
-     * Method that saves a device to the database.
-     * It uses the componentRepository to save the device
-     *
-     * @param device the device that needs to be saved
-     */
-    public void saveDevice(Device device) {
-        try {
-            this.deviceRepository.save(device);
-            log.info("Device successfully saved to the database");
-        } catch (Exception e) {
-            log.error("Error saving device to the database: " + e.getMessage());
-        }
-    }
+//
+//    /**
+//     * Method that saves a device to the database.
+//     * It uses the componentRepository to save the device
+//     *
+//     * @param device the device that needs to be saved
+//     */
+//    public void saveDevice(Device device) {
+//        try {
+//            this.deviceRepository.save(device);
+//            log.info("Device successfully saved to the database");
+//        } catch (Exception e) {
+//            log.error("Error saving device to the database: " + e.getMessage());
+//        }
+//    }
 
     /**
      * Method that deletes a component from the database.
@@ -148,8 +149,12 @@ public class MainDeviceService {
      * with calling the deleteComponentSpecs method
      *
      * @param Id The id of the component that needs to be deleted
+     * @return
      */
-    public void deleteDevice(Long Id) {
+    public ResponseEntity<String> deleteDevice(Long Id) {
+        // Use AtomicBoolean to track if the device was found and deleted.
+        AtomicBoolean deviceFoundAndDeleted = new AtomicBoolean(false);
+
         // Check if the component exists in the database
         this.deviceRepository.findById(Id).ifPresentOrElse(
                 device -> {
@@ -157,7 +162,8 @@ public class MainDeviceService {
                         // Delete the device specs
                         this.specsService.deleteDeviceSpecs(device);
                         // Delete the device from the database
-                        this.deviceRepository.deleteById(Id);
+                        this.deviceRepository.deleteDevice(Id);
+                        deviceFoundAndDeleted.set(true);
                     } catch (Exception e) {
                         log.error("Failed to delete device: " + e.getMessage());
                     }
@@ -165,6 +171,13 @@ public class MainDeviceService {
                 // Log an error if the component does not exist
                 () -> log.error("No component found with the given ID")
         );
+
+        // Check if the device was found and deleted, and return an appropriate response
+        if (deviceFoundAndDeleted.get()) {
+            return ResponseEntity.ok("Device successfully deleted.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     public DeviceDTO getDevice(Long id) {

@@ -26,7 +26,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "DeviceSpecs")
+@Table(name = "device_specs")
 public class DeviceSpecs {
 
     @Id
