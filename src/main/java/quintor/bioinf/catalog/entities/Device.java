@@ -1,7 +1,10 @@
 package quintor.bioinf.catalog.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.Objects;
@@ -33,6 +36,8 @@ public class Device {
     private String name;
 
     @Column(name = "brandName")
+    @NotEmpty
+    @NotNull
     private String brandName;
 
     @Column(name = "model")
