@@ -34,7 +34,6 @@ public class MainDeviceService {
     private final LocationService locationService;
     private final SpecsService specsService;
     private final DeviceRepository deviceRepository;
-
     private final DeviceDTOConverter deviceDTOConverter;
 
     @Autowired
@@ -83,65 +82,16 @@ public class MainDeviceService {
             String locationName,
             List<SpecDetail> specs)
     {
-        // 1 - Create the device, so it can be added to the spec
-        // 2 - Create the location
+        // 1 - Create the location
         Location location = this.locationService.addLocation(locationName, city, locationAddress);
         Long LocationId = location.getId();
+        // 2 - Add the device to the database
         this.deviceRepository.addDevice(name, brandName, model, serialNumber, invoiceNumber, LocationId);
-        // 3 - Add location to the device
-        // 4 - Create device specs
-        // 5 - Save the device to the database
-
+        // 3 - Get the device from the database by getting the last added device (highest current id)
+        Device device = this.deviceRepository.findFirstByOrderByIdDesc();
+        // 4 - Give that device to the spec service
+        this.specsService.createDeviceSpecs(specs, device);
     }
-
-    /**
-     * This method creates a new Device object and sets its properties based on the provided arguments.
-     * It uses varargs to accept an arbitrary number of arguments,
-     * which should correspond to the properties of the Device.
-     * The order of the arguments should be: name, brandName, model, serialNumber, invoiceNumber.
-     *
-     * @param args The properties of the Device.
-     * @return A new Device object with its properties set to the provided arguments.
-     * @throws IllegalArgumentException If any of the provided arguments are null or empty.
-     */
-    public Device createDevice(String... args) {
-        // The names of the arguments, used for the exception message.
-        String[] argNames = {"name", "brandName", "model", "serialNumber", "invoiceNumber"};
-
-        // Create a new Device object.
-        Device device = new Device();
-
-        // Iterate over the provided arguments.
-        for (int i = 0; i < args.length; i++) {
-            if (args[i] == null || args[i].isEmpty()) {
-                throw new IllegalArgumentException(argNames[i] + " cannot be null or empty");
-            }
-        }
-
-        // Set the properties of the Device object based on the provided arguments.
-        device.setName(args[0]);
-        device.setBrandName(args[1]);
-        device.setModel(args[2]);
-        device.setSerialNumber(args[3]);
-        device.setInvoiceNumber(args[4]);
-
-        return device;
-    }
-//
-//    /**
-//     * Method that saves a device to the database.
-//     * It uses the componentRepository to save the device
-//     *
-//     * @param device the device that needs to be saved
-//     */
-//    public void saveDevice(Device device) {
-//        try {
-//            this.deviceRepository.save(device);
-//            log.info("Device successfully saved to the database");
-//        } catch (Exception e) {
-//            log.error("Error saving device to the database: " + e.getMessage());
-//        }
-//    }
 
     /**
      * Method that deletes a component from the database.

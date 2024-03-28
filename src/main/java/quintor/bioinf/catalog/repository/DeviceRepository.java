@@ -29,7 +29,7 @@ public interface DeviceRepository extends CrudRepository<Device, Long>{
     @Procedure("delete_device")
     void deleteDevice(@Param("p_device_id") Long deviceId);
 
-    // I want to add a method that return the most recently added id
-
+    // Derived query method
+    Device findFirstByOrderByIdDesc();
 
 }
