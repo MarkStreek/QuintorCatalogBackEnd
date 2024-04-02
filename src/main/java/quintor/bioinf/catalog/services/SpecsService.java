@@ -124,4 +124,14 @@ public class SpecsService {
         return StreamSupport.stream(specsIterable.spliterator(), false)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Method that adds one new spec to the database.
+     * It saves the new spec to the database using the specsRepository.
+     *
+     * @param specs The new spec to be saved
+     */
+    public void addSpecs(Specs specs) {
+        specsRepository.save(specs);
+    }
 }
