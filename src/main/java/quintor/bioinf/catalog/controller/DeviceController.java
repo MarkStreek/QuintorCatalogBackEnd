@@ -23,7 +23,7 @@ public class DeviceController {
     @PostMapping
     public ResponseEntity<String> addDevice(@RequestBody @Valid DeviceDTO deviceDTO) {
         mainDeviceService.addDevice(
-                deviceDTO.getName(),
+                deviceDTO.getType(),
                 deviceDTO.getBrandName(),
                 deviceDTO.getModel(),
                 deviceDTO.getSerialNumber(),

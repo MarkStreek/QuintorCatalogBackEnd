@@ -1,6 +1,7 @@
 package quintor.bioinf.catalog.repository;
 
 import org.springframework.data.jdbc.repository.query.Modifying;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,12 +14,12 @@ import quintor.bioinf.catalog.entities.Device;
  * @see Device
  */
 @Repository
-public interface DeviceRepository extends CrudRepository<Device, Long>{
+public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     @Modifying
-    @Procedure("add_device")
-    void addDevice(
-            @Param("p_name") String name,
+    @Procedure(outputParameterName = "p_last_insert_id", procedureName = "add_device")
+    Long addDevice(
+            @Param("p_type") String type,
             @Param("p_brandName") String brandName,
             @Param("p_model") String model,
             @Param("p_serialNumber") String serialNumber,
@@ -28,8 +29,5 @@ public interface DeviceRepository extends CrudRepository<Device, Long>{
     @Modifying
     @Procedure("delete_device")
     void deleteDevice(@Param("p_device_id") Long deviceId);
-
-    // Derived query method
-    Device findFirstByOrderByIdDesc();
 
 }

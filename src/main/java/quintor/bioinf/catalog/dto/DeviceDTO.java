@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 public class DeviceDTO {
     private Long id;
-    private String name;
+    private String type;
     private String brandName;
     private String model;
     @Length(min = 1, max = 15)

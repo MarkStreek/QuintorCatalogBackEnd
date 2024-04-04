@@ -1,5 +1,6 @@
 package quintor.bioinf.catalog.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class MainDeviceService {
      *  The Device must first be stored in the database,
      *  before it can be used in the DeviceSpecs
      *
-     * @param name Name of the component
+     * @param type Name of the component
      * @param brandName Brand name of the component
      * @param model Model of the component
      * @param serialNumber Serial number of the component
@@ -72,7 +73,7 @@ public class MainDeviceService {
      * @param specs The specifications of the component
      */
     public void addDevice(
-            String name,
+            String type,
             String brandName,
             String model,
             String serialNumber,
@@ -83,12 +84,12 @@ public class MainDeviceService {
             List<SpecDetail> specs)
     {
         // 1 - Create the location
-        Location location = this.locationService.addLocation(locationName, city, locationAddress);
-        Long LocationId = location.getId();
-        // 2 - Add the device to the database
-        this.deviceRepository.addDevice(name, brandName, model, serialNumber, invoiceNumber, LocationId);
-        // 3 - Get the device from the database by getting the last added device (highest current id)
-        Device device = this.deviceRepository.findFirstByOrderByIdDesc();
+        Long locationId = this.locationService.addLocation(locationName, city, locationAddress);
+        // 2 - Add the device to the database and get the id of the inserted device
+        Long deviceId = this.deviceRepository.addDevice(type, brandName, model, serialNumber, invoiceNumber, locationId);
+        // 3 - Get the device from the database using the returned id
+        Device device = this.deviceRepository.findById(deviceId)
+                .orElseThrow(() -> new EntityNotFoundException("Device not found with id: " + deviceId));
         // 4 - Give that device to the spec service
         this.specsService.createDeviceSpecs(specs, device);
     }

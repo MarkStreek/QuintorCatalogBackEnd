@@ -31,7 +31,7 @@ public class MainDeviceServiceTest {
     void createComponent_HappyPath() {
         Device device = mainDeviceService.createDevice("Name", "Brand", "Model", "Serial", "Invoice");
         assertNotNull(device);
-        assertEquals("Name", device.getName());
+        assertEquals("Name", device.getType());
         assertEquals("Brand", device.getBrandName());
         assertEquals("Model", device.getModel());
         assertEquals("Serial", device.getSerialNumber());
