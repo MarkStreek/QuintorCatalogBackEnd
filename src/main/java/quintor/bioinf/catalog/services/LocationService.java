@@ -34,7 +34,7 @@ public class LocationService {
      * @param name Name of the location (i.e. "Server room")
      * @param city City of the location
      * @param locationAddress Address of the location
-     * @return Location that is added to the database
+     * @return LocationId that can be used for adding a device
      */
 
     public Long addLocation(String name, String city, String locationAddress) {
