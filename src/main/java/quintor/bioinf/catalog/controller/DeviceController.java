@@ -16,13 +16,10 @@ import java.util.List;
 public class DeviceController {
 
     private final MainDeviceService mainDeviceService;
-    private final LocationService locationService;
-
 
     @Autowired
-    public DeviceController(MainDeviceService mainDeviceService, LocationService locationService) {
+    public DeviceController(MainDeviceService mainDeviceService) {
         this.mainDeviceService = mainDeviceService;
-        this.locationService = locationService;
     }
 
     @PostMapping
