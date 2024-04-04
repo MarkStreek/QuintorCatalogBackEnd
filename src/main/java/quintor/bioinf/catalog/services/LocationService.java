@@ -3,6 +3,7 @@ package quintor.bioinf.catalog.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import quintor.bioinf.catalog.entities.Location;
 import quintor.bioinf.catalog.repository.LocationRepository;
@@ -39,13 +40,34 @@ public class LocationService {
 
     public Long addLocation(String name, String city, String locationAddress) {
         if (!this.checkIfLocationExists(locationAddress)) {
-            Long locationId  = locationRepository.addLocation(name, city, locationAddress);
+            Long locationId = locationRepository.addLocation(name, city, locationAddress);
             return locationId;
         } else {
             log.warn("Location already exists, not adding it again.");
-            return locationRepository.findById(locationRepository.findByAddress(locationAddress).getId());
+            Location foundLocation = locationRepository.findByAddress(locationAddress);
+            if (foundLocation != null) {
+                return foundLocation.getId();
+            } else {
+                log.error("Existing location not found after check. Address: {}", locationAddress);
+                return null;
+            }
         }
     }
+
+    public Long findOrCreateLocation(String name, String city, String address) {
+        Location location = this.locationRepository.findByAddress(address);
+        if (location == null) {
+            return this.addLocation(name, city, address);
+        } else {
+            return location.getId();
+        }
+    }
+
+
+    public ResponseEntity<String> updateLocation(Long id, String name, String city, String address) {
+        this.locationRepository.updateLocation(id, name, city, address);
+        return ResponseEntity.ok("Location updated successfully.");
+        }
 
 
     /**
@@ -63,4 +85,8 @@ public class LocationService {
         }
         return false;
     }
+
+
+
+
 }

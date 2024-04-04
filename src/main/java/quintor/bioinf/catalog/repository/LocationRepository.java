@@ -32,5 +32,12 @@ public interface LocationRepository extends CrudRepository<Location, Integer> {
             @Param("p_city") String city,
             @Param("p_address") String address);
 
-    Long findById(Long id);
+    @Modifying
+    @Procedure("update_location")
+    void updateLocation(
+            @Param("p_location_id") Long locationId,
+            @Param("p_name") String name,
+            @Param("p_city") String city,
+            @Param("p_address") String address);
+
 }

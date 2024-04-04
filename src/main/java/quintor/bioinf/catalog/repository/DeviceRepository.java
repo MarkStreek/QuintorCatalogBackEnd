@@ -30,4 +30,16 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     @Procedure("delete_device")
     void deleteDevice(@Param("p_device_id") Long deviceId);
 
+    @Modifying
+    @Procedure("update_device")
+    void updateDevice(
+            @Param("p_device_id") Long deviceId,
+            @Param("p_type") String type,
+            @Param("p_brandName") String brandName,
+            @Param("p_model") String model,
+            @Param("p_serialNumber") String serialNumber,
+            @Param("p_invoiceNumber") String invoiceNumber,
+            @Param("p_location_id") Long locationId);
+
 }
+

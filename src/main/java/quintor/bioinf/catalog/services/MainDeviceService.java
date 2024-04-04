@@ -131,6 +131,36 @@ public class MainDeviceService {
         }
     }
 
+    public ResponseEntity<String> updateDevice(DeviceDTO deviceDTO) {
+        // Find location based on dto, if it does not exist, create it
+        Long locationId = this.locationService.findOrCreateLocation(
+                deviceDTO.getLocationName(),
+                deviceDTO.getLocationCity(),
+                deviceDTO.getLocationAddress());
+
+        // Update the device
+        this.deviceRepository.updateDevice(
+                deviceDTO.getId(),
+                deviceDTO.getType(),
+                deviceDTO.getBrandName(),
+                deviceDTO.getModel(),
+                deviceDTO.getSerialNumber(),
+                deviceDTO.getInvoiceNumber(),
+                locationId);
+
+        // Update the location
+        this.locationService.updateLocation(
+                locationId,
+                deviceDTO.getLocationName(),
+                deviceDTO.getLocationCity(),
+                deviceDTO.getLocationAddress());
+
+        return ResponseEntity.ok("Device updated successfully.");
+    }
+
+        // Catch being handled by the exception handler???????
+
+
     public DeviceDTO getDevice(Long id) {
         return deviceRepository.findById(id)
                 .map(deviceDTOConverter)
