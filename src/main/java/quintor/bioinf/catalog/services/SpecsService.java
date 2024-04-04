@@ -11,7 +11,9 @@ import quintor.bioinf.catalog.entities.Specs;
 import quintor.bioinf.catalog.repository.DeviceSpecsRepository;
 import quintor.bioinf.catalog.repository.SpecsRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -119,9 +121,15 @@ public class SpecsService {
      *
      * @return List of all the specs
      */
-    public List<Specs> getAllSpecs() {
+    public Map<String, String> getAllSpecs() {
         Iterable<Specs> specsIterable = specsRepository.findAll();
-        return StreamSupport.stream(specsIterable.spliterator(), false)
-                .collect(Collectors.toList());
+
+        Map<String, String> specsMap = new HashMap<>();
+
+        for (Specs spec : specsIterable) {
+            specsMap.put(spec.getName(), spec.getDatatype());
+        }
+
+        return specsMap;
     }
 }

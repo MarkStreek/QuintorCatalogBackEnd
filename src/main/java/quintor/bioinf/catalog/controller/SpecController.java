@@ -6,6 +6,7 @@ import quintor.bioinf.catalog.entities.Specs;
 import quintor.bioinf.catalog.services.SpecsService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/specs")
@@ -18,7 +19,7 @@ public class SpecController {
     }
 
     @GetMapping
-    public List<Specs> getAllSpecs() {
+    public Map<String, String> getAllSpecs() {
         return specsService.getAllSpecs();
     }
 }
