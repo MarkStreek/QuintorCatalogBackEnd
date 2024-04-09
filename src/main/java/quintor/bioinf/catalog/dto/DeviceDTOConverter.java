@@ -25,11 +25,11 @@ public class DeviceDTOConverter implements Function<Device, DeviceDTO> {
 
     @Override
     public DeviceDTO apply(Device device) {
-        log.info("Converting device: {} (ID: {})", device.getName(), device.getId());
+        log.info("Converting device: {} (ID: {})", device.getType(), device.getId());
 
         DeviceDTO deviceDTO = new DeviceDTO();
         deviceDTO.setId(device.getId());
-        deviceDTO.setName(device.getName());
+        deviceDTO.setType(device.getType());
         deviceDTO.setBrandName(device.getBrandName());
         deviceDTO.setModel(device.getModel());
         deviceDTO.setSerialNumber(device.getSerialNumber());

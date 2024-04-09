@@ -3,6 +3,7 @@ package quintor.bioinf.catalog.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import quintor.bioinf.catalog.entities.Location;
 import quintor.bioinf.catalog.repository.LocationRepository;
@@ -34,75 +35,58 @@ public class LocationService {
      * @param name Name of the location (i.e. "Server room")
      * @param city City of the location
      * @param locationAddress Address of the location
-     * @return Location that is added to the database
+     * @return LocationId that can be used for adding a device
      */
-    public Location addLocation(
-            String name,
-            String city,
-            String locationAddress)
-    {
-        Location location = createLocation(name, city, locationAddress);
-        if (!this.checkIfLocationExists(location)) {
-            this.saveLocation(location);
-            return location;
+
+    public Long addLocation(String name, String city, String locationAddress) {
+        if (!this.checkIfLocationExists(locationAddress)) {
+            Long locationId = locationRepository.addLocation(name, city, locationAddress);
+            return locationId;
         } else {
             log.warn("Location already exists, not adding it again.");
-            return locationRepository.findByAddress(location.getAddress());
+            Location foundLocation = locationRepository.findByAddress(locationAddress);
+            if (foundLocation != null) {
+                return foundLocation.getId();
+            } else {
+                log.error("Existing location not found after check. Address: {}", locationAddress);
+                return null;
+            }
+        }
+    }
+
+    public Long findOrCreateLocation(String name, String city, String address) {
+        Location location = this.locationRepository.findByAddress(address);
+        if (location == null) {
+            return this.addLocation(name, city, address);
+        } else {
+            return location.getId();
         }
     }
 
 
-    /**
-     * Method that creates a location and checks the input for validity
-     * <p>
-     * The input is checked for emptiness of the city and address.
-     * It then sets the name, city and address of the location
-     *
-     * @param name Name of the location
-     * @param city City of the location
-     * @param locationAddress Address of the location
-     * @return Location that is created
-     * @throws IllegalArgumentException if the city or locationAddress is empty
-     */
-    public Location createLocation(
-            String name,
-            String city,
-            String locationAddress
-    ) {
-        Location location = new Location();
-        if (city.isEmpty() || locationAddress.isEmpty()) {
-            log.error("City or locationAddress is empty");
-            throw new IllegalArgumentException();
+    public ResponseEntity<String> updateLocation(Long id, String name, String city, String address) {
+        this.locationRepository.updateLocation(id, name, city, address);
+        return ResponseEntity.ok("Location updated successfully.");
         }
-            location.setCity(city);
-            location.setAddress(locationAddress);
-            location.setName(name);
-        return location;
-    }
+
 
     /**
      * Simple method that tests if an equal location already exists in the database
      * The address is searched for, if it exists, the location is compared to the findingLocation
      * If the location is equal, the location already exists
      *
-     * @param findingLocation Location to be checked
+     * @param locationAdress Location address to be checked
      * @return boolean if the location already exists
      */
-    public boolean checkIfLocationExists(Location findingLocation) {
-        if (locationRepository.findByAddress(findingLocation.getAddress()) != null) {
-            Location location = locationRepository.findByAddress(findingLocation.getAddress());
-            return findingLocation.equals(location);
+    public boolean checkIfLocationExists(String locationAdress) {
+        if (locationRepository.findByAddress(locationAdress) != null) {
+            Location location = locationRepository.findByAddress(locationAdress);
+            return location.getAddress().equals(locationAdress);
         }
         return false;
     }
 
-    /**
-     * Method that saves a location to the database
-     * It calls the locationRepository to save the location
-     *
-     * @param location Location to be saved
-     */
-    protected void saveLocation(Location location) {
-        locationRepository.save(location);
-    }
+
+
+
 }

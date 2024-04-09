@@ -84,6 +84,30 @@ public class DummyDataLoader {
                     "Tech Outlet",
                     hpSpecs
             );
+
+            List<SpecDetail> alienwareSpecs = Arrays.asList(
+                    new SpecDetail("Processor", "Intel Core i9-11900H", "String"),
+                    new SpecDetail("RAM", "32GB DDR4", "Text"),
+                    new SpecDetail("Storage", "1TB NVMe SSD", "Text"),
+                    new SpecDetail("Screen Size", "17.3\" FHD", "Text"),
+                    new SpecDetail("Graphics", "NVIDIA GeForce RTX 3080", "Text"),
+                    new SpecDetail("OS", "Windows 11 Pro", "Enum"),
+                    new SpecDetail("Battery", "99 Wh", "Text"),
+                    new SpecDetail("Weight", "2.5 kg", "Text")
+            );
+
+            mainDeviceService.addDevice(
+                    "Laptop",
+                    "Alienware",
+                    "M17 R4",
+                    "98765XYZ",
+                    "INV123456",
+                    "New York",
+                    "456 Tech Park",
+                    "Elite Gaming Gear",
+                    alienwareSpecs
+            );
+
         };
     }
 }

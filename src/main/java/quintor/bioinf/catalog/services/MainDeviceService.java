@@ -1,8 +1,10 @@
 package quintor.bioinf.catalog.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.dto.DeviceDTOConverter;
@@ -12,6 +14,7 @@ import quintor.bioinf.catalog.entities.Location;
 import quintor.bioinf.catalog.repository.DeviceRepository;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,7 +35,6 @@ public class MainDeviceService {
     private final LocationService locationService;
     private final SpecsService specsService;
     private final DeviceRepository deviceRepository;
-
     private final DeviceDTOConverter deviceDTOConverter;
 
     @Autowired
@@ -60,7 +62,7 @@ public class MainDeviceService {
      *  The Device must first be stored in the database,
      *  before it can be used in the DeviceSpecs
      *
-     * @param name Name of the component
+     * @param type Name of the component
      * @param brandName Brand name of the component
      * @param model Model of the component
      * @param serialNumber Serial number of the component
@@ -71,7 +73,7 @@ public class MainDeviceService {
      * @param specs The specifications of the component
      */
     public void addDevice(
-            String name,
+            String type,
             String brandName,
             String model,
             String serialNumber,
@@ -81,65 +83,15 @@ public class MainDeviceService {
             String locationName,
             List<SpecDetail> specs)
     {
-        // 1 - Create the device
-        Device device = this.createDevice(name, brandName, model, serialNumber, invoiceNumber);
-        // 2 - Create the location
-        Location location = this.locationService.addLocation(locationName, city, locationAddress);
-        // 3 - Add location to the device
-        device.setLocation(location);
-        // 4 - Save the device to the database
-        this.saveDevice(device);
-        // 5 - Create device specs
+        // 1 - Create the location
+        Long locationId = this.locationService.addLocation(locationName, city, locationAddress);
+        // 2 - Add the device to the database and get the id of the inserted device
+        Long deviceId = this.deviceRepository.addDevice(type, brandName, model, serialNumber, invoiceNumber, locationId);
+        // 3 - Get the device from the database using the returned id
+        Device device = this.deviceRepository.findById(deviceId)
+                .orElseThrow(() -> new EntityNotFoundException("Device not found with id: " + deviceId));
+        // 4 - Give that device to the spec service
         this.specsService.createDeviceSpecs(specs, device);
-    }
-
-    /**
-     * This method creates a new Device object and sets its properties based on the provided arguments.
-     * It uses varargs to accept an arbitrary number of arguments,
-     * which should correspond to the properties of the Device.
-     * The order of the arguments should be: name, brandName, model, serialNumber, invoiceNumber.
-     *
-     * @param args The properties of the Device.
-     * @return A new Device object with its properties set to the provided arguments.
-     * @throws IllegalArgumentException If any of the provided arguments are null or empty.
-     */
-    public Device createDevice(String... args) {
-        // The names of the arguments, used for the exception message.
-        String[] argNames = {"name", "brandName", "model", "serialNumber", "invoiceNumber"};
-
-        // Create a new Device object.
-        Device device = new Device();
-
-        // Iterate over the provided arguments.
-        for (int i = 0; i < args.length; i++) {
-            if (args[i] == null || args[i].isEmpty()) {
-                throw new IllegalArgumentException(argNames[i] + " cannot be null or empty");
-            }
-        }
-
-        // Set the properties of the Device object based on the provided arguments.
-        device.setName(args[0]);
-        device.setBrandName(args[1]);
-        device.setModel(args[2]);
-        device.setSerialNumber(args[3]);
-        device.setInvoiceNumber(args[4]);
-
-        return device;
-    }
-
-    /**
-     * Method that saves a device to the database.
-     * It uses the componentRepository to save the device
-     *
-     * @param device the device that needs to be saved
-     */
-    public void saveDevice(Device device) {
-        try {
-            this.deviceRepository.save(device);
-            log.info("Device successfully saved to the database");
-        } catch (Exception e) {
-            log.error("Error saving device to the database: " + e.getMessage());
-        }
     }
 
     /**
@@ -148,8 +100,12 @@ public class MainDeviceService {
      * with calling the deleteComponentSpecs method
      *
      * @param Id The id of the component that needs to be deleted
+     * @return
      */
-    public void deleteDevice(Long Id) {
+    public ResponseEntity<String> deleteDevice(Long Id) {
+        // Use AtomicBoolean to track if the device was found and deleted.
+        AtomicBoolean deviceFoundAndDeleted = new AtomicBoolean(false);
+
         // Check if the component exists in the database
         this.deviceRepository.findById(Id).ifPresentOrElse(
                 device -> {
@@ -157,7 +113,8 @@ public class MainDeviceService {
                         // Delete the device specs
                         this.specsService.deleteDeviceSpecs(device);
                         // Delete the device from the database
-                        this.deviceRepository.deleteById(Id);
+                        this.deviceRepository.deleteDevice(Id);
+                        deviceFoundAndDeleted.set(true);
                     } catch (Exception e) {
                         log.error("Failed to delete device: " + e.getMessage());
                     }
@@ -165,7 +122,44 @@ public class MainDeviceService {
                 // Log an error if the component does not exist
                 () -> log.error("No component found with the given ID")
         );
+
+        // Check if the device was found and deleted, and return an appropriate response
+        if (deviceFoundAndDeleted.get()) {
+            return ResponseEntity.ok("Device successfully deleted.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+    public ResponseEntity<String> updateDevice(DeviceDTO deviceDTO) {
+        // Find location based on dto, if it does not exist, create it
+        Long locationId = this.locationService.findOrCreateLocation(
+                deviceDTO.getLocationName(),
+                deviceDTO.getLocationCity(),
+                deviceDTO.getLocationAddress());
+
+        // Update the device
+        this.deviceRepository.updateDevice(
+                deviceDTO.getId(),
+                deviceDTO.getType(),
+                deviceDTO.getBrandName(),
+                deviceDTO.getModel(),
+                deviceDTO.getSerialNumber(),
+                deviceDTO.getInvoiceNumber(),
+                locationId);
+
+        // Update the location
+        this.locationService.updateLocation(
+                locationId,
+                deviceDTO.getLocationName(),
+                deviceDTO.getLocationCity(),
+                deviceDTO.getLocationAddress());
+
+        return ResponseEntity.ok("Device updated successfully.");
+    }
+
+        // Catch being handled by the exception handler???????
+
 
     public DeviceDTO getDevice(Long id) {
         return deviceRepository.findById(id)

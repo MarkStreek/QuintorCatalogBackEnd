@@ -1,6 +1,8 @@
 package quintor.bioinf.catalog.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class represents the Specs table in the database.
@@ -10,6 +12,8 @@ import jakarta.persistence.*;
  *
  * @see DeviceSpecs
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "specs")
 public class Specs {
@@ -23,25 +27,5 @@ public class Specs {
 
     @Column(name = "datatype")
     private String datatype;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDatatype() {
-        return datatype;
-    }
-
-    public void setDatatype(String datatype) {
-        this.datatype = datatype;
-    }
 
 }

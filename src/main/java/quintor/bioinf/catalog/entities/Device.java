@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.Objects;
@@ -32,10 +31,10 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "type")
+    private String type;
 
-    @Column(name = "brandName")
+    @Column(name = "brand_name")
     @NotEmpty
     @NotNull
     private String brandName;
@@ -43,10 +42,10 @@ public class Device {
     @Column(name = "model")
     private String model;
 
-    @Column(name = "serialNumber")
+    @Column(name = "serial_number")
     private String serialNumber;
 
-    @Column(name = "invoiceNumber")
+    @Column(name = "invoice_number")
     private String invoiceNumber;
 
     @ManyToOne
@@ -58,12 +57,12 @@ public class Device {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Device device = (Device) o;
-        return Objects.equals(name, device.name) && Objects.equals(brandName, device.brandName) && Objects.equals(model, device.model) && Objects.equals(serialNumber, device.serialNumber) && Objects.equals(invoiceNumber, device.invoiceNumber) && Objects.equals(location, device.location);
+        return Objects.equals(type, device.type) && Objects.equals(brandName, device.brandName) && Objects.equals(model, device.model) && Objects.equals(serialNumber, device.serialNumber) && Objects.equals(invoiceNumber, device.invoiceNumber) && Objects.equals(location, device.location);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, brandName, model, serialNumber, invoiceNumber, location);
+        return Objects.hash(type, brandName, model, serialNumber, invoiceNumber, location);
     }
 
 }

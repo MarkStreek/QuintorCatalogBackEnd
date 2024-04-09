@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.dto.DeviceDTO;
+import quintor.bioinf.catalog.repository.DeviceRepository;
+import quintor.bioinf.catalog.services.LocationService;
 import quintor.bioinf.catalog.dto.SpecDetail;
 import quintor.bioinf.catalog.services.MainDeviceService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/components")
+@RequestMapping("/devices")
 public class DeviceController {
 
     private final MainDeviceService mainDeviceService;
@@ -24,7 +26,7 @@ public class DeviceController {
     @PostMapping
     public ResponseEntity<String> addDevice(@RequestBody @Valid DeviceDTO deviceDTO) {
         mainDeviceService.addDevice(
-                deviceDTO.getName(),
+                deviceDTO.getType(),
                 deviceDTO.getBrandName(),
                 deviceDTO.getModel(),
                 deviceDTO.getSerialNumber(),
@@ -48,13 +50,17 @@ public class DeviceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateDevices(@PathVariable Long id, @RequestBody DeviceDTO deviceDTO) {
-        return null;
+    public ResponseEntity<String> updateDevice(
+            @PathVariable Long id,
+            @RequestBody @Valid DeviceDTO deviceDTO) {
+
+        deviceDTO.setId(id);
+        return mainDeviceService.updateDevice(deviceDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDevices(@PathVariable Long id) {
-        return null;
+        return mainDeviceService.deleteDevice(id);
     }
 
 }
