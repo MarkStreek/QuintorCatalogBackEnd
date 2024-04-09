@@ -1,5 +1,6 @@
 package quintor.bioinf.catalog.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import quintor.bioinf.catalog.entities.Specs;
@@ -12,7 +13,7 @@ import quintor.bioinf.catalog.entities.Specs;
  * @see Specs
  */
 @Repository
-public interface SpecsRepository extends CrudRepository<Specs, Long> {
+public interface SpecsRepository extends JpaRepository<Specs, Long> {
 
     /**
      * Method that retrieves specs by their name

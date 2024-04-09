@@ -1,6 +1,7 @@
 package quintor.bioinf.catalog.repository;
 
 import org.springframework.data.jdbc.repository.query.Modifying;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +16,7 @@ import quintor.bioinf.catalog.entities.Location;
  * @see Location
  */
 @Repository
-public interface LocationRepository extends CrudRepository<Location, Integer> {
+public interface LocationRepository extends JpaRepository<Location, Integer> {
 
     /**
      * Method that retrieves a location by its address

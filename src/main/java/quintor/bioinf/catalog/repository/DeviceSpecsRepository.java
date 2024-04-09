@@ -1,5 +1,6 @@
 package quintor.bioinf.catalog.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import quintor.bioinf.catalog.entities.Device;
@@ -15,7 +16,7 @@ import java.util.List;
  * @see DeviceSpecs
  */
 @Repository
-public interface DeviceSpecsRepository extends CrudRepository<DeviceSpecs, Long> {
+public interface DeviceSpecsRepository extends JpaRepository<DeviceSpecs, Long> {
 
     /**
      * Method that retrieves all the DeviceSpecs from the database that belong to a certain device.
