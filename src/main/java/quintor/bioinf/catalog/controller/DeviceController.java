@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.repository.DeviceRepository;
 import quintor.bioinf.catalog.services.LocationService;
+import quintor.bioinf.catalog.dto.SpecDetail;
 import quintor.bioinf.catalog.services.MainDeviceService;
 
 import java.util.List;
