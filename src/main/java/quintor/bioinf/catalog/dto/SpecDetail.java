@@ -1,5 +1,10 @@
 package quintor.bioinf.catalog.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class SpecDetail {
     private String specName;
     private String value;
@@ -11,28 +16,4 @@ public class SpecDetail {
         this.datatype = datatype;
     }
 
-    // Getters en setters
-    public String getSpecName() {
-        return specName;
-    }
-
-    public void setSpecName(String spec) {
-        this.specName = spec;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getDatatype() {
-        return datatype;
-    }
-
-    public void setDatatype(String datatype) {
-        this.datatype = datatype;
-    }
 }

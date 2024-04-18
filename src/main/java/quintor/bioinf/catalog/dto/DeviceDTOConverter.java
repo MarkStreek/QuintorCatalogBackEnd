@@ -25,29 +25,29 @@ public class DeviceDTOConverter implements Function<Device, DeviceDTO> {
 
     @Override
     public DeviceDTO apply(Device device) {
-        log.info("Converting device: {} (ID: {})", device.getType(), device.getId());
-
-        DeviceDTO deviceDTO = new DeviceDTO();
-        deviceDTO.setId(device.getId());
-        deviceDTO.setType(device.getType());
-        deviceDTO.setBrandName(device.getBrandName());
-        deviceDTO.setModel(device.getModel());
-        deviceDTO.setSerialNumber(device.getSerialNumber());
-        deviceDTO.setInvoiceNumber(device.getInvoiceNumber());
-
-        Location location = device.getLocation();
-        if (location != null) {
-            deviceDTO.setLocationCity(location.getCity());
-            deviceDTO.setLocationAddress(location.getAddress());
-            deviceDTO.setLocationName(location.getName());
-        }
+        // Create a new DeviceDTO object
+        DeviceDTO deviceDTO = createNewDeviceDTO(device);
+        // Set the Location of the DTO
+        setDTOLocationWithDevice(device, deviceDTO);
 
         List<SpecDetail> specDetails = new ArrayList<>();
         List<DeviceSpecs> deviceSpecsList = deviceSpecsRepository.findByDevice(device);
+
+        checkForCurrentDeviceSpecs(device, deviceSpecsList);
+        getSpecDetailListOfDevice(deviceSpecsList, specDetails);
+
+        log.info("Converted device: {}", deviceDTO);
+        deviceDTO.setSpecs(specDetails);
+        return deviceDTO;
+    }
+
+    private static void checkForCurrentDeviceSpecs(Device device, List<DeviceSpecs> deviceSpecsList) {
         if (deviceSpecsList.isEmpty()) {
             log.warn("No specs found for device ID: {}", device.getId());
         }
+    }
 
+    private static void getSpecDetailListOfDevice(List<DeviceSpecs> deviceSpecsList, List<SpecDetail> specDetails) {
         for (DeviceSpecs compSpec : deviceSpecsList) {
             Specs spec = compSpec.getSpecs();
             if (spec == null) {
@@ -58,8 +58,25 @@ public class DeviceDTOConverter implements Function<Device, DeviceDTO> {
             log.info("Adding spec detail: name={}, value={}, datatype={}", spec.getName(), compSpec.getValue(), spec.getDatatype());
             specDetails.add(specDetail);
         }
-        log.info("Converted device: {}", deviceDTO);
-        deviceDTO.setSpecs(specDetails);
+    }
+
+    private static void setDTOLocationWithDevice(Device device, DeviceDTO deviceDTO) {
+        Location location = device.getLocation();
+        if (location != null) {
+            deviceDTO.setLocationCity(location.getCity());
+            deviceDTO.setLocationAddress(location.getAddress());
+            deviceDTO.setLocationName(location.getName());
+        }
+    }
+
+    private static DeviceDTO createNewDeviceDTO(Device device) {
+        DeviceDTO deviceDTO = new DeviceDTO();
+        deviceDTO.setId(device.getId());
+        deviceDTO.setType(device.getType());
+        deviceDTO.setBrandName(device.getBrandName());
+        deviceDTO.setModel(device.getModel());
+        deviceDTO.setSerialNumber(device.getSerialNumber());
+        deviceDTO.setInvoiceNumber(device.getInvoiceNumber());
         return deviceDTO;
     }
 }

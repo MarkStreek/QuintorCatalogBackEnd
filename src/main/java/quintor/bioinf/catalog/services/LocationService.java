@@ -45,12 +45,16 @@ public class LocationService {
         } else {
             log.warn("Location already exists, not adding it again.");
             Location foundLocation = locationRepository.findByAddress(locationAddress);
-            if (foundLocation != null) {
-                return foundLocation.getId();
-            } else {
-                log.error("Existing location not found after check. Address: {}", locationAddress);
-                return null;
-            }
+            return getExistingLocationId(locationAddress, foundLocation);
+        }
+    }
+
+    private static Long getExistingLocationId(String locationAddress, Location foundLocation) {
+        if (foundLocation != null) {
+            return foundLocation.getId();
+        } else {
+            log.error("Existing location not found after check. Address: {}", locationAddress);
+            return null;
         }
     }
 

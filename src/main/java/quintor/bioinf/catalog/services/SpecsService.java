@@ -14,8 +14,6 @@ import quintor.bioinf.catalog.repository.SpecsRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * This service class is the service that provides the main functionality for creating,
@@ -53,35 +51,43 @@ public class SpecsService {
      * @throws IllegalArgumentException if the specs or device are null or empty
      */
     public void createDeviceSpecs(List<SpecDetail> specDetails, Device device) {
-        if (specDetails == null || specDetails.isEmpty() || device == null) {
-            log.error("Error with parameters: specDetails or device is null or empty.");
-            throw new IllegalArgumentException();
-        }
+        if (checkForValidParameters(specDetails, device)) return;
 
         for (SpecDetail detail : specDetails) {
+            // Create a new DeviceSpecs object and set the device
             DeviceSpecs deviceSpecs = new DeviceSpecs();
             deviceSpecs.setDevice(device);
-
-            // Check if the spec already exists
+            // Find the spec in the database
+            // If nothing is found, the spec is null
             Specs spec = specsRepository.findByName(detail.getSpecName());
-            if (spec == null) {
-                // If the spec does not exist, create and save a new one
-                spec = new Specs();
-                spec.setName(detail.getSpecName());
-                spec.setDatatype(detail.getDatatype());
-                specsRepository.save(spec);
-                log.info("A new Spec has been created and saved: " + detail.getSpecName());
-            }
-
+            // Check if the spec already exists
+            spec = checkIfSpecExistsOrCreateNew(detail, spec);
             // Now, associate the spec and its value with the device spec
             deviceSpecs.setSpecs(spec);
             deviceSpecs.setValue(detail.getValue());
-
             // Save the device spec
             saveDeviceSpecs(deviceSpecs);
         }
     }
 
+    private static boolean checkForValidParameters(List<SpecDetail> specDetails, Device device) {
+        if (specDetails == null || specDetails.isEmpty() || device == null) {
+            log.error("Error with parameters: specDetails or device is null or empty.");
+            return true;
+        }
+        return false;
+    }
+
+    private Specs checkIfSpecExistsOrCreateNew(SpecDetail detail, Specs spec) {
+        if (spec == null) {
+            spec = new Specs();
+            spec.setName(detail.getSpecName());
+            spec.setDatatype(detail.getDatatype());
+            specsRepository.save(spec);
+            log.info("A new Spec has been created and saved: {}", detail.getSpecName());
+        }
+        return spec;
+    }
 
     /**
      * Method that saves the component specs to the database.
@@ -93,7 +99,7 @@ public class SpecsService {
         try {
             this.deviceSpecsRepository.save(deviceSpecs);
         } catch (Exception e) {
-            log.error("Failed to save component specs: " + e.getMessage());
+            log.error("Failed to save component specs: {}", e.getMessage());
         }
     }
 
@@ -111,7 +117,7 @@ public class SpecsService {
             // Delete all the device specs from the database
             this.deviceSpecsRepository.deleteAll(deviceSpecsList);
         } catch (Exception e) {
-            log.error("Failed to delete device specs: " + e.getMessage());
+            log.error("Failed to delete device specs: {}", e.getMessage());
         }
     }
 
@@ -119,11 +125,10 @@ public class SpecsService {
      * Method that retrieves all the specs from the database.
      * It retrieves all the specs from the database using the specsRepository.
      *
-     * @return List of all the specs
+     * @return Map of all the specs
      */
     public Map<String, String> getAllSpecs() {
         Iterable<Specs> specsIterable = specsRepository.findAll();
-
         Map<String, String> specsMap = new HashMap<>();
 
         for (Specs spec : specsIterable) {

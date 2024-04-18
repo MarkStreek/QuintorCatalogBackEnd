@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.dto.DeviceDTOConverter;
 import quintor.bioinf.catalog.dto.SpecDetail;
 import quintor.bioinf.catalog.entities.Device;
-import quintor.bioinf.catalog.entities.Location;
 import quintor.bioinf.catalog.repository.DeviceRepository;
 
 import java.util.List;
@@ -72,6 +72,7 @@ public class MainDeviceService {
      * @param locationName Name of the location (i.e. "Server room")
      * @param specs The specifications of the component
      */
+    @Transactional
     public void addDevice(
             String type,
             String brandName,
@@ -102,6 +103,7 @@ public class MainDeviceService {
      * @param Id The id of the component that needs to be deleted
      * @return
      */
+    @Transactional
     public ResponseEntity<String> deleteDevice(Long Id) {
         // Use AtomicBoolean to track if the device was found and deleted.
         AtomicBoolean deviceFoundAndDeleted = new AtomicBoolean(false);
@@ -109,21 +111,29 @@ public class MainDeviceService {
         // Check if the component exists in the database
         this.deviceRepository.findById(Id).ifPresentOrElse(
                 device -> {
-                    try {
-                        // Delete the device specs
-                        this.specsService.deleteDeviceSpecs(device);
-                        // Delete the device from the database
-                        this.deviceRepository.deleteDevice(Id);
-                        deviceFoundAndDeleted.set(true);
-                    } catch (Exception e) {
-                        log.error("Failed to delete device: " + e.getMessage());
-                    }
+                    deleteSpecsAndDevice(Id, device, deviceFoundAndDeleted);
                 },
                 // Log an error if the component does not exist
                 () -> log.error("No component found with the given ID")
         );
 
         // Check if the device was found and deleted, and return an appropriate response
+        return checkSuccessfullyDeleted(deviceFoundAndDeleted);
+    }
+
+    private void deleteSpecsAndDevice(Long Id, Device device, AtomicBoolean deviceFoundAndDeleted) {
+        try {
+            // Delete the device specs
+            this.specsService.deleteDeviceSpecs(device);
+            // Delete the device from the database
+            this.deviceRepository.deleteDevice(Id);
+            deviceFoundAndDeleted.set(true);
+        } catch (Exception e) {
+            log.error("Failed to delete device: {}", e.getMessage());
+        }
+    }
+
+    private static ResponseEntity<String> checkSuccessfullyDeleted(AtomicBoolean deviceFoundAndDeleted) {
         if (deviceFoundAndDeleted.get()) {
             return ResponseEntity.ok("Device successfully deleted.");
         } else {
@@ -131,14 +141,18 @@ public class MainDeviceService {
         }
     }
 
-    public ResponseEntity<String> updateDevice(DeviceDTO deviceDTO) {
+    @Transactional
+    public void updateDeviceAndLocation(DeviceDTO deviceDTO) {
         // Find location based on dto, if it does not exist, create it
-        Long locationId = this.locationService.findOrCreateLocation(
-                deviceDTO.getLocationName(),
-                deviceDTO.getLocationCity(),
-                deviceDTO.getLocationAddress());
-
+        Long locationId = getLocationOfUpdatedDevice(deviceDTO);
         // Update the device
+        updateDevice(deviceDTO, locationId);
+        // Update the location
+        updateDeviceLocation(deviceDTO, locationId);
+        log.info("Device was updated successfully.");
+    }
+
+    private void updateDevice(DeviceDTO deviceDTO, Long locationId) {
         this.deviceRepository.updateDevice(
                 deviceDTO.getId(),
                 deviceDTO.getType(),
@@ -147,19 +161,23 @@ public class MainDeviceService {
                 deviceDTO.getSerialNumber(),
                 deviceDTO.getInvoiceNumber(),
                 locationId);
+    }
 
-        // Update the location
+    private void updateDeviceLocation(DeviceDTO deviceDTO, Long locationId) {
         this.locationService.updateLocation(
                 locationId,
                 deviceDTO.getLocationName(),
                 deviceDTO.getLocationCity(),
                 deviceDTO.getLocationAddress());
-
-        return ResponseEntity.ok("Device updated successfully.");
     }
 
-        // Catch being handled by the exception handler???????
-
+    private Long getLocationOfUpdatedDevice(DeviceDTO deviceDTO) {
+        return this.locationService.findOrCreateLocation(
+                deviceDTO.getLocationName(),
+                deviceDTO.getLocationCity(),
+                deviceDTO.getLocationAddress());
+    }
+    
 
     public DeviceDTO getDevice(Long id) {
         return deviceRepository.findById(id)
