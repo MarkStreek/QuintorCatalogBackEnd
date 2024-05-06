@@ -163,7 +163,9 @@ Ook zal er aan het eind van het project overzichtelijke en uitgebreid documentat
 
 ## Current status of development
 
-De huidige status van de ontwikkeling is dat er nog geen begin is gemaakt met de applicatie. De eerste sprint van het project omvatte een leer-sprint. Het doel was om de technieken die gebruikt gaan worden te leren. De volgende stap is om een begin te maken met de applicatie. De eerste stap zal zijn om een backend te maken.
+De huidige status van de ontwikkeling is dat er apparaten toegevoegd kunnen worden aan de database. De apparaten kunnen worden toegevoegd op een speciale pagina die hiervoor is gemaakt. Tevens is er met feedback van de eindgebruikers een tabel gemaakt waarin alle apparaten worden getoond. Deze tabel kan gefilterd worden op verschillende velden. Ook kan er gezocht worden in de tabel op verschillende velden.
+
+Tot slot bevat de applicatie een homepagina, waarop de gebruiker binnenkomt na het inloggen. Op deze pagina staan snelle links naar de verschillende pagina's binnen de applicatie. Ook hier is de zoekbalk aanwezig, waar snel gezocht kan woorden naar een specifiek apparaat.
 
 ## Code Repo
 
