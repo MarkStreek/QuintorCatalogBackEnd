@@ -1,52 +1,57 @@
 package quintor.bioinf.catalog.DataLayer.Services;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import quintor.bioinf.catalog.entities.Location;
-import quintor.bioinf.catalog.services.LocationService;
-
+import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
-        "spring.datasource.driverClassName=org.h2.Driver",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=",
-        "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
-})
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import quintor.bioinf.catalog.entities.Location;
+import quintor.bioinf.catalog.repository.LocationRepository;
+import quintor.bioinf.catalog.services.LocationService;
+
 class LocationServiceTest {
 
-    @Autowired
+    @Mock
+    private LocationRepository locationRepository;
+
+    @InjectMocks
     private LocationService locationService;
 
-    @Test
-    void createLocation_ValidCityAndAddress_ReturnsLocation() {
-//        Location location = locationService.createLocation("Basement","City", "Street 123");
-//        assertNotNull(location);
-//        assertEquals("City", location.getCity());
-//        assertEquals("Street 123", location.getAddress());
-        System.out.println("test");
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
     }
-//
-//    @Test
-//    void createLocation_EmptyCity_ThrowsException() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            locationService.createLocation("Server Room","", "Street 123");
-//        });
-//    }
-//
-//    @Test
-//    void createLocation_EmptyAddress_ThrowsException() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            locationService.createLocation("Server Room","City", "");
-//        });
-//    }
-//
-//    @Test
-//    void createLocation_InvalidAddress_ThrowsException() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            locationService.createLocation("", "", "");
-//        });
-//    }
+
+    @Test
+    void testAddLocation_NewLocation() {
+        String name = "Server room";
+        String city = "Springfield";
+        String address = "123 Main St";
+        when(locationRepository.findByAddress(address)).thenReturn(null);
+        when(locationRepository.addLocation(name, city, address)).thenReturn(1L);
+
+        Long result = locationService.addLocation(name, city, address);
+        assertNotNull(result);
+        assertEquals(Long.valueOf(1), result);
+    }
+
+    @Test
+    void testAddLocation_ExistingLocation() {
+        String name = "Server room";
+        String city = "Springfield";
+        String address = "123 Main St";
+        Location location = new Location();
+        location.setId(1L);
+        location.setAddress(address);  // Make sure to set the address
+        when(locationRepository.findByAddress(address)).thenReturn(location);
+
+        Long result = locationService.addLocation(name, city, address);
+        assertNotNull(result);
+        assertEquals(Long.valueOf(1), result);
+    }
+
 }

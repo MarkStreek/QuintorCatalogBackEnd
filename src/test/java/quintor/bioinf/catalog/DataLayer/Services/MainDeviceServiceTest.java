@@ -1,76 +1,77 @@
 package quintor.bioinf.catalog.DataLayer.Services;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-import quintor.bioinf.catalog.entities.Device;
-import quintor.bioinf.catalog.services.MainDeviceService;
-
+import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
-        "spring.datasource.driverClassName=org.h2.Driver",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=",
-        "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
-})
-@AutoConfigureMockMvc
-public class MainDeviceServiceTest {
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import quintor.bioinf.catalog.dto.DeviceDTO;
+import quintor.bioinf.catalog.entities.Device;
+import quintor.bioinf.catalog.repository.DeviceRepository;
+import quintor.bioinf.catalog.services.LocationService;
+import quintor.bioinf.catalog.services.MainDeviceService;
+import quintor.bioinf.catalog.services.SpecsService;
 
-//    @MockBean
-//    MockMvc mockMvc;
-//
-//    @Autowired
-//    private MainDeviceService mainDeviceService;
-//
-    @Test
-    void createComponent_HappyPath() {
-//        Device device = mainDeviceService.createDevice("Name", "Brand", "Model", "Serial", "Invoice");
-//        assertNotNull(device);
-//        assertEquals("Name", device.getType());
-//        assertEquals("Brand", device.getBrandName());
-//        assertEquals("Model", device.getModel());
-//        assertEquals("Serial", device.getSerialNumber());
-//        assertEquals("Invoice", device.getInvoiceNumber());
-        System.out.println("test");
+class MainDeviceServiceTest {
+
+    @Mock
+    private DeviceRepository deviceRepository;
+    @Mock
+    private LocationService locationService;
+    @Mock
+    private SpecsService specsService;
+
+    @InjectMocks
+    private MainDeviceService mainDeviceService;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
     }
-//
+
+    @Test
+    void testAddDevice_NewDevice() {
+        String type = "Router";
+        String brandName = "Cisco";
+        String model = "XYZ123";
+        String serialNumber = "SN123456";
+        String invoiceNumber = "INV123456";
+        String city = "Springfield";
+        String locationAddress = "123 Main St";
+        String locationName = "Server room";
+        Long locationId = 1L;
+
+        when(locationService.addLocation(locationName, city, locationAddress)).thenReturn(locationId);
+        when(deviceRepository.addDevice(type, brandName, model, serialNumber, invoiceNumber, locationId)).thenReturn(1L);
+        Device device = new Device();
+        device.setId(1L);
+        when(deviceRepository.findById(1L)).thenReturn(java.util.Optional.of(device));
+
+        mainDeviceService.addDevice(type, brandName, model, serialNumber, invoiceNumber, city, locationAddress, locationName, null);
+
+        verify(specsService, times(1)).createDeviceSpecs(any(), eq(device));
+    }
+
 //    @Test
-//    void createComponent_EmptyName_ThrowsException() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            mainDeviceService.createDevice("", "Brand", "Model", "Serial", "Invoice");
+//    void testDeleteDevice_DeviceNotFound() {
+//        Long deviceId = 1L;
+//        when(deviceRepository.findById(deviceId)).thenReturn(java.util.Optional.empty());
+//
+//        assertThrows(RuntimeException.class, () -> {
+//            mainDeviceService.deleteDevice(deviceId);
 //        });
 //    }
-//
-//    @Test
-//    void createComponent_EmptyBrandName_ThrowsException() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            mainDeviceService.createDevice("Name", "", "Model", "Serial", "Invoice");
-//        });
-//    }
-//
-//    @Test
-//    void createComponent_EmptyModel_ThrowsException() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            mainDeviceService.createDevice("Name", "Brand", "", "Serial", "Invoice");
-//        });
-//    }
-//
-//    @Test
-//    void createComponent_EmptySerialNumber_ThrowsException() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            mainDeviceService.createDevice("Name", "Brand", "Model", "", "Invoice");
-//        });
-//    }
-//
-//    @Test
-//    void createComponent_EmptyInvoiceNumber_ThrowsException() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            mainDeviceService.createDevice("Name", "Brand", "Model", "Serial", "");
-//        });
-//    }
+
+    @Test
+    void testUpdateDeviceAndLocation_ExistingDevice() {
+        Long locationId = 1L;
+        when(locationService.findOrCreateLocation(anyString(), anyString(), anyString())).thenReturn(locationId);
+
+        assertDoesNotThrow(() -> {
+            mainDeviceService.updateDeviceAndLocation(new DeviceDTO());
+        });
+    }
 }
