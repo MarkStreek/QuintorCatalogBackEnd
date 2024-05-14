@@ -2,11 +2,14 @@ package quintor.bioinf.catalog.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.services.MainDeviceService;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -21,7 +24,7 @@ public class DeviceController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addDevice(@RequestBody @Valid DeviceDTO deviceDTO) {
+    public ReturnMessage addDevice(@RequestBody @Valid DeviceDTO deviceDTO) {
         mainDeviceService.addDevice(
                 deviceDTO.getType(),
                 deviceDTO.getBrandName(),
@@ -33,7 +36,13 @@ public class DeviceController {
                 deviceDTO.getLocationName(),
                 deviceDTO.getSpecs()
         );
-        return ResponseEntity.ok("Added component");
+        // return ResponseEntity.ok("Apparaat toegevoegd aan de database");
+        return new ReturnMessage(
+                HttpStatus.OK.value(),
+                new Date(),
+                "Bericht: apparaat toegevoegd aan de database",
+                "Apparaat toegevoegd aan de database"
+        );
     }
 
     @GetMapping("/{id}")
