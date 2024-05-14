@@ -27,12 +27,12 @@ public class DeviceDTO {
 
     @NotNull
     @NotEmpty
-    @Length(min = 3, max = 25)
+    @Length(min = 3, max = 50)
     private String serialNumber;
 
     @NotNull
     @NotEmpty
-    @Length(min = 3, max = 25)
+    @Length(min = 3, max = 50)
     private String invoiceNumber;
 
     @NotNull
