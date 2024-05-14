@@ -1,8 +1,13 @@
 package quintor.bioinf.catalog.entities;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 /**
  * This class represents the BorrowedStatus table in the database.
@@ -22,11 +27,20 @@ public class BorrowedStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "device_id")
     private Device device;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "created_borrowed_date")
+    private Date createdBorrowedDate;
+
+    @NotNull
+    @NotEmpty
+    @Column(name = "status")
+    private String status;
+
 }
