@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -47,6 +48,16 @@ public class ExceptionController {
     public ReturnMessage legalStateException(IllegalStateException ex, WebRequest request) {
         return new ReturnMessage(
                 HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(true));
+    }
+
+    @ExceptionHandler(value = {NoSuchElementException.class})
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ReturnMessage noSuchElementException(NoSuchElementException ex, WebRequest request) {
+        return new ReturnMessage(
+                HttpStatus.NOT_FOUND.value(),
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(true));
