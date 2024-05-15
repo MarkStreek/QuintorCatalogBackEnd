@@ -2,12 +2,10 @@ package quintor.bioinf.catalog.dto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import quintor.bioinf.catalog.entities.BorrowedStatus;
 import quintor.bioinf.catalog.entities.Device;
 import quintor.bioinf.catalog.entities.User;
-import quintor.bioinf.catalog.repository.UserRepository;
 
 import java.util.function.Function;
 
@@ -15,26 +13,43 @@ import java.util.function.Function;
 public class BorrowDTOConverter implements Function<BorrowedStatus, BorrowDTO> {
 
     private static final Logger log = LoggerFactory.getLogger(BorrowDTOConverter.class);
-    private final UserRepository userRepository;
-
-    @Autowired
-    public BorrowDTOConverter(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     /**
      * Method that converts a BorrowedStatus object to a BorrowDTO object.
+     *
      * @param borrowedStatus the function argument
-     * @return
+     * @return The BorrowDTO object
      */
     @Override
     public BorrowDTO apply(BorrowedStatus borrowedStatus) {
         BorrowDTO borrowDTO = new BorrowDTO();
         borrowDTO.setId(borrowedStatus.getId());
-        User user = borrowedStatus.getUser();
-        borrowDTO.setUserName(user.getName());
-        borrowDTO.setDeviceId(Math.toIntExact(borrowedStatus.getDevice().getId()));
+        // Create a new User and Device object
+        User user = createUser(borrowedStatus);
+        Device device = createDevice(borrowedStatus);
+        // Set the User and Device object to the BorrowDTO object
+        borrowDTO.setUser(user);
+        borrowDTO.setDevice(device);
+
         log.info("Converted borrowed status: {}", borrowDTO);
         return borrowDTO;
+    }
+
+    private static Device createDevice(BorrowedStatus borrowedStatus) {
+        Device device = new Device();
+        device.setId(borrowedStatus.getDevice().getId());
+        device.setType(borrowedStatus.getDevice().getType());
+        device.setBrandName(borrowedStatus.getDevice().getBrandName());
+        device.setModel(borrowedStatus.getDevice().getModel());
+        device.setSerialNumber(borrowedStatus.getDevice().getSerialNumber());
+        device.setInvoiceNumber(borrowedStatus.getDevice().getInvoiceNumber());
+        return device;
+    }
+
+    private static User createUser(BorrowedStatus borrowedStatus) {
+        User user = new User();
+        user.setId(borrowedStatus.getUser().getId());
+        user.setName(borrowedStatus.getUser().getName());
+        return user;
     }
 }

@@ -4,7 +4,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
+import quintor.bioinf.catalog.entities.Device;
+import quintor.bioinf.catalog.entities.User;
 
 
 @Getter
@@ -15,10 +16,9 @@ public class BorrowDTO {
 
     @NotNull
     @NotEmpty
-    private String userName;
+    private User user;
 
     @NotNull
     @NotEmpty
-    @Length(min = 1, max = 6)
-    private int deviceId;
+    private Device device;
 }
