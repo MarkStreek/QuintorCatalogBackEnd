@@ -50,21 +50,21 @@ public class SpecsServiceTests {
                 new SpecDetail("name", "value", "datatype"),
                 new SpecDetail("name", "value", "datatype"));
         Device device = new Device();
-        assertFalse(specsService.checkForValidParameters(specDetails, device));
+        assertFalse(specsService.checkForInValidParameters(specDetails, device));
     }
 
     @Test
     void checkForValidParametersEmptySpecs() {
         List<SpecDetail> specDetails = List.of();
         Device device = new Device();
-        assertTrue(specsService.checkForValidParameters(specDetails, device));
+        assertTrue(specsService.checkForInValidParameters(specDetails, device));
     }
 
     @Test
     void checkForValidParametersNullSpecs() {
         List<SpecDetail> specDetails = null;
         Device device = new Device();
-        assertTrue(specsService.checkForValidParameters(specDetails, device));
+        assertTrue(specsService.checkForInValidParameters(specDetails, device));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class SpecsServiceTests {
                 new SpecDetail("name", "value", "datatype"),
                 new SpecDetail("name", "value", "datatype"));
         Device device = null;
-        assertTrue(specsService.checkForValidParameters(specDetails, device));
+        assertTrue(specsService.checkForInValidParameters(specDetails, device));
     }
 
     @Test
