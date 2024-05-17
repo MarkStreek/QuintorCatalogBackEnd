@@ -53,16 +53,13 @@ public class BorrowedStatusService {
     public void borrowDevice(String name, int deviceId) {
         BorrowedStatus borrowedStatus = new BorrowedStatus();
         // Find or create a new user and set it to the borrowed status
-        User user = findUser(name);
-        borrowedStatus.setUser(user);
-
-        // Check the amount of devices for the user and
-        // set the status based on the amount
-        checkAmountOfDevicesForUser(user, borrowedStatus);
-
+        borrowedStatus.setUser(findUser(name));
+        // Set the status to waiting for approval
+        borrowedStatus.setStatus("Wachten op goedkeuring");
+        // Find the device by id and check for duplicates
         Device device = DeviceRepository.findById((long) deviceId).orElseThrow(() -> new IllegalArgumentException("Apparaat met id " + deviceId + " bestaat niet"));
         checkForDoubleDevices(deviceId);
-
+        // Set the device, date and save to database
         borrowedStatus.setDevice(device);
         borrowedStatus.setCreatedBorrowedDate(new Date());
         borrowedStatusRepository.save(borrowedStatus);
@@ -80,24 +77,6 @@ public class BorrowedStatusService {
         if (borrowedStatusRepository.existsById((long) deviceId)) {
             log.error("Device with id {} already exist", deviceId);
             throw new IllegalArgumentException("Apparaat met id " + deviceId + " is al uitgeleend");
-        }
-    }
-
-    /**
-     * Method that checks the amount of devices for a user.
-     * If the user already has a device, the status is set to "Waiting for approval".
-     * If the user does not have a device, the status is set to "No approval needed".
-     *
-     * @param user user object
-     * @param borrowedStatus borrowed status object
-     */
-    private void checkAmountOfDevicesForUser(User user, BorrowedStatus borrowedStatus) {
-        List<BorrowedStatus> users = borrowedStatusRepository.findAllByUser(user);
-        if (users.isEmpty()) {
-            borrowedStatus.setStatus("Geen goedkeuring nodig");
-        } else {
-            log.warn("User {} already has a device, approval is needed", user.getName());
-            borrowedStatus.setStatus("Wachten op goedkeuring");
         }
     }
 
