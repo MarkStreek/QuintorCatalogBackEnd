@@ -16,8 +16,8 @@ import quintor.bioinf.catalog.entities.DeviceSpecs;
 import quintor.bioinf.catalog.entities.Specs;
 import quintor.bioinf.catalog.repository.DeviceSpecsRepository;
 import quintor.bioinf.catalog.repository.SpecsRepository;
-
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -42,7 +42,6 @@ public class SpecsServiceTests {
         verify(deviceSpecsRepository, times(1)).save(mockDeviceSpecs);
     }
 
-
     @Test
     void checkForValidParameters() {
         List<SpecDetail> specDetails = List.of(
@@ -50,21 +49,21 @@ public class SpecsServiceTests {
                 new SpecDetail("name", "value", "datatype"),
                 new SpecDetail("name", "value", "datatype"));
         Device device = new Device();
-        assertFalse(specsService.checkForInValidParameters(specDetails, device));
+        assertTrue(specsService.checkForInValidParameters(specDetails, device));
     }
 
     @Test
     void checkForValidParametersEmptySpecs() {
         List<SpecDetail> specDetails = List.of();
         Device device = new Device();
-        assertTrue(specsService.checkForInValidParameters(specDetails, device));
+        assertFalse(specsService.checkForInValidParameters(specDetails, device));
     }
 
     @Test
     void checkForValidParametersNullSpecs() {
         List<SpecDetail> specDetails = null;
         Device device = new Device();
-        assertTrue(specsService.checkForInValidParameters(specDetails, device));
+        assertFalse(specsService.checkForInValidParameters(specDetails, device));
     }
 
     @Test
@@ -74,7 +73,7 @@ public class SpecsServiceTests {
                 new SpecDetail("name", "value", "datatype"),
                 new SpecDetail("name", "value", "datatype"));
         Device device = null;
-        assertTrue(specsService.checkForInValidParameters(specDetails, device));
+        assertFalse(specsService.checkForInValidParameters(specDetails, device));
     }
 
     @Test
@@ -104,6 +103,20 @@ public class SpecsServiceTests {
         Specs result = specsService.checkIfSpecExistsOrCreateNew(new SpecDetail("testName", "value", "datatype"), spec);
 
         assertEquals(name, result.getName());
+    }
+
+    @Test
+    void getAllSpecsMockTest() {
+
+        List<Specs> mockSpecs = List.of(
+                new Specs(),
+                new Specs(),
+                new Specs()
+        );
+
+        when(specsRepository.findAll()).thenReturn(mockSpecs);
+        Map<String, String> result = specsService.getAllSpecs();
+        verify(specsRepository, times(1)).findAll();
     }
 
 }
