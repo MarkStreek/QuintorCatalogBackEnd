@@ -36,12 +36,11 @@ public class DeviceController {
                 deviceDTO.getLocationName(),
                 deviceDTO.getSpecs()
         );
-        // return ResponseEntity.ok("Apparaat toegevoegd aan de database");
         return new ReturnMessage(
                 HttpStatus.OK.value(),
                 new Date(),
-                "Bericht: apparaat toegevoegd aan de database",
-                "Apparaat toegevoegd aan de database"
+                "Apparaat toegevoegd aan de database",
+                "Een nieuw apparaat is toegevoegd aan de Device tabel in de database"
         );
     }
 
