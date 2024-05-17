@@ -40,8 +40,7 @@ public class LocationService {
 
     public Long addLocation(String name, String city, String locationAddress) {
         if (!this.checkIfLocationExists(locationAddress)) {
-            Long locationId = locationRepository.addLocation(name, city, locationAddress);
-            return locationId;
+            return locationRepository.addLocation(name, city, locationAddress);
         } else {
             log.warn("Location already exists, not adding it again.");
             Location foundLocation = locationRepository.findByAddress(locationAddress);
