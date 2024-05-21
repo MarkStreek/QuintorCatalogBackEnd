@@ -87,26 +87,12 @@ public class BorrowedStatusService {
      * @return User object
      */
     private User findUser(String name) {
-        name = name.toLowerCase();
         User user = userRepository.findByName(name);
         if (user == null) {
-            return createNewUser(name);
+            throw new IllegalArgumentException("Gebruiker met naam " + name + " bestaat niet");
         } else return user;
     }
 
-    /**
-     * Method that creates a new user, sets the name and
-     * saves it to the user database. The User object is returned.
-     *
-     * @param name user name
-     * @return User object
-     */
-    private User createNewUser(String name) {
-        User newUser = new User();
-        newUser.setName(name);
-        userRepository.save(newUser);
-        return newUser;
-    }
 
     /**
      * Method that returns a borrowed status from the database by id.
@@ -133,6 +119,34 @@ public class BorrowedStatusService {
         return StreamSupport.stream(borrowedStatusRepositoryAll.spliterator(), false)
                 .map(borrowDTOConverter)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Method that returns all the borrowed statuses with the status 'Wachten op goedkeuring'.
+     * The statuses are converted to BorrowDTO objects.
+     *
+     * @return list of BorrowDTO objects
+     */
+    public List<BorrowDTO> getAllPendingBorrowStatus() {
+        Iterable<BorrowedStatus> borrowedStatusRepositoryAll = borrowedStatusRepository.findAll();
+        return StreamSupport.stream(borrowedStatusRepositoryAll.spliterator(), false)
+                .filter(borrowedStatus -> borrowedStatus.getStatus().equals("Wachten op goedkeuring"))
+                .map(borrowDTOConverter)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Method that approves a borrowed status by id.
+     *
+     * @param id borrowed status id
+     */
+    public void approveBorrowedStatus(Long id) {
+        BorrowedStatus borrowedStatus = borrowedStatusRepository
+                .findById(Math.toIntExact(id))
+                .orElseThrow(()
+                        -> new IllegalArgumentException("Id: " + id + " niet gevonden"));
+        borrowedStatus.setStatus("Goedgekeurd");
+        borrowedStatusRepository.save(borrowedStatus);
     }
 
 }
