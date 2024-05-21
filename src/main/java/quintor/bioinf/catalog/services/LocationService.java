@@ -48,7 +48,7 @@ public class LocationService {
         }
     }
 
-    private static Long getExistingLocationId(String locationAddress, Location foundLocation) {
+    public Long getExistingLocationId(String locationAddress, Location foundLocation) {
         if (foundLocation != null) {
             return foundLocation.getId();
         } else {
@@ -78,18 +78,12 @@ public class LocationService {
      * The address is searched for, if it exists, the location is compared to the findingLocation
      * If the location is equal, the location already exists
      *
-     * @param locationAdress Location address to be checked
+     * @param locationAddress Location address to be checked
      * @return boolean if the location already exists
      */
-    public boolean checkIfLocationExists(String locationAdress) {
-        if (locationRepository.findByAddress(locationAdress) != null) {
-            Location location = locationRepository.findByAddress(locationAdress);
-            return location.getAddress().equals(locationAdress);
-        }
-        return false;
+    public boolean checkIfLocationExists(String locationAddress) {
+        Location location = locationRepository.findByAddress(locationAddress);
+        return location != null && location.getAddress().equals(locationAddress);
     }
-
-
-
 
 }

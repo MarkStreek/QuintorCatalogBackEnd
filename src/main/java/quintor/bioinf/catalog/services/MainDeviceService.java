@@ -14,6 +14,7 @@ import quintor.bioinf.catalog.entities.Device;
 import quintor.bioinf.catalog.repository.DeviceRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -152,7 +153,7 @@ public class MainDeviceService {
         log.info("Device was updated successfully.");
     }
 
-    private void updateDevice(DeviceDTO deviceDTO, Long locationId) {
+    protected void updateDevice(DeviceDTO deviceDTO, Long locationId) {
         this.deviceRepository.updateDevice(
                 deviceDTO.getId(),
                 deviceDTO.getType(),
@@ -182,7 +183,7 @@ public class MainDeviceService {
     public DeviceDTO getDevice(Long id) {
         return deviceRepository.findById(id)
                 .map(deviceDTOConverter)
-                .orElseThrow(() -> new RuntimeException("Device not found with id: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Device not found with id: " + id));
     }
 
     public List<DeviceDTO> getAllDevices() {
