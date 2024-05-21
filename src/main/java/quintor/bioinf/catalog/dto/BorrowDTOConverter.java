@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import quintor.bioinf.catalog.entities.BorrowedStatus;
 import quintor.bioinf.catalog.entities.Device;
+import quintor.bioinf.catalog.entities.Location;
 import quintor.bioinf.catalog.entities.User;
 
 import java.util.function.Function;
@@ -27,12 +28,24 @@ public class BorrowDTOConverter implements Function<BorrowedStatus, BorrowDTO> {
         // Create a new User and Device object
         User user = createUser(borrowedStatus);
         Device device = createDevice(borrowedStatus);
+        Location location = createLocation(borrowedStatus);
+
         // Set the User and Device object to the BorrowDTO object
         borrowDTO.setUser(user);
         borrowDTO.setDevice(device);
+        device.setLocation(location);
 
         log.info("Converted borrowed status: {}", borrowDTO);
         return borrowDTO;
+    }
+
+    private static Location createLocation(BorrowedStatus borrowedStatus) {
+        Location location = new Location();
+        location.setId(borrowedStatus.getDevice().getLocation().getId());
+        location.setCity(borrowedStatus.getDevice().getLocation().getCity());
+        location.setName(borrowedStatus.getDevice().getLocation().getName());
+        location.setAddress(borrowedStatus.getDevice().getLocation().getAddress());
+        return location;
     }
 
     private static Device createDevice(BorrowedStatus borrowedStatus) {
@@ -50,6 +63,7 @@ public class BorrowDTOConverter implements Function<BorrowedStatus, BorrowDTO> {
         User user = new User();
         user.setId(borrowedStatus.getUser().getId());
         user.setName(borrowedStatus.getUser().getName());
+        user.setEmail(borrowedStatus.getUser().getEmail());
         return user;
     }
 }
