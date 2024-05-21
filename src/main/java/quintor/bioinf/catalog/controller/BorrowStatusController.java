@@ -20,6 +20,11 @@ public class BorrowStatusController {
     private static final Logger log = LoggerFactory.getLogger(BorrowStatusController.class);
     private final BorrowedStatusService borrowedStatusService;
 
+    private void logIncomingRequest(HttpServletRequest request) {
+        log.info("New incoming request. CLIENT IP: {}, PORT: {}, REQUEST URI: {}",
+                request.getRemoteAddr(), request.getRemotePort(), request.getRequestURI());
+    }
+
     @Autowired
     public BorrowStatusController(BorrowedStatusService borrowedStatusService) {
         this.borrowedStatusService = borrowedStatusService;
@@ -27,10 +32,7 @@ public class BorrowStatusController {
 
     @PostMapping
     public ReturnMessage borrowDevice(@RequestBody BorrowRequest borrowRequest, HttpServletRequest request) {
-        // Log the incoming request
-        log.info("New incoming request. CLIENT IP: {}, PORT: {}, REQUEST URI: {}",
-                request.getRemoteAddr(), request.getRemotePort(), request.getRequestURI());
-
+        logIncomingRequest(request);
         // Create a new borrow request with the incoming "BorrowRequest" object
         // BorrowRequest is a simple (DTO) object that contains the username and device id
         this.borrowedStatusService.borrowDevice(
@@ -46,8 +48,18 @@ public class BorrowStatusController {
                         "alle checks zijn uitgevoerd");
     }
 
+    /**
+     * Simple GET endpoint that searches for a borrowedRequest by id.
+     * The id is passed as a path variable. And the founded object is
+     * converted to a BorrowDTO object.
+     *
+     * @param id The requested id of the borrowed device
+     * @param request The incoming request
+     * @return The BorrowDTO object
+     */
     @GetMapping("/{id}")
-    public BorrowDTO getBorrowStatus(@PathVariable Long id) {
+    public BorrowDTO getBorrowStatus(@PathVariable Long id, HttpServletRequest request) {
+        logIncomingRequest(request);
         return borrowedStatusService.getBorrowStatus(id);
     }
 
@@ -58,7 +70,42 @@ public class BorrowStatusController {
      * @return List<BorrowDTO> list of borrowed devices
      */
     @GetMapping()
-    public List<BorrowDTO> getAllBorrowStatus() {
+    public List<BorrowDTO> getAllBorrowStatus(HttpServletRequest request) {
+        logIncomingRequest(request);
         return borrowedStatusService.getAllBorrowStatus();
+    }
+
+    /**
+     * GET endpoint to get all pending borrowed devices.
+     * All the pending borrowed devices are converted to a BorrowDTO object.
+     *
+     * @param request The incoming request
+     * @return List of BorrowDTO objects with status approval needed
+     */
+    @GetMapping("/pending")
+    public List<BorrowDTO> getAllPendingBorrowStatus(HttpServletRequest request) {
+        logIncomingRequest(request);
+        return borrowedStatusService.getAllPendingBorrowStatus();
+    }
+
+    /**
+     * POST endpoint to approve a borrow request. The borrow request is approved by id.
+     * The id is passed as a path variable.
+     * The borrow request is approved and the device is now available for use.
+     *
+     * @param id The id of the borrow request
+     * @param request The incoming request
+     * @return a ReturnMessage record with status and message
+     * @see ReturnMessage
+     */
+    @PostMapping("/approve/{id}")
+    public ReturnMessage approveBorrowRequest(@PathVariable Long id, HttpServletRequest request) {
+        logIncomingRequest(request);
+        borrowedStatusService.approveBorrowedStatus(id);
+        return new ReturnMessage(
+                HttpStatus.OK.value(),
+                new Date(),
+                "Apparaat succesvol goedgekeurd",
+                "Het apparaat is succesvol goedgekeurd en is nu beschikbaar voor gebruik");
     }
 }
