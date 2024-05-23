@@ -13,33 +13,53 @@ import quintor.bioinf.catalog.services.BorrowedStatusService;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * Controller class that handles all incoming requests for the borrow status.
+ * The class uses the Logging class to log incoming requests.
+ * <p>
+ * The controller has the following endpoints:
+ * - POST endpoint to create a new borrow request
+ * - GET endpoint to get a borrow request by id
+ * - GET endpoint to get all borrow requests
+ * - GET endpoint to get all pending borrow requests
+ * - POST endpoint to approve a borrow request
+ * <p>
+ * See the individual methods for more information.
+ * @see Logging
+ */
 @RestController
 @RequestMapping("/borrowedstatus")
 public class BorrowStatusController {
 
-    private static final Logger log = LoggerFactory.getLogger(BorrowStatusController.class);
     private final BorrowedStatusService borrowedStatusService;
-
-    private void logIncomingRequest(HttpServletRequest request) {
-        log.info("New incoming request. CLIENT IP: {}, PORT: {}, REQUEST URI: {}",
-                request.getRemoteAddr(), request.getRemotePort(), request.getRequestURI());
-    }
 
     @Autowired
     public BorrowStatusController(BorrowedStatusService borrowedStatusService) {
         this.borrowedStatusService = borrowedStatusService;
     }
 
+    /**
+     * POST endpoint to create a new borrow request.
+     * The incoming request is a BorrowRequest object. The object contains the username and device id.
+     * The service class is called with the incoming BorrowRequest object.
+     * The request is logged and the borrow request is created.
+     * <p>
+     * If the request was successful, the return message will contain a status code of 200.
+     * If not, the exception handler will catch the exception and return a ReturnMessage.
+     *
+     * @param borrowRequest The incoming request object (Username and device id)
+     * @param request The incoming request
+     * @return ReturnMessage object with status and message
+     * @see BorrowRequest
+     */
     @PostMapping
     public ReturnMessage borrowDevice(@RequestBody BorrowRequest borrowRequest, HttpServletRequest request) {
-        logIncomingRequest(request);
-        // Create a new borrow request with the incoming "BorrowRequest" object
-        // BorrowRequest is a simple (DTO) object that contains the username and device id
+        Logging.logIncomingRequest(request);
         this.borrowedStatusService.borrowDevice(
                 borrowRequest.getUserName(),
                 borrowRequest.getDeviceId());
 
-        // Return a new (OK) message to the client
         return new ReturnMessage(
                 HttpStatus.OK.value(),
                 new Date(),
@@ -59,7 +79,7 @@ public class BorrowStatusController {
      */
     @GetMapping("/{id}")
     public BorrowDTO getBorrowStatus(@PathVariable Long id, HttpServletRequest request) {
-        logIncomingRequest(request);
+        Logging.logIncomingRequest(request);
         return borrowedStatusService.getBorrowStatus(id);
     }
 
@@ -71,7 +91,7 @@ public class BorrowStatusController {
      */
     @GetMapping()
     public List<BorrowDTO> getAllBorrowStatus(HttpServletRequest request) {
-        logIncomingRequest(request);
+        Logging.logIncomingRequest(request);
         return borrowedStatusService.getAllBorrowStatus();
     }
 
@@ -84,7 +104,7 @@ public class BorrowStatusController {
      */
     @GetMapping("/pending")
     public List<BorrowDTO> getAllPendingBorrowStatus(HttpServletRequest request) {
-        logIncomingRequest(request);
+        Logging.logIncomingRequest(request);
         return borrowedStatusService.getAllPendingBorrowStatus();
     }
 
@@ -100,7 +120,7 @@ public class BorrowStatusController {
      */
     @PostMapping("/approve/{id}")
     public ReturnMessage approveBorrowRequest(@PathVariable Long id, HttpServletRequest request) {
-        logIncomingRequest(request);
+        Logging.logIncomingRequest(request);
         borrowedStatusService.approveBorrowedStatus(id);
         return new ReturnMessage(
                 HttpStatus.OK.value(),

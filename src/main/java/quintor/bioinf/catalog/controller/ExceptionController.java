@@ -9,12 +9,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import quintor.bioinf.catalog.services.BorrowedStatusService;
 
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+/**
+ * This class is responsible for handling exceptions that are thrown in the controller layer.
+ * It catches exceptions and returns a message with the exception message and the request description.
+ * The exceptions that are caught are:
+ * - NullPointerException
+ * - IllegalArgumentException
+ * - IllegalStateException
+ * - ConstraintViolationException
+ * - NoSuchElementException
+ * - MethodArgumentNotValidException
+ */
 @RestControllerAdvice
 public class ExceptionController {
 
@@ -79,7 +89,7 @@ public class ExceptionController {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ReturnMessage methodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
         String error = Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage();
-        log.error("Method argument not valid exception: {}", ex.getMessage());
+        log.error("There is something wrong with the validation of the argument: {}", ex.getMessage());
         return new ReturnMessage(
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
