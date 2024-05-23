@@ -37,11 +37,9 @@ public class LocationService {
      * @param locationAddress Address of the location
      * @return LocationId that can be used for adding a device
      */
-
     public Long addLocation(String name, String city, String locationAddress) {
         if (!this.checkIfLocationExists(locationAddress)) {
-            Long locationId = locationRepository.addLocation(name, city, locationAddress);
-            return locationId;
+            return locationRepository.addLocation(name, city, locationAddress);
         } else {
             log.warn("Location already exists, not adding it again.");
             Location foundLocation = locationRepository.findByAddress(locationAddress);
@@ -49,7 +47,14 @@ public class LocationService {
         }
     }
 
-    private static Long getExistingLocationId(String locationAddress, Location foundLocation) {
+    /**
+     * Method that returns the locationId of an existing location.
+     * If the location is not found, an error is logged and null is returned.
+     * @param locationAddress Address of the location
+     * @param foundLocation Location that was found in the database
+     * @return LocationId of the found location
+     */
+    public Long getExistingLocationId(String locationAddress, Location foundLocation) {
         if (foundLocation != null) {
             return foundLocation.getId();
         } else {
@@ -58,6 +63,16 @@ public class LocationService {
         }
     }
 
+    /**
+     * Method that finds or creates a location in the database.
+     * If the location is not found, a new location is created.
+     * Otherwise, the existing location is returned.
+     *
+     * @param name Name of location
+     * @param city City of location
+     * @param address Address of location
+     * @return LocationId of the found or created location
+     */
     public Long findOrCreateLocation(String name, String city, String address) {
         Location location = this.locationRepository.findByAddress(address);
         if (location == null) {
@@ -67,12 +82,20 @@ public class LocationService {
         }
     }
 
-
+    /**
+     * Method that updates a location in the database.
+     * The location is found by id and the name, city and address are updated.
+     *
+     * @param id Location id
+     * @param name Name of location
+     * @param city City of location
+     * @param address Address of location
+     * @return ResponseEntity with a message that the location was updated
+     */
     public ResponseEntity<String> updateLocation(Long id, String name, String city, String address) {
         this.locationRepository.updateLocation(id, name, city, address);
         return ResponseEntity.ok("Location updated successfully.");
         }
-
 
     /**
      * Simple method that tests if an equal location already exists in the database
@@ -84,8 +107,6 @@ public class LocationService {
      */
     public boolean checkIfLocationExists(String locationAddress) {
         Location location = locationRepository.findByAddress(locationAddress);
-        return location != null && location.getAddress() != null && location.getAddress().equals(locationAddress);
+        return location != null && location.getAddress().equals(locationAddress);
     }
-
-
 }

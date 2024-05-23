@@ -8,6 +8,11 @@ import quintor.bioinf.catalog.services.SpecsService;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for the Specs entity
+ * It contains the GET mapping for the /specs endpoint
+ * This endpoint will return all the specs in the database
+ */
 @RestController
 @RequestMapping("/specs")
 public class SpecController {

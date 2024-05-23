@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import quintor.bioinf.catalog.dto.SpecDetail;
+import quintor.bioinf.catalog.entities.ROLE;
+import quintor.bioinf.catalog.entities.User;
+import quintor.bioinf.catalog.repository.UserRepository;
 import quintor.bioinf.catalog.services.MainDeviceService;
 
 import java.util.Arrays;
@@ -13,6 +16,35 @@ import java.util.List;
 
 @Configuration
 public class DummyDataLoader {
+
+    @Bean
+    @Profile("!test")
+    CommandLineRunner loadUsers(UserRepository userService) {
+        User user = new User();
+        user.setName("admin");
+        user.setEmail("mvdstreek2003@gmail.com");
+        user.setPassword("admin");
+        user.setRole(ROLE.USER);
+
+        User user2 = new User();
+        user2.setName("user");
+        user2.setEmail("info@test.nl");
+        user2.setPassword("user");
+        user2.setRole(ROLE.CTO);
+
+        User user3 = new User();
+        user3.setName("Another User");
+        user3.setEmail("another+test@gmail.com");
+        user3.setPassword("another");
+        user3.setRole(ROLE.ADMIN);
+
+
+        return args -> {
+            userService.save(user);
+            userService.save(user2);
+            userService.save(user3);
+        };
+    }
 
     @Bean
     @Profile("!test") // Ensure this doesn't run during testing

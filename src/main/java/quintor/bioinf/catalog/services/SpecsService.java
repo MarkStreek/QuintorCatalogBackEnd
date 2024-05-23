@@ -51,7 +51,7 @@ public class SpecsService {
      * @throws IllegalArgumentException if the specs or device are null or empty
      */
     public void createDeviceSpecs(List<SpecDetail> specDetails, Device device) {
-        if (checkForValidParameters(specDetails, device)) return;
+        if (!checkForInValidParameters(specDetails, device)) return;
 
         for (SpecDetail detail : specDetails) {
             // Create a new DeviceSpecs object and set the device
@@ -70,15 +70,32 @@ public class SpecsService {
         }
     }
 
-    private static boolean checkForValidParameters(List<SpecDetail> specDetails, Device device) {
+    /**
+     * Method that checks if the parameters are valid.
+     * It's a bit weird that this method returns a true boolean if the parameters are invalid.
+     * But this is because of the way the method is used in the createDeviceSpecs method.
+     *
+     * @param specDetails SpecDetails Object
+     * @param device Device Object
+     * @return true if the parameters are invalid, false otherwise
+     */
+    public boolean checkForInValidParameters(List<SpecDetail> specDetails, Device device) {
         if (specDetails == null || specDetails.isEmpty() || device == null) {
             log.error("Error with parameters: specDetails or device is null or empty.");
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
-    private Specs checkIfSpecExistsOrCreateNew(SpecDetail detail, Specs spec) {
+    /**
+     * Method that checks if a spec already exists in the database.
+     * If the spec does not exist, a new spec is created and saved to the database.
+     *
+     * @param detail SpecDetail object
+     * @param spec Specs object
+     * @return Specs object
+     */
+    public Specs checkIfSpecExistsOrCreateNew(SpecDetail detail, Specs spec) {
         if (spec == null) {
             spec = new Specs();
             spec.setName(detail.getSpecName());

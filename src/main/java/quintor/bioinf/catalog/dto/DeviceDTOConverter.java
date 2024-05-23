@@ -14,6 +14,11 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Converter class that converts a Device object to a DeviceDTO object.
+ * I.e., this class is used to convert a database record to a DeviceDTO object.
+ * The apply method is used to convert the Device object to a DeviceDTO object.
+ */
 @Service
 public class DeviceDTOConverter implements Function<Device, DeviceDTO> {
     private static final Logger log = LoggerFactory.getLogger(DeviceDTOConverter.class);

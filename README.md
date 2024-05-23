@@ -30,11 +30,43 @@
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [Getting Started](#getting-started)
 - [About Quintor](#about-quintor)
 - [About the project](#about-the-project)
 - [Unit Tests](#unit-tests)
 - [Built with](#built-with)
 - [React Project](#react-project)
+
+## Getting Started
+
+To start the application, clone the repo and navigate to the cloned folder. Type the following command in the terminal:
+
+```bash
+java -jar QuintorCatalogBackEnd-0.0.1-SNAPSHOT.jar
+```
+
+> Warning: before starting the application, you have to meet the following (minimum) requirements to run the application:
+
+**Install**:
+- Java 21 or higher
+- Mysql 8.0
+
+**Database Operations**:
+
+ - Create a database account
+ - Create a new database in mysql
+ - Make sure the database is running
+ - Make sure the database account has the correct permissions
+
+**Application Operations**:
+
+ - Fill in the database credentials in the application.properties file
+ - Build the application using Gradle, navigate to the cloned folder and type the following command in the terminal:
+ ```bash
+ ./gradlew build
+```
+
+> After building the application, you can start the application using the command mentioned above.
 
 ## About Quintor
 
