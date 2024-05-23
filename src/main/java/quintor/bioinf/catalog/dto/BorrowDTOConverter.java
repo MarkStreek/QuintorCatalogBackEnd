@@ -10,6 +10,17 @@ import quintor.bioinf.catalog.entities.User;
 
 import java.util.function.Function;
 
+/**
+ * Converter class that converts a BorrowedStatus object to a BorrowDTO object.
+ * I.e., this class is used to convert a database record to a BorrowDTO object.
+ * The apply method is used to convert the BorrowedStatus object to a BorrowDTO object.
+ * There are several methods that are used to create a User, Device and Location object.
+ * <p>
+ * The class implements the Function interface,
+ * which is a functional interface that has only one abstract method.
+ *
+ * @see BorrowDTO
+ */
 @Service
 public class BorrowDTOConverter implements Function<BorrowedStatus, BorrowDTO> {
 

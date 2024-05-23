@@ -4,15 +4,18 @@ import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import quintor.bioinf.catalog.controller.ReturnMessage;
 import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.dto.DeviceDTOConverter;
 import quintor.bioinf.catalog.dto.SpecDetail;
 import quintor.bioinf.catalog.entities.Device;
 import quintor.bioinf.catalog.repository.DeviceRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -105,7 +108,7 @@ public class MainDeviceService {
      * @return
      */
     @Transactional
-    public ResponseEntity<String> deleteDevice(Long Id) {
+    public ReturnMessage deleteDevice(Long Id) {
         // Use AtomicBoolean to track if the device was found and deleted.
         AtomicBoolean deviceFoundAndDeleted = new AtomicBoolean(false);
 
@@ -134,11 +137,15 @@ public class MainDeviceService {
         }
     }
 
-    private static ResponseEntity<String> checkSuccessfullyDeleted(AtomicBoolean deviceFoundAndDeleted) {
+    private static ReturnMessage checkSuccessfullyDeleted(AtomicBoolean deviceFoundAndDeleted) {
         if (deviceFoundAndDeleted.get()) {
-            return ResponseEntity.ok("Device successfully deleted.");
+            return new ReturnMessage(
+                    HttpStatus.OK.value(),
+                    new Date(),
+                    "Apparaat succesvol verwijderd",
+                    "Het apparaat is succesvol verwijderd uit de database");
         } else {
-            return ResponseEntity.notFound().build();
+            throw new NoSuchElementException();
         }
     }
 

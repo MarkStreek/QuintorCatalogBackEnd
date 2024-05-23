@@ -1,10 +1,13 @@
 package quintor.bioinf.catalog.config;
 
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * This class is used to configure the Web settings of the application.
+ * See the method for more information.
+ */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
