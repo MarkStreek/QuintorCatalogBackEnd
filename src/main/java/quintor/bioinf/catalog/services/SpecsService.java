@@ -87,6 +87,14 @@ public class SpecsService {
         return true;
     }
 
+    /**
+     * Method that checks if a spec already exists in the database.
+     * If the spec does not exist, a new spec is created and saved to the database.
+     *
+     * @param detail SpecDetail object
+     * @param spec Specs object
+     * @return Specs object
+     */
     public Specs checkIfSpecExistsOrCreateNew(SpecDetail detail, Specs spec) {
         if (spec == null) {
             spec = new Specs();

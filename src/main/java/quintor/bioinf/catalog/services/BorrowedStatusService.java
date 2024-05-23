@@ -20,6 +20,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/**
+ * Service class responsible for borrowing devices.
+ * This BorrowedStatusService class can can create, read and update borrowed statuses.
+ * Interaction with the database is done through the BorrowedStatusRepository.
+ * This repository capable of adding, deleting and updating borrowed statuses in the database.
+ * See the methods for more information.
+ */
 @Service
 public class BorrowedStatusService {
 

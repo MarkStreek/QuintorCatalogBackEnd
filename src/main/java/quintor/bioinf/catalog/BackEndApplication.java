@@ -6,6 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import quintor.bioinf.catalog.services.BorrowedStatusService;
 
+/**
+ * Main class of the application.
+ * This class is used to start the application.
+ */
 @SpringBootApplication()
 public class BackEndApplication {
 

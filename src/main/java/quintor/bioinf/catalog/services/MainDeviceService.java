@@ -125,6 +125,14 @@ public class MainDeviceService {
         return checkSuccessfullyDeleted(deviceFoundAndDeleted);
     }
 
+    /**
+     * Method that deletes the specs of a device and the device itself.
+     * If the device is found and deleted, the deviceFoundAndDeleted boolean is set to true.
+     *
+     * @param Id The id of the device
+     * @param device The device that needs to be deleted
+     * @param deviceFoundAndDeleted AtomicBoolean to track if the device was found and deleted
+     */
     private void deleteSpecsAndDevice(Long Id, Device device, AtomicBoolean deviceFoundAndDeleted) {
         try {
             // Delete the device specs
@@ -137,6 +145,14 @@ public class MainDeviceService {
         }
     }
 
+    /**
+     * Method that checks if the device was successfully deleted.
+     * If the device was found and deleted, a success message is returned.
+     * Otherwise, an exception is thrown. This exception is caught by the handler
+     *
+     * @param deviceFoundAndDeleted AtomicBoolean to track if the device was found and deleted
+     * @return ReturnMessage with the appropriate message
+     */
     private static ReturnMessage checkSuccessfullyDeleted(AtomicBoolean deviceFoundAndDeleted) {
         if (deviceFoundAndDeleted.get()) {
             return new ReturnMessage(
@@ -149,6 +165,15 @@ public class MainDeviceService {
         }
     }
 
+    /**
+     * Method that updates a device in the database.
+     * The device is updated based on the given DeviceDTO object.
+     * The location is updated as well.
+     * <p>
+     * The function will call other sub-methods to update the device and location.
+     *
+     * @param deviceDTO DeviceDTO object with the updated device information
+     */
     @Transactional
     public void updateDeviceAndLocation(DeviceDTO deviceDTO) {
         // Find location based on dto, if it does not exist, create it
@@ -160,6 +185,13 @@ public class MainDeviceService {
         log.info("Device was updated successfully.");
     }
 
+    /**
+     * Sub-method that updates a device in the database.
+     * The device is updated based on the given DeviceDTO object.
+     *
+     * @param deviceDTO DeviceDTO object with the updated device information
+     * @param locationId Location id of the device
+     */
     protected void updateDevice(DeviceDTO deviceDTO, Long locationId) {
         this.deviceRepository.updateDevice(
                 deviceDTO.getId(),
@@ -171,6 +203,12 @@ public class MainDeviceService {
                 locationId);
     }
 
+    /**
+     * Sub-method that updates the location of a device in the database.
+     *
+     * @param deviceDTO DeviceDTO object with the updated device information
+     * @param locationId Location id of the device
+     */
     private void updateDeviceLocation(DeviceDTO deviceDTO, Long locationId) {
         this.locationService.updateLocation(
                 locationId,
@@ -179,20 +217,39 @@ public class MainDeviceService {
                 deviceDTO.getLocationAddress());
     }
 
+    /**
+     * Sub-method that finds the location of an updated device.
+     * If the location does not exist, it is created.
+     *
+     * @param deviceDTO DeviceDTO object with the updated device information
+     * @return LocationId of the updated device
+     */
     private Long getLocationOfUpdatedDevice(DeviceDTO deviceDTO) {
         return this.locationService.findOrCreateLocation(
                 deviceDTO.getLocationName(),
                 deviceDTO.getLocationCity(),
                 deviceDTO.getLocationAddress());
     }
-    
 
+    /**
+     * Method that retrieves a device from the database by id.
+     * The device is converted to a DeviceDTO object.
+     *
+     * @param id Device id
+     * @return DeviceDTO object
+     */
     public DeviceDTO getDevice(Long id) {
         return deviceRepository.findById(id)
                 .map(deviceDTOConverter)
                 .orElseThrow(() -> new NoSuchElementException("Device not found with id: " + id));
     }
 
+    /**
+     * Method that retrieves all the devices from the database.
+     * The devices are converted to DeviceDTO objects.
+     *
+     * @return list of DeviceDTO objects
+     */
     public List<DeviceDTO> getAllDevices() {
         Iterable<Device> devices = deviceRepository.findAll();
         return StreamSupport.stream(devices.spliterator(), false)
