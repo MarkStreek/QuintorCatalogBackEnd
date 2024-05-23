@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import java.util.function.Function;
 
 /**
  * The main service method of the application. The service class is autowired by a controller class.
@@ -39,14 +40,14 @@ public class MainDeviceService {
     private final LocationService locationService;
     private final SpecsService specsService;
     private final DeviceRepository deviceRepository;
-    private final DeviceDTOConverter deviceDTOConverter;
+    private final Function<Device, DeviceDTO> deviceDTOConverter;
 
     @Autowired
     public MainDeviceService(
             DeviceRepository deviceRepository,
             SpecsService specsService,
             LocationService locationService,
-            DeviceDTOConverter deviceDTOConverter
+            Function<Device, DeviceDTO> deviceDTOConverter
     )
     {
         this.deviceRepository = deviceRepository;
@@ -89,7 +90,7 @@ public class MainDeviceService {
             List<SpecDetail> specs)
     {
         // 1 - Create the location
-        Long locationId = this.locationService.addLocation(locationName, city, locationAddress);
+        Long locationId = this.locationService.findOrCreateLocation(locationName, city, locationAddress);
         // 2 - Add the device to the database and get the id of the inserted device
         Long deviceId = this.deviceRepository.addDevice(type, brandName, model, serialNumber, invoiceNumber, locationId);
         // 3 - Get the device from the database using the returned id

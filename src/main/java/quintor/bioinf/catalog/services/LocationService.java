@@ -109,5 +109,4 @@ public class LocationService {
         Location location = locationRepository.findByAddress(locationAddress);
         return location != null && location.getAddress().equals(locationAddress);
     }
-
 }
