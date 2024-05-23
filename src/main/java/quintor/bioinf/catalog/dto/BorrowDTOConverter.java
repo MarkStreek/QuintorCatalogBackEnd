@@ -64,6 +64,7 @@ public class BorrowDTOConverter implements Function<BorrowedStatus, BorrowDTO> {
         user.setId(borrowedStatus.getUser().getId());
         user.setName(borrowedStatus.getUser().getName());
         user.setEmail(borrowedStatus.getUser().getEmail());
+        user.setRole(borrowedStatus.getUser().getRole());
         return user;
     }
 }

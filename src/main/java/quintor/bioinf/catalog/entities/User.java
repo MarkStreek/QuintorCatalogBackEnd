@@ -35,6 +35,10 @@ public class User {
     @NotEmpty
     private String email;
 
+    @Column(name = "role")
+    @NotNull
+    private ROLE role;
+
     @Column(name = "password")
     @NotNull
     @NotEmpty
