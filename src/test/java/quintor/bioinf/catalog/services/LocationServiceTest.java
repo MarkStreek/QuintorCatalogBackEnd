@@ -1,10 +1,12 @@
 package quintor.bioinf.catalog.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import quintor.bioinf.catalog.entities.Location;
 import quintor.bioinf.catalog.repository.LocationRepository;
@@ -22,6 +24,38 @@ class LocationServiceTest {
 
     @InjectMocks
     private LocationService locationService;
+
+    @Test
+    void testAddLocation_NewLocation() {
+        String name = "Server room";
+        String city = "Springfield";
+        String address = "123 Main St";
+        //when(locationRepository.findByAddress(address)).thenReturn(null);
+        when(locationRepository.addLocation(name, city, address)).thenReturn(1L);
+
+        Long result = locationService.addLocation(name, city, address);
+        System.out.println(result);
+        assertNotNull(result);
+        assertEquals(Long.valueOf(1), result);
+    }
+
+    @Test
+    void testAddLocation_ExistingLocation() {
+        String name = "Server room";
+        String city = "Springfield";
+        String address = "123 Main St";
+        Location location = new Location();
+        location.setId(1L);
+        location.setAddress(address);  // Make sure to set the address
+        when(locationRepository.findByAddress(address)).thenReturn(location);
+
+        Long result = locationService.addLocation(name, city, address);
+
+        System.out.println(result);
+
+        assertNotNull(result);
+        assertEquals(Long.valueOf(1), result);
+    }
 
     /**
      * Method that provides a stream of location ids.

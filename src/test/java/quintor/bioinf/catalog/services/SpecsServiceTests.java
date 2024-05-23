@@ -1,5 +1,7 @@
 package quintor.bioinf.catalog.services;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -8,6 +10,8 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.mock;
+
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import quintor.bioinf.catalog.dto.SpecDetail;
@@ -16,15 +20,18 @@ import quintor.bioinf.catalog.entities.DeviceSpecs;
 import quintor.bioinf.catalog.entities.Specs;
 import quintor.bioinf.catalog.repository.DeviceSpecsRepository;
 import quintor.bioinf.catalog.repository.SpecsRepository;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@Nested
 @SpringBootTest
 @Profile("test")
-public class SpecsServiceTests {
+class SpecsServiceTests {
 
     @Mock
     private DeviceSpecsRepository deviceSpecsRepository;
@@ -34,6 +41,31 @@ public class SpecsServiceTests {
 
     @InjectMocks
     private SpecsService specsService;
+
+    @Test
+    void testCreateDeviceSpecs_ValidSpecs() {
+        Device device = new Device();
+        device.setId(1L);
+        Specs spec = new Specs();
+        spec.setName("CPU");
+        spec.setDatatype("String");
+        when(specsRepository.findByName("CPU")).thenReturn(spec);
+
+        List<SpecDetail> specDetails = Collections.singletonList(new SpecDetail("CPU", "Intel i7", "String"));
+        assertDoesNotThrow(() -> specsService.createDeviceSpecs(specDetails, device));
+    }
+
+    @Test
+    void testDeleteDeviceSpecs_ExistingDeviceSpecs() {
+        Device device = new Device();
+        device.setId(1L);
+        DeviceSpecs deviceSpecs = new DeviceSpecs();
+        deviceSpecs.setDevice(device);
+        List<DeviceSpecs> deviceSpecsList = Collections.singletonList(deviceSpecs);
+        when(deviceSpecsRepository.findByDevice(device)).thenReturn(deviceSpecsList);
+
+        assertDoesNotThrow(() -> specsService.deleteDeviceSpecs(device));
+    }
 
     @Test
     void testSaveDeviceSpecs() {
