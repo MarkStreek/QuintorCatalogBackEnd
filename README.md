@@ -81,13 +81,28 @@ Quintor has the following disciplines:
 5. Cloud-native development
 6. Security
 
+Currently, Quintor Groningen is documenting all their hardware components in a simple Excel sheet. This is not efficient and not user-friendly.
+Therefore, we created an automated hardware catalog for Quintor. This catalog will store all hardware components in the company.
+
+Additionally, the catalog will be able to:
+
+- Add new hardware components
+- Update existing hardware components
+- Delete hardware components
+- Search for hardware components
+- Filter hardware components
+- Sort hardware components
+- Borrow hardware components to a user
+- CTO can approve/deny a borrow request to a user
+
 ## About the project
 
-This project was created by students bioinformatics at the Hanze University of applied sciences. The main task was to create a (automated) catalog to store all hardware components in the company.
-
+This project was created by students bioinformatics at the Hanze University of Applied Sciences. The main task was to create a (automated) catalog to store all hardware components in the company. 
 The hardware tools are stored in a database. This information is served to the front end using a REST API.
 
 ## Unit Tests
+
+After every push to the main branch, the unit tests will be run automatically. The tests are run using GitHub Actions and executed on an ubuntu-latest runner. Results are shown in the badge below:
 
 >[![Run Tests](https://github.com/MarkStreek/QuintorCatalogBackEnd/actions/workflows/runTests.yml/badge.svg)](https://github.com/MarkStreek/QuintorCatalogBackEnd/actions/workflows/runTests.yml)
 
