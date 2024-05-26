@@ -16,14 +16,12 @@
   <p align="center">
     Automated hardware catalog for the software company Quintor
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">View Demo</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd/issues">Report Bug</a>
   </p>
 </div>
 
