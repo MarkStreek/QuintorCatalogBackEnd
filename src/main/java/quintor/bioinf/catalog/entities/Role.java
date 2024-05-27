@@ -8,7 +8,7 @@ package quintor.bioinf.catalog.entities;
  * - CTO (Chief Technology Officer)
  * - USER
  */
-public enum ROLE {
+public enum Role {
     ADMIN,
     CTO,
     USER;

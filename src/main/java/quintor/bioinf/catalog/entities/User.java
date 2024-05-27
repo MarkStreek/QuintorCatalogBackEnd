@@ -37,7 +37,7 @@ public class User {
 
     @Column(name = "role")
     @NotNull
-    private ROLE role;
+    private Role role;
 
     @Column(name = "password")
     @NotNull

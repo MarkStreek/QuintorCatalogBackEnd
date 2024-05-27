@@ -1,12 +1,11 @@
 package quintor.bioinf.catalog.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import quintor.bioinf.catalog.dto.SpecDetail;
-import quintor.bioinf.catalog.entities.ROLE;
+import quintor.bioinf.catalog.entities.Role;
 import quintor.bioinf.catalog.entities.User;
 import quintor.bioinf.catalog.repository.UserRepository;
 import quintor.bioinf.catalog.services.MainDeviceService;
@@ -24,19 +23,19 @@ public class DummyDataLoader {
         user.setName("admin");
         user.setEmail("mvdstreek2003@gmail.com");
         user.setPassword("admin");
-        user.setRole(ROLE.USER);
+        user.setRole(Role.USER);
 
         User user2 = new User();
         user2.setName("user");
         user2.setEmail("info@test.nl");
         user2.setPassword("user");
-        user2.setRole(ROLE.CTO);
+        user2.setRole(Role.CTO);
 
         User user3 = new User();
         user3.setName("Another User");
         user3.setEmail("another+test@gmail.com");
         user3.setPassword("another");
-        user3.setRole(ROLE.ADMIN);
+        user3.setRole(Role.ADMIN);
 
 
         return args -> {
