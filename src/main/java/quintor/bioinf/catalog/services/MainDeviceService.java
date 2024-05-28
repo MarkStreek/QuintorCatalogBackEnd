@@ -13,11 +13,15 @@ import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.dto.DeviceDTOConverter;
 import quintor.bioinf.catalog.dto.SpecDetail;
 import quintor.bioinf.catalog.entities.Device;
+import quintor.bioinf.catalog.entities.DeviceSpecs;
 import quintor.bioinf.catalog.repository.DeviceRepository;
+import quintor.bioinf.catalog.repository.DeviceSpecsRepository;
+import quintor.bioinf.catalog.repository.SpecsRepository;
 
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -41,19 +45,24 @@ public class MainDeviceService {
     private final SpecsService specsService;
     private final DeviceRepository deviceRepository;
     private final Function<Device, DeviceDTO> deviceDTOConverter;
+    private final SpecsRepository specsRepository;
+    private final DeviceSpecsRepository deviceSpecsRepository;
 
     @Autowired
     public MainDeviceService(
             DeviceRepository deviceRepository,
             SpecsService specsService,
             LocationService locationService,
-            Function<Device, DeviceDTO> deviceDTOConverter
-    )
+            Function<Device, DeviceDTO> deviceDTOConverter,
+            SpecsRepository specsRepository,
+            DeviceSpecsRepository deviceSpecsRepository)
     {
         this.deviceRepository = deviceRepository;
         this.specsService = specsService;
         this.locationService = locationService;
         this.deviceDTOConverter = deviceDTOConverter;
+        this.specsRepository = specsRepository;
+        this.deviceSpecsRepository = deviceSpecsRepository;
     }
 
     /**
@@ -109,21 +118,30 @@ public class MainDeviceService {
      * @return
      */
     @Transactional
-    public ReturnMessage deleteDevice(Long Id) {
+    public void deleteDevice(Long Id) {
         // Use AtomicBoolean to track if the device was found and deleted.
-        AtomicBoolean deviceFoundAndDeleted = new AtomicBoolean(false);
+        //AtomicBoolean deviceFoundAndDeleted = new AtomicBoolean(false);
+
+        Device device = this.deviceRepository.findById(Id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Apparaat niet gevonden met id: " + Id));
+        List<DeviceSpecs> deviceSpecs = this.deviceSpecsRepository.findByDevice(device);
+        this.deviceSpecsRepository.deleteAll(deviceSpecs);
+        this.deviceRepository.delete(device);
+
+
 
         // Check if the component exists in the database
-        this.deviceRepository.findById(Id).ifPresentOrElse(
-                device -> {
-                    deleteSpecsAndDevice(Id, device, deviceFoundAndDeleted);
-                },
-                // Log an error if the component does not exist
-                () -> log.error("No component found with the given ID")
-        );
-
-        // Check if the device was found and deleted, and return an appropriate response
-        return checkSuccessfullyDeleted(deviceFoundAndDeleted);
+//        this.deviceRepository.findById(Id).ifPresentOrElse(
+//                device -> {
+//                    deleteSpecsAndDevice(Id, device, deviceFoundAndDeleted);
+//                },
+//                // Log an error if the component does not exist
+//                () -> log.error("No component found with the given ID")
+//        );
+//
+//        // Check if the device was found and deleted, and return an appropriate response
+//        return checkSuccessfullyDeleted(deviceFoundAndDeleted);
     }
 
     /**

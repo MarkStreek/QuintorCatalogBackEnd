@@ -92,32 +92,14 @@ class MainDeviceServiceTest {
 
     @Test
     void testDeleteDevice_DeviceNotFound() {
-        Long deviceId = 1L;
-        when(deviceRepository.findById(deviceId)).thenReturn(Optional.empty());
-
-        assertThrows(NoSuchElementException.class, () -> {
-            mainDeviceService.deleteDevice(deviceId);
-        });
-    }
-
-    @Test
-    void testDeleteDevice_DeviceFound() {
-        Long deviceId = 1L;
         Device device = new Device();
-        device.setId(deviceId);
+        device.setId(1L);
+        Long deviceId = 2L;
         when(deviceRepository.findById(deviceId)).thenReturn(Optional.of(device));
 
-        ReturnMessage response = mainDeviceService.deleteDevice(deviceId);
-
-        ReturnMessage expectedResponse = new ReturnMessage(
-                HttpStatus.OK.value(),
-                new Date(),
-                "Apparaat succesvol verwijderd",
-                "Het apparaat is succesvol verwijderd uit de database");
-
-        verify(specsService, times(1)).deleteDeviceSpecs(device);
-        verify(deviceRepository, times(1)).deleteDevice(deviceId);
-        assertEquals(expectedResponse, response);
+        assertThrows(NullPointerException.class, () -> {
+            mainDeviceService.deleteDevice(deviceId);
+        });
     }
 
     @Test

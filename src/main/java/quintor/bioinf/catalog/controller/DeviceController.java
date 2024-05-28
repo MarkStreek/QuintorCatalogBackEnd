@@ -129,8 +129,14 @@ public class DeviceController {
      * @return ReturnMessage object with status and message
      */
     @DeleteMapping("/{id}")
-    public ReturnMessage deleteDevices(@PathVariable Long id) {
-        return mainDeviceService.deleteDevice(id);
+    public ReturnMessage deleteDevices(@PathVariable Long id, HttpServletRequest request) {
+        Logging.logIncomingRequest(request);
+        this.mainDeviceService.deleteDevice(id);
+        return new ReturnMessage(
+                HttpStatus.OK.value(),
+                new Date(),
+                "Apparaat succesvol verwijderd",
+                "Het apparaat is succesvol verwijderd uit de database");
     }
 
 }
