@@ -17,6 +17,7 @@ import quintor.bioinf.catalog.repository.UserRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -112,7 +113,7 @@ public class BorrowedStatusService {
         System.out.println("id = " + id);
         return borrowedStatusRepository.findById(Math.toIntExact(id))
                 .map(borrowDTOConverter)
-                .orElseThrow(() -> new RuntimeException("Device not found with id: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Device not found with id: " + id));
     }
 
     /**
