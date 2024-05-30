@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.services.MainDeviceService;
+import quintor.bioinf.catalog.services.SpecsService;
 
 import java.util.Date;
 import java.util.List;
@@ -31,10 +32,12 @@ import java.util.List;
 public class DeviceController {
 
     private final MainDeviceService mainDeviceService;
+    private final SpecsService specsService;
 
     @Autowired
-    public DeviceController(MainDeviceService mainDeviceService) {
+    public DeviceController(MainDeviceService mainDeviceService, SpecsService specsService) {
         this.mainDeviceService = mainDeviceService;
+        this.specsService = specsService;
     }
 
     /**
@@ -112,7 +115,8 @@ public class DeviceController {
                                       HttpServletRequest request) {
         Logging.logIncomingRequest(request);
         deviceDTO.setId(id);
-        mainDeviceService.updateDeviceAndLocation(deviceDTO);
+        this.mainDeviceService.updateDeviceAndLocation(deviceDTO);
+        this.specsService.updateDeviceSpecs(deviceDTO);
 
         return new ReturnMessage(
                 HttpStatus.OK.value(),

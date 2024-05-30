@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.dto.SpecDetail;
 import quintor.bioinf.catalog.entities.Device;
 import quintor.bioinf.catalog.entities.DeviceSpecs;
 import quintor.bioinf.catalog.entities.Specs;
+import quintor.bioinf.catalog.repository.DeviceRepository;
 import quintor.bioinf.catalog.repository.DeviceSpecsRepository;
 import quintor.bioinf.catalog.repository.SpecsRepository;
 
@@ -29,11 +31,15 @@ public class SpecsService {
     private static final Logger log = LoggerFactory.getLogger(SpecsService.class);
     private final DeviceSpecsRepository deviceSpecsRepository;
     private final SpecsRepository specsRepository;
+    private final DeviceRepository deviceRepository;
 
     @Autowired
-    public SpecsService(DeviceSpecsRepository deviceSpecsRepository, SpecsRepository specsRepository) {
+    public SpecsService(DeviceSpecsRepository deviceSpecsRepository,
+                        SpecsRepository specsRepository,
+                        DeviceRepository deviceRepository) {
         this.deviceSpecsRepository = deviceSpecsRepository;
         this.specsRepository = specsRepository;
+        this.deviceRepository = deviceRepository;
     }
 
     /**
@@ -138,7 +144,20 @@ public class SpecsService {
         }
     }
 
-    /**
+    public void updateDeviceSpecs(DeviceDTO deviceDTO) {
+        // Retrieve the existing device from the database
+        Device device = deviceRepository.findById(deviceDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Device with id " + deviceDTO.getId() + " not found"));
+
+        // Delete the existing specs for that device
+        deleteDeviceSpecs(device);
+
+        // Create new specs from the DeviceDTO and save them to the database
+        List<SpecDetail> specDetails = deviceDTO.getSpecs();
+        createDeviceSpecs(specDetails, device);
+    }
+
+                                  /**
      * Method that retrieves all the specs from the database.
      * It retrieves all the specs from the database using the specsRepository.
      *

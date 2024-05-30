@@ -45,7 +45,6 @@ public class MainDeviceService {
     private final SpecsService specsService;
     private final DeviceRepository deviceRepository;
     private final Function<Device, DeviceDTO> deviceDTOConverter;
-    private final SpecsRepository specsRepository;
     private final DeviceSpecsRepository deviceSpecsRepository;
 
     @Autowired
@@ -61,7 +60,6 @@ public class MainDeviceService {
         this.specsService = specsService;
         this.locationService = locationService;
         this.deviceDTOConverter = deviceDTOConverter;
-        this.specsRepository = specsRepository;
         this.deviceSpecsRepository = deviceSpecsRepository;
     }
 
