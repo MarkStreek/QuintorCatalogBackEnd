@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import quintor.bioinf.catalog.dto.SpecDetail;
 import quintor.bioinf.catalog.entities.Role;
 import quintor.bioinf.catalog.entities.User;
@@ -19,22 +20,27 @@ public class DummyDataLoader {
     @Bean
     @Profile("!test")
     CommandLineRunner loadUsers(UserRepository userService) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         User user = new User();
         user.setName("admin");
         user.setEmail("mvdstreek2003@gmail.com");
-        user.setPassword("admin");
+        String hashedPassword = passwordEncoder.encode("admin");
+        user.setPassword(hashedPassword);
         user.setRole(Role.USER);
 
         User user2 = new User();
         user2.setName("user");
         user2.setEmail("info@test.nl");
-        user2.setPassword("user");
+        String hashedPassword2 = passwordEncoder.encode("user");
+        user2.setPassword(hashedPassword2);
         user2.setRole(Role.CTO);
 
         User user3 = new User();
         user3.setName("Another User");
         user3.setEmail("another+test@gmail.com");
-        user3.setPassword("another");
+        String hashedPassword3 = passwordEncoder.encode("another");
+        user3.setPassword(hashedPassword3);
         user3.setRole(Role.ADMIN);
 
 
