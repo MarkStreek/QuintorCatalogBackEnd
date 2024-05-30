@@ -1,9 +1,12 @@
 package quintor.bioinf.catalog.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,6 +27,9 @@ import java.util.Objects;
  * - ConstraintViolationException
  * - NoSuchElementException
  * - MethodArgumentNotValidException
+ * - BadCredentialsException
+ * - ExpiredJwtException
+ * - JwtException
  */
 @RestControllerAdvice
 public class ExceptionController {
@@ -94,6 +100,39 @@ public class ExceptionController {
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 error,
+                request.getDescription(true));
+    }
+
+    @ExceptionHandler(value = {BadCredentialsException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ReturnMessage badCredentialsException(BadCredentialsException ex, WebRequest request) {
+        log.error("Bad credentials exception: {}", ex.getMessage());
+        return new ReturnMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                "Incorrecte login gegevens",
+                request.getDescription(true));
+    }
+
+    @ExceptionHandler(value = {ExpiredJwtException.class})
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ReturnMessage expiredJwtException(ExpiredJwtException ex, WebRequest request) {
+        log.error("Expired JWT exception: {}", ex.getMessage());
+        return new ReturnMessage(
+                HttpStatus.FORBIDDEN.value(),
+                new Date(),
+                "Authenticatie Token is verlopen: " + ex.getMessage(),
+                request.getDescription(true));
+    }
+
+    @ExceptionHandler(value = {JwtException.class})
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ReturnMessage jwtException(JwtException ex, WebRequest request) {
+        log.error("JWT exception: {}", ex.getMessage());
+        return new ReturnMessage(
+                HttpStatus.FORBIDDEN.value(),
+                new Date(),
+                "Er is iets mis met JWT token: " + ex.getMessage(),
                 request.getDescription(true));
     }
 }
