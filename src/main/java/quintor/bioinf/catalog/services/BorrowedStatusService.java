@@ -143,6 +143,15 @@ public class BorrowedStatusService {
     }
 
     /**
+     * Method that returns all the users from the database.
+     *
+     * @return list of User objects
+     */
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    /**
      * Method that approves a borrowed status by id.
      *
      * @param id borrowed status id

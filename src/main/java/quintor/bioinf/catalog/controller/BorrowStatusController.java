@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.dto.BorrowDTO;
 import quintor.bioinf.catalog.dto.BorrowRequest;
+import quintor.bioinf.catalog.entities.User;
 import quintor.bioinf.catalog.services.BorrowedStatusService;
 
 import java.util.Date;
@@ -108,6 +109,20 @@ public class BorrowStatusController {
         return borrowedStatusService.getAllPendingBorrowStatus();
     }
 
+
+    /**
+     * GET endpoint to get all users.
+     * All the users are converted to a User object.
+     *
+     * @param request The incoming request
+     * @return List of User objects
+     */
+    @GetMapping("/users")
+    public List<User> getAllUsers(HttpServletRequest request) {
+        Logging.logIncomingRequest(request);
+        return borrowedStatusService.getAllUsers();
+    }
+
     /**
      * POST endpoint to approve a borrow request. The borrow request is approved by id.
      * The id is passed as a path variable.
@@ -128,4 +143,5 @@ public class BorrowStatusController {
                 "Apparaat succesvol goedgekeurd",
                 "Het apparaat is succesvol goedgekeurd en is nu beschikbaar voor gebruik");
     }
+
 }
