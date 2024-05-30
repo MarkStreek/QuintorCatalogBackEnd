@@ -59,7 +59,8 @@ public class BorrowStatusController {
         Logging.logIncomingRequest(request);
         this.borrowedStatusService.borrowDevice(
                 borrowRequest.getUserName(),
-                borrowRequest.getDeviceId());
+                borrowRequest.getDeviceId(),
+                borrowRequest.getDescription());
 
         return new ReturnMessage(
                 HttpStatus.OK.value(),

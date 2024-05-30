@@ -30,4 +30,9 @@ public class BorrowRequest {
     @NotNull
     @Pattern(regexp = "^[0-9]{1,7}$", message = "DeviceId mag alleen cijfers bevatten")
     private int deviceId;
+
+    @NotEmpty
+    @NotNull
+    private String description;
+
 }

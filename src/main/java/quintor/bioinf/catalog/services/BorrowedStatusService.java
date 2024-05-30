@@ -1,5 +1,7 @@
 package quintor.bioinf.catalog.services;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import quintor.bioinf.catalog.dto.BorrowDTO;
 import quintor.bioinf.catalog.dto.BorrowDTOConverter;
-import quintor.bioinf.catalog.dto.DeviceDTO;
 import quintor.bioinf.catalog.entities.BorrowedStatus;
 import quintor.bioinf.catalog.entities.Device;
 import quintor.bioinf.catalog.entities.User;
@@ -53,11 +54,12 @@ public class BorrowedStatusService {
      * It calls other methods to check parameters and create new objects.
      * If everything is correct, the borrowed status is saved to the database.
      *
-     * @param name user name
-     * @param deviceId device id
+     * @param name        user name
+     * @param deviceId    device id
+     * @param description
      */
     @Transactional
-    public void borrowDevice(String name, int deviceId) {
+    public void borrowDevice(String name, int deviceId, String description) {
         BorrowedStatus borrowedStatus = new BorrowedStatus();
         // Find or create a new user and set it to the borrowed status
         borrowedStatus.setUser(findUser(name));
@@ -69,6 +71,8 @@ public class BorrowedStatusService {
         // Set the device, date and save to database
         borrowedStatus.setDevice(device);
         borrowedStatus.setCreatedBorrowedDate(new Date());
+        // Set the description and save to database
+        borrowedStatus.setDescription(description);
         borrowedStatusRepository.save(borrowedStatus);
 
     }

@@ -36,6 +36,9 @@ public class BorrowDTOConverter implements Function<BorrowedStatus, BorrowDTO> {
     public BorrowDTO apply(BorrowedStatus borrowedStatus) {
         BorrowDTO borrowDTO = new BorrowDTO();
         borrowDTO.setId(borrowedStatus.getId());
+        borrowDTO.setStatus(borrowedStatus.getStatus());
+        borrowDTO.setBorrowDate(borrowedStatus.getCreatedBorrowedDate());
+        borrowDTO.setDescription(borrowedStatus.getDescription());
         // Create a new User and Device object
         User user = createUser(borrowedStatus);
         Device device = createDevice(borrowedStatus);

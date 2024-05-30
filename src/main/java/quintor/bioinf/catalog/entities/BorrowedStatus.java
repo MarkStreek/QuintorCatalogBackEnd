@@ -42,4 +42,9 @@ public class BorrowedStatus {
     @Column(name = "status")
     private String status;
 
+    @NotNull
+    @NotEmpty
+    @Column(name = "description")
+    private String description;
+
 }
