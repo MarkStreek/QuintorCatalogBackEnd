@@ -4,26 +4,56 @@
 [![Forks][forks-shield]][forks-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
-<div align="center">
-  <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">
-    <img src="https://quintor.nl/wp-content/uploads/2022/08/logo-square.png" alt="Logo" width="100" height="100">
-  </a>
-  <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">
-    <img src="https://www.heeredwinger.nl/wp-content/uploads/2019/12/Logo-Hanze.jpg" alt="Logo" width="250" height="100">
-  </a>
-<h1 align="center">QuintorCatalogBackEnd</h3>
+# QuintorCatalogBackEnd
 
-  <p align="center">
-    Automated hardware catalog for the software company Quintor
-    <br />
-    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">View Demo</a>
-    ·
-    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd/issues">Report Bug</a>
-  </p>
-</div>
+This application contains the back end of the Quintor Catalog. The Quintor Catalog is an automated hardware catalog for the software company Quintor. The hardware is stored in a database. The front end is built using React. [Go to Front end repo](https://github.com/MarkStreek/QuintorCatalogFrontEnd) 
+
+The back end is built using Java and Spring Boot. The back end serves the front end using REST API.
+Security is implemented using Spring Security and JWT tokens.
+
+![Screenshot1](docs/screenshots/homepage.png)
+![Screenshot2](docs/screenshots/devices_page.png)
+![Screenshot3](docs/screenshots/AddDevice_page.png)
+![Screenshot4](docs/screenshots/homepage_phone.png)
+
+[//]: # (<div align="center">)
+
+[//]: # (  <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">)
+
+[//]: # (    <img src="https://quintor.nl/wp-content/uploads/2022/08/logo-square.png" alt="Logo" width="100" height="100">)
+
+[//]: # (  </a>)
+
+[//]: # (  <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">)
+
+[//]: # (    <img src="https://www.heeredwinger.nl/wp-content/uploads/2019/12/Logo-Hanze.jpg" alt="Logo" width="250" height="100">)
+
+[//]: # (  </a>)
+
+[//]: # (<h1 align="center">QuintorCatalogBackEnd</h3>)
+
+[//]: # ()
+[//]: # (  <p align="center">)
+
+[//]: # (    Automated hardware catalog for the software company Quintor)
+
+[//]: # (    <br />)
+
+[//]: # (    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd"><strong>Explore the docs »</strong></a>)
+
+[//]: # (    <br />)
+
+[//]: # (    <br />)
+
+[//]: # (    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">View Demo</a>)
+
+[//]: # (    ·)
+
+[//]: # (    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd/issues">Report Bug</a>)
+
+[//]: # (  </p>)
+
+[//]: # (</div>)
 
 ## Table of Contents
 
@@ -36,6 +66,8 @@
 - [React Project](#react-project)
 
 ## Getting Started
+
+**! It is very adviced to read the full insight of the project before starting the application !**
 
 To start the application, clone the repo and navigate to the cloned folder. Type the following command in the terminal:
 
@@ -97,6 +129,20 @@ Additionally, the catalog will be able to:
 
 This project was created by students bioinformatics at the Hanze University of Applied Sciences. The main task was to create a (automated) catalog to store all hardware components in the company. 
 The hardware tools are stored in a database. This information is served to the front end using a REST API.
+
+## Full Insight
+
+> This section will deep dive into the project functionalities and approaches. This is a must-read before starting the application. Additionally, this section is handy for future developers who want to expand to the project.
+
+### Packages design
+
+### Database schema
+
+### REST Controllers and Controllers Advice
+
+### DTOs and Models
+
+### Security
 
 ## Unit Tests
 
