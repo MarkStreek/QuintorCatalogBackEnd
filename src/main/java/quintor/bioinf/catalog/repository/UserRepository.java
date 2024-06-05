@@ -5,6 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import quintor.bioinf.catalog.entities.User;
 
+import java.util.Optional;
+
 /**
  * This interface is used to interact with the User table in the database.
  *
@@ -15,6 +17,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByName(String name);
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
 }

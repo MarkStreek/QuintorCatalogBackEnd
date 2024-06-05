@@ -27,21 +27,21 @@ public class DummyDataLoader {
         user.setEmail("mvdstreek2003@gmail.com");
         String hashedPassword = passwordEncoder.encode("admin");
         user.setPassword(hashedPassword);
-        user.setRole(Role.USER);
+        user.setRole(Role.ROLE_USER);
 
         User user2 = new User();
         user2.setName("user");
         user2.setEmail("info@test.nl");
         String hashedPassword2 = passwordEncoder.encode("user");
         user2.setPassword(hashedPassword2);
-        user2.setRole(Role.CTO);
+        user2.setRole(Role.ROLE_CTO);
 
         User user3 = new User();
         user3.setName("Another User");
         user3.setEmail("another+test@gmail.com");
         String hashedPassword3 = passwordEncoder.encode("another");
         user3.setPassword(hashedPassword3);
-        user3.setRole(Role.ADMIN);
+        user3.setRole(Role.ROLE_ADMIN);
 
 
         return args -> {

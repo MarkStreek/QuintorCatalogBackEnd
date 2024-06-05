@@ -110,7 +110,7 @@ public class ExceptionController {
         return new ReturnMessage(
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
-                "Incorrecte login gegevens",
+                "Incorrecte login gegevens: " + ex.getMessage(),
                 request.getDescription(true));
     }
 
