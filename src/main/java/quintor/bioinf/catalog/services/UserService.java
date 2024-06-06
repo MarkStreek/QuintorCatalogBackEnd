@@ -8,6 +8,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import quintor.bioinf.catalog.repository.UserRepository;
 
+/**
+ * UserService class that handles the retrieving user data from the database
+ * The loadUserByUsername method is used by the Spring Security framework to retrieve the user data from the database
+ */
 @Service
 public class UserService {
 
@@ -18,6 +22,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Method that retrieves the user data from the database
+     * It calls the findByEmail method from the UserRepository class
+     * If the user is not found, a BadCredentialsException is thrown.
+     * This bad credentials exception is caught by the exception handling and
+     * sends an object back to the client
+     * @return UserDetailsService
+     */
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override

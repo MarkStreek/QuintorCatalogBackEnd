@@ -19,6 +19,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import quintor.bioinf.catalog.services.UserService;
 
+/**
+ * This class is the configuration class for the security of the application.
+ * The authentication provider is being set, the authentication manager is being set, and the security filter chain is being set.
+ * Additionally, endpoints are being secured with the security filter chain.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -29,6 +34,14 @@ public class SecurityConfig {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * This method is responsible for creating and returning a new authentication provider object.
+     * The authentication provider is a DaoAuthenticationProvider object.
+     * The user details service is being set to the user service user details service.
+     * The password encoder is being set to the password encoder.
+     *
+     * @return a new authentication provider object
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -37,11 +50,28 @@ public class SecurityConfig {
         return authProvider;
     }
 
+    /**
+     * Method is responsible for creating and returning a new authentication manager object.
+     * The authentication manager is being created with the authentication configuration.
+     *
+     * @param config the authentication configuration
+     * @return a new authentication manager object
+     * @throws Exception if the authentication manager could not be created
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    /**
+     * Method that sets the endpoints that are secured with the security filter chain.
+     * The security filter is being called with every request except for the login request,
+     * POST requests to /auth/login are allowed.
+     *
+     * @param http the http security object
+     * @return the security filter chain
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

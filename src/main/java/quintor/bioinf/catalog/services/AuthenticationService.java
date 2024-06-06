@@ -9,6 +9,11 @@ import quintor.bioinf.catalog.model.LoginRequest;
 import quintor.bioinf.catalog.model.LoginResponse;
 import quintor.bioinf.catalog.repository.UserRepository;
 
+/**
+ * Service class for handling the authentication process.
+ * It communicates with the UserRepository, UserService, PasswordEncoder, JwtService and AuthenticationManager.
+ * The signin method is used to authenticate a user and generate a JWT token.
+ */
 @Service
 public class AuthenticationService {
 
@@ -27,6 +32,15 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Method that authenticates a user and generates a JWT token.
+     * It uses the AuthenticationManager to authenticate the user.
+     * If the user is authenticated, the method generates a JWT token using the JwtService.
+     * The method returns a LoginResponse object containing the user's email and the JWT token.
+     *
+     * @param request the LoginRequest object containing the user's email and password
+     * @return a LoginResponse object containing the user's email and the JWT token
+     */
     public LoginResponse signin(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
