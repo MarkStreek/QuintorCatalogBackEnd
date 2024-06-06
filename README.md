@@ -15,7 +15,6 @@ CTO can approve/deny a borrow request to a user. The hardware is stored in a dat
 
 This application was built in Spring Boot. Additionally, the application uses a MySQL database to store the hardware components. The information is served to the front end using a REST API. A REST API is a way to communicate between different software systems regardless of the operating system or programming language. 
 
- 
 
 [//]: #
 
@@ -62,13 +61,20 @@ This application was built in Spring Boot. Additionally, the application uses a 
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [Getting Started](#getting-started)
-- [About Quintor](#about-quintor)
-- [About the project](#about-the-project)
-- [Unit Tests](#unit-tests)
-- [Built with](#built-with)
-- [React Project](#react-project)
+- [QuintorCatalogBackEnd](#quintorcatalogbackend)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+  - [About Quintor](#about-quintor)
+  - [About the project](#about-the-project)
+  - [Full Insight](#full-insight)
+    - [Auth](#auth)
+    - [Configuration](#configuration)
+    - [Controllers](#controllers)
+    - [DTO](#dto)
+    - [Database schema](#database-schema)
+    - [Entities](#entities)
+  - [Built with](#built-with)
+  - [React Project](#react-project)
 
 ## Getting Started
 
@@ -132,8 +138,7 @@ Additionally, the catalog will be able to:
 
 ## About the project
 
-This project was created by students bioinformatics at the Hanze University of Applied Sciences. The main task was to create a (automated) catalog to store all hardware components in the company. 
-The hardware tools are stored in a database. This information is served to the front end using a REST API.
+This project was created by students bioinformatics at the Hanze University of Applied Sciences. The main task was to create a (automated) catalog to store all hardware components in the company. This catalog will be used by system administrators to manage the hardware components. The project was built in 1 semester.
 
 ## Full Insight
 
@@ -142,7 +147,7 @@ The hardware tools are stored in a database. This information is served to the f
 In the project, the following packages are present:
 
 - **Auth** : This package contains the main security configuration. The main security filter is being defined here. Every new request that is made to the rest controllers is first being checked by the security filter.
-- **Config** : This package contains the configuration of the application. One of these classes is responsible for putting some test data in the database, everytime the application starts up.
+- **Config** : This package contains the configuration of the application. One of these classes is responsible for putting some test data in the database, every time the application starts up.
 - **Controllers** : This package contains all the rest controllers. The REST controllers are responsible for handling the incoming requests.
 - **DTO** : This package contains objects that are used to transfer data from the back end to the front end.
 - **Entities** : This package contains all the entities. The entities are the objects that are stored in the database.
@@ -152,11 +157,66 @@ In the project, the following packages are present:
 
 ### Auth
 
-To start with the Auth package. This package contains the main security configuration. The main security filter is being defined here (`JwtAuthenticationFilter.java`). Every new request that is made to the rest controllers is first being checked by the `doFilterInternal.java` method of the class. The security filter checks if the request is allowed to be made. I.e., is the right token present in the request header? Or is the token still valid? If the token is not valid, the request will be denied/caught by the exception handler. More on the exception handler later. Additionally, the Auth package contains the security configuration in which the end points are being configured. /auth/login, for example is accessible for everyone, this is defined in the security configuration (SecurityConfig.java).
+To start with the Auth package. This package contains the main security configuration. The main security filter is being defined here (`JwtAuthenticationFilter.java`). Every new request that is made to the rest controllers is first being checked by the `doFilterInternal` method of the class. The security filter checks if the request is allowed to be made. I.e., is the right token present in the request header? Or is the token still valid? Let's look at the main logic ot the `doFilterInternal.java` method:
+
+```java
+// JwtAuthenticationFilter.java
+
+@Override
+protected void doFilterInternal(
+        HttpServletRequest request, 
+        @NonNull HttpServletResponse response, 
+        @NonNull FilterChain filterChain) throws ServletException, IOException {
+    
+    final String authHeader = request.getHeader("Authorization");
+    // Check for the bearer presence, if it is not present, continue with the filter chain
+    if (checkForBearerPresence(request, response, filterChain, authHeader)) return;
+    
+    final String jwt = authHeader.substring(7);
+    final String userEmail = jwtService.extractUsername(jwt);
+    
+    if (userEmail != null && !userEmail.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
+        UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
+        if (jwtService.isTokenValid(jwt, userDetails)) {
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            context.setAuthentication(authToken);
+            SecurityContextHolder.setContext(context);
+        }
+    }
+    filterChain.doFilter(request, response);
+}
+```
+
+First impression of the method: very big and hard to understand. Let's break it down. The method first gets the header out of the request. With that header, another method is being called that checks if the bearer token is present. If not, the method will return and the request will be denied. 
+
+After the checking the bearer presence, the method extracts the token from the header. The token is then used to extract the username from the token. The username is then used to get the user details from the database. The user details are then used to check if the token is still valid.
+
+An additional check is being made to see if the user is not empty or userdetails are epmty. After those checks are good, the UsernamePasswordAuthenticationToken is being created. This token is then used to set the security context.
+
+If the token is not valid, the request will be denied/caught by the exception handler. More on the exception handler later. 
+
+Additionally, the Auth package contains the security configuration in which the end points are being configured. /auth/login, for example is accessible for everyone, this is defined in the security configuration (`SecurityConfig.java`). `PasswordConfig.java` class contains the password encoder. The passwords in the datbase are encoded using the BCryptPasswordEncoder. The method in the `PasswordConfig.java` class is used to decode the password when a user is trying to login. [Read more about BCrypt Encoding](https://en.wikipedia.org/wiki/Bcrypt). 
+
+The password encrtpyon method could be changed to a different, probably better alternative. Make sure, to also change the encoding method for storing the password. I.e., if you change the decoder also change the encoder (but this makes sense, right?).
 
 ### Configuration
 
-The configuration package contains two classes. One of these classes is responsible for putting some test data in the database, everytime the application starts up. This class probably should be empty/or deleted, when starting the application in production. The `WebConfig.java` class contains a single method that makes sure the request from localhost:3000 are not failing because of the CORS policy. Because the front end is running on localhost:3000, the request from the front end to the back end should be allowed. Normally this is not allowed, because you're making a request to your own server. Read more about CORS [here](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing).
+The configuration package contains two classes. One of these classes is responsible for putting some test data in the database, everytime the application starts up. This class probably should be empty/or deleted, when starting the application in production. The `WebConfig.java` class contains a single method that makes sure the request from localhost:3000 are not failing because of the CORS policy. 
+
+```java
+// WebConfig.java
+
+public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+            .allowedOrigins("http://localhost:3000")
+            .allowedMethods("GET", "POST", "PUT", "DELETE");
+}
+```
+
+Because the front end is running on localhost:3000, the request from the front end to the back end should be allowed. Normally this is not allowed, because you're making a request to your own server. This method allows the GET, POST, PUT and DELETE methods from the front end to the back end. Read more about CORS [here](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing).
 
 ### Controllers
 
@@ -187,6 +247,7 @@ public class LoginRequest {
     }
 }
 ```
+
 When creating a request to the /auth/login end-point, the request should contain a body with an email and password. The body should be in JSON format. Spring will **automatically** cast/map this incoming JSON request to the LoginRequest object. The incoming request body:
 
 ```json
@@ -197,6 +258,39 @@ When creating a request to the /auth/login end-point, the request should contain
 ```
 
 Will be cast to a LoginRequest object. This is very handy, because you don't have to do this manually. This way of incoming request-to-object mapping is used more often in the project. Later, in the `DTO`, we will see that this method is extremely useful for `@Validation`.
+
+If a method does't contain an `@Mapping` at the top, the url defined above the Controller class is enough to trigger the method. Let's take a quick look at an exmple method in the `DeviceController.java` class:
+
+```java
+@RestController
+@RequestMapping("/devices")
+public class DeviceController {
+  
+  @PostMapping
+  public ReturnMessage addDevice(@RequestBody @Valid DeviceDTO deviceDTO, HttpServletRequest request) {
+      Logging.logIncomingRequest(request);
+      mainDeviceService.addDevice(
+              deviceDTO.getType(),
+              deviceDTO.getBrandName(),
+              deviceDTO.getModel(),
+              deviceDTO.getSerialNumber(),
+              deviceDTO.getInvoiceNumber(),
+              deviceDTO.getLocationCity(),
+              deviceDTO.getLocationAddress(),
+              deviceDTO.getLocationName(),
+              deviceDTO.getSpecs()
+      );
+      return new ReturnMessage(
+              HttpStatus.OK.value(),
+              new Date(),
+              "Apparaat toegevoegd aan de database",
+              "Een nieuw apparaat is toegevoegd aan de Device tabel in de database"
+      );
+  }
+}
+```
+
+A post request to the end-point `/devices` will trigger the `addDevice` method. Of course, the request must be authorized.
 
 ### DTO
 
