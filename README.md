@@ -67,12 +67,18 @@ This application was built in Spring Boot. Additionally, the application uses a 
   - [About Quintor](#about-quintor)
   - [About the project](#about-the-project)
   - [Full Insight](#full-insight)
-    - [Auth](#auth)
+    - [Annotations](#annotations)
+    - [Auth / Authentication](#auth--authentication)
     - [Configuration](#configuration)
     - [Controllers](#controllers)
     - [DTO](#dto)
     - [Database schema](#database-schema)
     - [Entities](#entities)
+    - [Model](#model)
+    - [Repository](#repository)
+    - [Service](#service)
+    - [Exception Handler / RestControllerAdvice](#exception-handler--restcontrolleradvice)
+  - [Unit Tests](#unit-tests)
   - [Built with](#built-with)
   - [React Project](#react-project)
 
@@ -144,6 +150,8 @@ This project was created by students bioinformatics at the Hanze University of A
 
 > This section will deep dive into the project functionalities and approaches. This is a must-read before starting the application. Additionally, this section is handy for future developers who want to expand to the project.
 
+> There is a wiki page available for this project. The wiki page contains this information in a more structured way. [Go to the wiki page](https://github.com/MarkStreek/QuintorCatalogBackEnd/wiki) 
+
 In the project, the following packages are present:
 
 - **Auth** : This package contains the main security configuration. The main security filter is being defined here. Every new request that is made to the rest controllers is first being checked by the security filter.
@@ -155,7 +163,47 @@ In the project, the following packages are present:
 - **Repository** : This package contains the repositories. The repositories are used to communicate with the database.
 - **Services** : This package contains the services. The services are used to handle the main logic and checking of the application.
 
-### Auth
+### Annotations
+
+In the project there is wide variety of annotations used. Annotations are used to add metadata to the classes and methods. Also define the behavior of the certain classes or methods in classes. Some annotations you can find in the project are:
+
+- `@Autowired`: used to inject the object dependency implicitly.
+- `@Configuration`: used to define the configuration classes.
+- `@Bean`: used to define the beans in the configuration classes. Beans are objects that are managed by the Spring IoC container.
+- `@Component`: used to define the beans in the configuration classes.
+- `@Service`: used to define the services in the services package.
+- `@Entity`: used to define the database entities
+- `@Repository`: used to define the repositories that communicate with the entities
+
+This is only a small list of the used annotations. Sometimes they are hard to understand. Sometimes they speak for themselves. For example, we use a package called `lombok`. Lombok is a library that creates simple boiler plate code with annotations. Let's look at the class below:
+
+```java
+// Location.java
+
+@Getter
+@Setter
+@Entity
+@Table(name = "locations")
+public class Location {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "city")
+    private String city;
+
+// ...
+
+}
+```
+
+The `@Getter` and `@Setter` annotations are used to create the getters and setters for the class. This makes the class more readable and easier to understand. 
+
+### Auth / Authentication
 
 To start with the Auth package. This package contains the main security configuration. The main security filter is being defined here (`JwtAuthenticationFilter.java`). Every new request that is made to the rest controllers is first being checked by the `doFilterInternal` method of the class. The security filter checks if the request is allowed to be made. I.e., is the right token present in the request header? Or is the token still valid? Let's look at the main logic ot the `doFilterInternal.java` method:
 
@@ -194,17 +242,17 @@ First impression of the method: very big and hard to understand. Let's break it 
 
 After the checking the bearer presence, the method extracts the token from the header. The token is then used to extract the username from the token. The username is then used to get the user details from the database. The user details are then used to check if the token is still valid.
 
-An additional check is being made to see if the user is not empty or userdetails are epmty. After those checks are good, the UsernamePasswordAuthenticationToken is being created. This token is then used to set the security context.
+An additional check is being made to see if the user is not empty or User details are empty. After those checks are good, the UsernamePasswordAuthenticationToken is being created. This token is then used to set the security context.
 
 If the token is not valid, the request will be denied/caught by the exception handler. More on the exception handler later. 
 
 Additionally, the Auth package contains the security configuration in which the end points are being configured. /auth/login, for example is accessible for everyone, this is defined in the security configuration (`SecurityConfig.java`). `PasswordConfig.java` class contains the password encoder. The passwords in the datbase are encoded using the BCryptPasswordEncoder. The method in the `PasswordConfig.java` class is used to decode the password when a user is trying to login. [Read more about BCrypt Encoding](https://en.wikipedia.org/wiki/Bcrypt). 
 
-The password encrtpyon method could be changed to a different, probably better alternative. Make sure, to also change the encoding method for storing the password. I.e., if you change the decoder also change the encoder (but this makes sense, right?).
+The password encryption method could be changed to a different, probably better alternative. Make sure, to also change the encoding method for storing the password. I.e., if you change the decoder also change the encoder (but this makes sense, right?).
 
 ### Configuration
 
-The configuration package contains two classes. One of these classes is responsible for putting some test data in the database, everytime the application starts up. This class probably should be empty/or deleted, when starting the application in production. The `WebConfig.java` class contains a single method that makes sure the request from localhost:3000 are not failing because of the CORS policy. 
+The configuration package contains two classes. One of these classes is responsible for putting some test data in the database, every time the application starts up. This class probably should be empty/or deleted, when starting the application in production. The `WebConfig.java` class contains a single method that makes sure the request from localhost:3000 are not failing because of the CORS policy. 
 
 ```java
 // WebConfig.java
@@ -296,7 +344,31 @@ A post request to the end-point `/devices` will trigger the `addDevice` method. 
 
 When listing devices in the frond end, you need devices, locations, device specification, etc. It is very redundant to first request the devices, then the locations, etc. Here comes the DTO package in play. DTO stands for Data Transfer Object. The DTO package contains objects that are used to transfer data from the back end to the front end. The `DeviceDTO.java` class is the most important class in the DTO package. This class contains all the information that is needed to display a device in the front end. Additionally, The `DeviceDTO.java` is also used as incoming request. Just like we were talking above: `@RequestBody @Valid DeviceDTO deviceDTO`.
 
-Right before sending the data to the front end, the right database lines are called from the database and converted to DTO. This is done in the `Converter` classes. The `Converter.java` class contains a method that: creates a new DTO object, sets the right values with incoming database lines (devices, locations, specifications, etc.) and returns the DTO object.
+Right before sending the data to the front end, the right database lines are called from the database and converted to DTO. This is done in the `Converter` classes. The `Converter.java` class contains a method that: creates a new DTO object, sets the right values with incoming database lines (devices, locations, specifications, etc.) and returns the DTO object. Below is an example of a converter method in `BorrowDTOConverter.java` class:
+
+```java
+// BorrowDTOConverter.java
+
+@Override
+public BorrowDTO apply(BorrowedStatus borrowedStatus) {
+    BorrowDTO borrowDTO = new BorrowDTO();
+    borrowDTO.setId(borrowedStatus.getId());
+    // Create a new User and Device object
+    User user = createUser(borrowedStatus);
+    Device device = createDevice(borrowedStatus);
+    Location location = createLocation(borrowedStatus);
+
+    // Set the User and Device object to the BorrowDTO object
+    borrowDTO.setUser(user);
+    borrowDTO.setDevice(device);
+    device.setLocation(location);
+
+    log.info("Converted borrowed status: {}", borrowDTO);
+    return borrowDTO;
+}
+```
+
+The method creates a new BorrowDTO object, the values are set with the provided data from the database (borrowedStatus) and that's basically it. After converting, the DTO object is sent to the front end using the controller.
 
 Because the DTO is sometimes also used as incoming request, the `@Valid` annotation is used. The `@Valid` annotation is used to validate the incoming request. These annotation is placed in the controller and checks for more validation annotations in the incoming request-object. For example, the `@NotNull` annotation is used in the `DeviceDTO.java` class. This annotation checks if the incoming request contains a value for the field. An example validation in the `DeviceDTO.java` class:
 
@@ -311,15 +383,27 @@ Message is passed to the exception handler when the validation fails.
 
 ### Database schema
 
-Below you can find the database schema. The fields on the scheme may differ slightly but the main structure is the same.
+Below you can find the database schema. The fields of the tables are in Dutch, but if you closely look at the table names and structure, you can understand the schema. 
 
 ![Database Schema](docs/DB_Scheme.png)
 
-The HardwareSpecifications contains a device id and a spec id. The spec id is placed in a different table. This is because it's now future and expanding proof. A user can add a new spec in the spec table and give it a value in the HardwareSpecs table. They are completely separate from each-other.
+The `DeviceSpecs` contains a `Device` id and a `Spec` id. The Spec id is placed in a different table. This is because it's now future and expanding proof. A user can add a new spec in the spec table and give it a value in the DeviceSpecs table. They are completely separate from each-other. In other words, you don't have to use empty fields in the DeviveSpecs if you have devices without that spec. You simply tell which spec you have and give it a value. You can reuse them as well. 
+
+There is end-point in the application that is used to serve all the current specs in the database to the front end. The `getAllSpecs` method in the `SpecController.java` class makes sure of that.
 
 ### Entities
 
 The entities package contains all the entities. The entities are the objects that are stored in the database. The entities are the objects that are being converted to DTO objects. The entities are actually just database schemes. The entities in classes are annotated with `@Entity`, `@Table`, `@Id`, `@GeneratedValue`, etc. These annotations are used to define the database scheme. Only the `Role.java` class is not an entity. The `Role.java` class is used to define the roles in the application. The roles are used to define the permissions in the application.
+
+### Model
+
+### Repository
+
+### Service
+
+### Exception Handler / RestControllerAdvice
+
+## Unit Tests
 
 After every push to the main branch, the unit tests will be run automatically. The tests are run using GitHub Actions and executed on an ubuntu-latest runner. Results are shown in the badge below:
 
