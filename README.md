@@ -6,15 +6,20 @@
 
 # QuintorCatalogBackEnd
 
-This application contains the back end of the Quintor Catalog. The Quintor Catalog is an automated hardware catalog for the software company Quintor. The hardware is stored in a database. The front end is built using React. [Go to Front end repo](https://github.com/MarkStreek/QuintorCatalogFrontEnd) 
-
-The back end is built using Java and Spring Boot. The back end serves the front end using REST API.
-Security is implemented using Spring Security and JWT tokens.
+The Quintor Catalog is an automated hardware catalog for the software company Quintor. System administrators can add, update, delete, search, filter, sort, and borrow hardware components. 
+CTO can approve/deny a borrow request to a user. The hardware is stored in a database. The front end is built using React. [Go to Front end repo](https://github.com/MarkStreek/QuintorCatalogFrontEnd)
 
 ![Screenshot1](docs/screenshots/homepage.png)
 ![Screenshot2](docs/screenshots/devices_page.png)
 ![Screenshot3](docs/screenshots/AddDevice_page.png)
-![Screenshot4](docs/screenshots/homepage_phone.png)
+
+This application was built in Spring Boot. Additionally, the application uses a MySQL database to store the hardware components. The information is served to the front end using a REST API. A REST API is a way to communicate between different software systems regardless of the operating system or programming language. 
+
+ 
+
+[//]: #
+
+[//]: # (![Screenshot4]&#40;docs/screenshots/homepage_phone.png&#41;)
 
 [//]: # (<div align="center">)
 
@@ -134,17 +139,93 @@ The hardware tools are stored in a database. This information is served to the f
 
 > This section will deep dive into the project functionalities and approaches. This is a must-read before starting the application. Additionally, this section is handy for future developers who want to expand to the project.
 
-### Packages design
+In the project, the following packages are present:
+
+- **Auth** : This package contains the main security configuration. The main security filter is being defined here. Every new request that is made to the rest controllers is first being checked by the security filter.
+- **Config** : This package contains the configuration of the application. One of these classes is responsible for putting some test data in the database, everytime the application starts up.
+- **Controllers** : This package contains all the rest controllers. The REST controllers are responsible for handling the incoming requests.
+- **DTO** : This package contains objects that are used to transfer data from the back end to the front end.
+- **Entities** : This package contains all the entities. The entities are the objects that are stored in the database.
+- **Model** : This package contains the models. The models are used to define the objects that are used in the application.
+- **Repository** : This package contains the repositories. The repositories are used to communicate with the database.
+- **Services** : This package contains the services. The services are used to handle the main logic and checking of the application.
+
+### Auth
+
+To start with the Auth package. This package contains the main security configuration. The main security filter is being defined here (`JwtAuthenticationFilter.java`). Every new request that is made to the rest controllers is first being checked by the `doFilterInternal.java` method of the class. The security filter checks if the request is allowed to be made. I.e., is the right token present in the request header? Or is the token still valid? If the token is not valid, the request will be denied/caught by the exception handler. More on the exception handler later. Additionally, the Auth package contains the security configuration in which the end points are being configured. /auth/login, for example is accessible for everyone, this is defined in the security configuration (SecurityConfig.java).
+
+### Configuration
+
+The configuration package contains two classes. One of these classes is responsible for putting some test data in the database, everytime the application starts up. This class probably should be empty/or deleted, when starting the application in production. The `WebConfig.java` class contains a single method that makes sure the request from localhost:3000 are not failing because of the CORS policy. Because the front end is running on localhost:3000, the request from the front end to the back end should be allowed. Normally this is not allowed, because you're making a request to your own server. Read more about CORS [here](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing).
+
+### Controllers
+
+The controllers package contains all the rest controllers. The REST controllers are responsible for handling the incoming requests. The REST controllers are the entry point of the application. The end-points are defined above methods (with `@Mapping`) of the REST controller. When a request is incoming, the method that is defined below the `@Mapping` is being called. Good to know, some end-point methods take arguments. For example take the `AuthController.java` class and look at the login method:
+
+```java
+@PostMapping("/login")
+public LoginResponse login(@RequestBody LoginRequest request) {
+    return authenticationService.signin(request);
+}
+```
+
+This method takes a LoginRequest as input. LoginRequest is simple object that is defined in the `model` package:
+
+```java
+// LoginRequest.java
+
+@Getter
+@Setter
+public class LoginRequest {
+
+    private String email;
+    private String password;
+
+    public LoginRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+}
+```
+When creating a request to the /auth/login end-point, the request should contain a body with an email and password. The body should be in JSON format. Spring will **automatically** cast/map this incoming JSON request to the LoginRequest object. The incoming request body:
+
+```json
+{
+    "email": "some_user@info.com",
+    "password": "welcome123"
+}
+```
+
+Will be cast to a LoginRequest object. This is very handy, because you don't have to do this manually. This way of incoming request-to-object mapping is used more often in the project. Later, in the `DTO`, we will see that this method is extremely useful for `@Validation`.
+
+### DTO
+
+When listing devices in the frond end, you need devices, locations, device specification, etc. It is very redundant to first request the devices, then the locations, etc. Here comes the DTO package in play. DTO stands for Data Transfer Object. The DTO package contains objects that are used to transfer data from the back end to the front end. The `DeviceDTO.java` class is the most important class in the DTO package. This class contains all the information that is needed to display a device in the front end. Additionally, The `DeviceDTO.java` is also used as incoming request. Just like we were talking above: `@RequestBody @Valid DeviceDTO deviceDTO`.
+
+Right before sending the data to the front end, the right database lines are called from the database and converted to DTO. This is done in the `Converter` classes. The `Converter.java` class contains a method that: creates a new DTO object, sets the right values with incoming database lines (devices, locations, specifications, etc.) and returns the DTO object.
+
+Because the DTO is sometimes also used as incoming request, the `@Valid` annotation is used. The `@Valid` annotation is used to validate the incoming request. These annotation is placed in the controller and checks for more validation annotations in the incoming request-object. For example, the `@NotNull` annotation is used in the `DeviceDTO.java` class. This annotation checks if the incoming request contains a value for the field. An example validation in the `DeviceDTO.java` class:
+
+```java
+@NotNull
+@NotEmpty
+@Length(min = 1, max = 50, message = "Merk moet tussen de 1 en 50 karakters lang zijn")
+private String brandName;
+```
+
+Message is passed to the exception handler when the validation fails.
 
 ### Database schema
 
-### REST Controllers and Controllers Advice
+Below you can find the database schema. The fields on the scheme may differ slightly but the main structure is the same.
 
-### DTOs and Models
+![Database Schema](docs/DB_Scheme.png)
 
-### Security
+The HardwareSpecifications contains a device id and a spec id. The spec id is placed in a different table. This is because it's now future and expanding proof. A user can add a new spec in the spec table and give it a value in the HardwareSpecs table. They are completely separate from each-other.
 
-## Unit Tests
+### Entities
+
+The entities package contains all the entities. The entities are the objects that are stored in the database. The entities are the objects that are being converted to DTO objects. The entities are actually just database schemes. The entities in classes are annotated with `@Entity`, `@Table`, `@Id`, `@GeneratedValue`, etc. These annotations are used to define the database scheme. Only the `Role.java` class is not an entity. The `Role.java` class is used to define the roles in the application. The roles are used to define the permissions in the application.
 
 After every push to the main branch, the unit tests will be run automatically. The tests are run using GitHub Actions and executed on an ubuntu-latest runner. Results are shown in the badge below:
 
