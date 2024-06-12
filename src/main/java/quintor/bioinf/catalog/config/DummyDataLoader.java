@@ -1,5 +1,6 @@
 package quintor.bioinf.catalog.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,15 @@ import java.util.List;
 @Configuration
 public class DummyDataLoader {
 
+    @Value("${admin.password}")
+    private String adminPassword;
+
+    @Value("${user.password}")
+    private String userPassword;
+
+    @Value("${another.password}")
+    private String anotherPassword;
+
     @Bean
     @Profile("!test")
     CommandLineRunner loadUsers(UserRepository userService) {
@@ -25,21 +35,21 @@ public class DummyDataLoader {
         User user = new User();
         user.setName("admin");
         user.setEmail("mvdstreek2003@gmail.com");
-        String hashedPassword = passwordEncoder.encode("admin");
+        String hashedPassword = passwordEncoder.encode(adminPassword);
         user.setPassword(hashedPassword);
         user.setRole(Role.ROLE_USER);
 
         User user2 = new User();
         user2.setName("user");
         user2.setEmail("info@test.nl");
-        String hashedPassword2 = passwordEncoder.encode("user");
+        String hashedPassword2 = passwordEncoder.encode(userPassword);
         user2.setPassword(hashedPassword2);
         user2.setRole(Role.ROLE_CTO);
 
         User user3 = new User();
         user3.setName("Another User");
         user3.setEmail("another+test@gmail.com");
-        String hashedPassword3 = passwordEncoder.encode("another");
+        String hashedPassword3 = passwordEncoder.encode(anotherPassword);
         user3.setPassword(hashedPassword3);
         user3.setRole(Role.ROLE_ADMIN);
 
