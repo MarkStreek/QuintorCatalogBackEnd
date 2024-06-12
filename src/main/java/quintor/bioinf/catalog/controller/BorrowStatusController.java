@@ -120,6 +120,7 @@ public class BorrowStatusController {
      * @see ReturnMessage
      */
     @PostMapping("/approve/{id}")
+    @PreAuthorize("hasRole('ROLE_CTO')")
     public ReturnMessage approveBorrowRequest(@PathVariable Long id, HttpServletRequest request) {
         Logging.logIncomingRequest(request);
         borrowedStatusService.approveBorrowedStatus(id);

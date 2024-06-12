@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -133,6 +134,17 @@ public class ExceptionController {
                 HttpStatus.FORBIDDEN.value(),
                 new Date(),
                 "Er is iets mis met JWT token: " + ex.getMessage(),
+                request.getDescription(true));
+    }
+
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ReturnMessage accessDeniedException(AccessDeniedException ex, WebRequest request) {
+        log.error("Access denied exception: {}", ex.getMessage());
+        return new ReturnMessage(
+                HttpStatus.FORBIDDEN.value(),
+                new Date(),
+                "Toegang geweigerd: " + ex.getMessage(),
                 request.getDescription(true));
     }
 }
