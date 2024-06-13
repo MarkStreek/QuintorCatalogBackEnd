@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import quintor.bioinf.catalog.services.BorrowedStatusService;
 
 /**
  * Main class of the application.

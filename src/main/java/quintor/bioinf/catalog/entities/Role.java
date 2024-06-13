@@ -9,7 +9,7 @@ package quintor.bioinf.catalog.entities;
  * - USER
  */
 public enum Role {
-    ADMIN,
-    CTO,
-    USER;
+    ROLE_ADMIN,
+    ROLE_CTO,
+    ROLE_USER;
 }

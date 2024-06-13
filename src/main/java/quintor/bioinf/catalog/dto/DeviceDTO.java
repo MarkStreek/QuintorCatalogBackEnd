@@ -21,7 +21,7 @@ import java.util.List;
 @Setter
 @Getter
 public class DeviceDTO {
-
+    
     private Long id;
 
     @NotNull

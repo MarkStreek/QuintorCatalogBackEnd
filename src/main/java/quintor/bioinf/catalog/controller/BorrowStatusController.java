@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.dto.BorrowDTO;
 import quintor.bioinf.catalog.dto.BorrowRequest;
@@ -135,6 +136,7 @@ public class BorrowStatusController {
      * @see ReturnMessage
      */
     @PostMapping("/approve/{id}")
+    @PreAuthorize("hasRole('ROLE_CTO')")
     public ReturnMessage approveBorrowRequest(@PathVariable Long id, HttpServletRequest request) {
         Logging.logIncomingRequest(request);
         borrowedStatusService.approveBorrowedStatus(id);
