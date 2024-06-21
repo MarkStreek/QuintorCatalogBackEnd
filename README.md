@@ -329,6 +329,38 @@ The Service classes are the main classes in the project. The logic and checking 
 
 Let's take a closer look at the service classes. The `MainDeviceService.java` class is the most important class in the service package. This class contains all methods that deal with the devices.
 
+The main method that adds the device to the database is the `addDevice` method. This method is called by the DeviceController class. 
+
+```java
+// MainDeviceService.java
+@Transactional
+public void addDevice(
+        String type, String brandName, String model,
+        String serialNumber, String invoiceNumber, String city,
+        String locationAddress, String locationName, List<SpecDetail> specs
+        )
+{
+    // 1 - Create the location
+    Long locationId = this.locationService.findOrCreateLocation(locationName, city, locationAddress);
+    // 2 - Add the device to the database and get the id of the inserted device
+    Long deviceId = this.deviceRepository.addDevice(type, brandName, model, serialNumber, invoiceNumber, locationId);
+    // 3 - Get the device from the database using the returned id
+    Device device = this.deviceRepository.findById(deviceId)
+            .orElseThrow(() -> new EntityNotFoundException("Device not found with id: " + deviceId));
+    // 4 - Give that device to the spec service
+    this.specsService.createDeviceSpecs(specs, device);
+}
+```
+
+As you can see, this method is quite overwhelming. Let's break it down a bit. The commenting right before every comment is used to explain the steps.
+
+1. First the location of the new added device is found or created. The `findOrCreateLocation` method is used to find or create the location. If the location is already in the database, the id of the location is returned. If the location is not in the database, the location is created and the id of the location is returned. This Id is then used to define the location in de device table.
+2. The device is added to the database. The `addDevice` method returns a id as well.
+3. With the device id, the device is retrieved from the database. 
+4. With the device, the specs are being added to the database. The specs are defined in the `Specs` table and values of specs are stored in the linking-table `DeviceSpecs`. In the DeviceSpecs table, the reference to the device is made.
+
+Continue here....
+
 ### DTO
 
 When listing devices in the frond end, you need devices, locations, device specification, etc. It is very redundant to first request the devices, then the locations, etc. Here comes the DTO package in play. DTO stands for Data Transfer Object. The DTO package contains objects that are used to transfer data from the back end to the front end. The `DeviceDTO.java` class is the most important class in the DTO package. This class contains all the information that is needed to display a device in the front end. Additionally, The `DeviceDTO.java` is also used as incoming request. Just like we were talking above: `@RequestBody @Valid DeviceDTO deviceDTO`.
@@ -462,7 +494,7 @@ A post request to the end-point `/devices` will trigger the `addDevice` method. 
 
 ### Exception Handler / RestControllerAdvice
 
-Fill in...
+Fill... 
 
 ### Auth / Authentication
 
