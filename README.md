@@ -359,7 +359,60 @@ As you can see, this method is quite overwhelming. Let's break it down a bit. Th
 3. With the device id, the device is retrieved from the database. 
 4. With the device, the specs are being added to the database. The specs are defined in the `Specs` table and values of specs are stored in the linking-table `DeviceSpecs`. In the DeviceSpecs table, the reference to the device is made.
 
-Continue here....
+The **`@Transactional`** annotation is used to make sure that the transaction is atomic. This means that the transaction is either fully executed or not executed at all. If an exception is thrown, the transaction is rolled back. This is very useful when you're dealing with multiple database operations.
+
+The `MainDeviceService` class contains some more 'simple' methods. For example, *updateDeviceLocation*, *updateDevice*, *deleteDevice*, etc. These methods are mostly self-explaining: search for a location with a given id, update it with the (new) provided values.
+
+#### Other services
+
+In the services package, the following services are present:
+
+1. **LocationService**
+2. **SpecsService**
+3. **BorrowStatusService**
+4. **UserService**
+5. **AuthenticationService**
+6. **JwtService**
+
+The `LocationService`, `SpecsService` and `BorrowStatusService` are used to handle the main logic of creating, updating, deleting devices and specs. `BorrowStatusService` is used to create and approve/deny borrow requests. All methods contain comments that explain the steps of the method. These are all easy to understand, because it's mostly (simple) logic.
+
+The `UserService` class contains a single method that is used to get the user by email.
+
+```java
+// UserService.java
+
+public UserDetailsService userDetailsService() {
+  return new UserDetailsService() {
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+      return userRepository.findByEmail(username)
+              .orElseThrow(() -> new BadCredentialsException("Gebruiker niet gevonden"));
+    }
+  };
+}
+```
+
+This `userDetailsService` method is used for authenticating a user with username (email) and password. When a user is trying to login, the `loadUserByUsername` method is called. The method returns the user with the given email. If the user is not found, a `BadCredentialsException` is thrown. The method could be changed so it uses something else then the email to authenticate the user.
+
+The `AuthenticationService` class contains a single method that is used to sign in a user. The class calls some other methods to retrieve the user details, create a token and return the token. The `JwtService` class contains the main logic of creating and validating the token. 
+
+```java
+// JwtService.java
+
+private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return Jwts
+                .builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(this.jwtSecretKey, SignatureAlgorithm.HS256)
+                .compact();
+    }
+```
+
+This method is used to generate a token. With the userDetails a unique key is created with an expiration time. The token is then signed with the secret key. 
+
+>What is a token you ask? The user logs in with a username and password. If the credentials are valid, a unique token is generated. This token must be used in every request to the back end. The token is used to authenticate the user. It's safer because a password may sometimes be intercepted. The token is valid for a certain amount of time. More about tokens in de [security section](#auth--authentication).
 
 ### DTO
 
