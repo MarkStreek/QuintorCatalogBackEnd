@@ -18,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import quintor.bioinf.catalog.services.JwtServie;
+import quintor.bioinf.catalog.services.JwtService;
 import quintor.bioinf.catalog.services.UserService;
 
 import java.util.Collection;
@@ -53,7 +53,7 @@ public class JwtTokenProviderTest {
     @InjectMocks
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
-    private JwtServie jwtServie;
+    private JwtService jwtService;
 
     @BeforeEach
     public void setUp() {
@@ -88,7 +88,7 @@ public class JwtTokenProviderTest {
     public void shouldNotGenerateAuthToken() throws Exception {
         UserDetails userDetails = mock(UserDetails.class);
         when(userService.userDetailsService().loadUserByUsername("john")).thenReturn(userDetails);
-        String token = jwtServie.generateToken(userService.userDetailsService().loadUserByUsername("john"));
+        String token = jwtService.generateToken(userService.userDetailsService().loadUserByUsername("john"));
 
         assertNotNull(token);
         mvc.perform(MockMvcRequestBuilders.get("/devices")
@@ -136,9 +136,9 @@ public class JwtTokenProviderTest {
             }
         };
 
-        String token = jwtServie.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails);
         assertNotNull(token);
-        assertTrue(jwtServie.isTokenValid(token, userDetails));
+        assertTrue(jwtService.isTokenValid(token, userDetails));
     }
 
 }

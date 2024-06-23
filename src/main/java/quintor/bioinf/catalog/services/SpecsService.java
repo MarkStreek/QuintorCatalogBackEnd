@@ -157,7 +157,7 @@ public class SpecsService {
         createDeviceSpecs(specDetails, device);
     }
 
-                                  /**
+    /**
      * Method that retrieves all the specs from the database.
      * It retrieves all the specs from the database using the specsRepository.
      *

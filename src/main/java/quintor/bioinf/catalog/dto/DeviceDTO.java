@@ -25,17 +25,17 @@ public class DeviceDTO {
     private Long id;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Type mag niet leeg zijn")
     @Length(min = 1, max = 50, message = "Type moet tussen de 1 en 50 karakters lang zijn")
     private String type;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Merk mag niet leeg zijn")
     @Length(min = 1, max = 50, message = "Merk moet tussen de 1 en 50 karakters lang zijn")
     private String brandName;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Model mag niet leeg zijn")
     @Length(min = 1, max = 50, message = "Model moet tussen de 1 en 50 karakters lang zijn")
     private String model;
 
@@ -45,21 +45,21 @@ public class DeviceDTO {
     private String serialNumber;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Factuurnummer mag niet leeg zijn")
     @Length(min = 3, max = 50)
     private String invoiceNumber;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Locatie stad mag niet leeg zijn")
     @Pattern(regexp = "^[a-zA-Z ]*$", message = "Locatie stad mag alleen letters bevatten")
     private String locationCity;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Locatie adres mag niet leeg zijn")
     private String locationAddress;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Locatie naam mag niet leeg zijn")
     private String locationName;
 
     @NotNull(message = "Specificaties mogen niet leeg zijn")

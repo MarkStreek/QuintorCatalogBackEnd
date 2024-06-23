@@ -117,8 +117,6 @@ public class MainDeviceService {
      */
     @Transactional
     public void deleteDevice(Long Id) {
-        // Use AtomicBoolean to track if the device was found and deleted.
-        //AtomicBoolean deviceFoundAndDeleted = new AtomicBoolean(false);
 
         Device device = this.deviceRepository.findById(Id)
                 .orElseThrow(() ->
@@ -127,59 +125,6 @@ public class MainDeviceService {
         this.deviceSpecsRepository.deleteAll(deviceSpecs);
         this.deviceRepository.delete(device);
 
-
-
-        // Check if the component exists in the database
-//        this.deviceRepository.findById(Id).ifPresentOrElse(
-//                device -> {
-//                    deleteSpecsAndDevice(Id, device, deviceFoundAndDeleted);
-//                },
-//                // Log an error if the component does not exist
-//                () -> log.error("No component found with the given ID")
-//        );
-//
-//        // Check if the device was found and deleted, and return an appropriate response
-//        return checkSuccessfullyDeleted(deviceFoundAndDeleted);
-    }
-
-    /**
-     * Method that deletes the specs of a device and the device itself.
-     * If the device is found and deleted, the deviceFoundAndDeleted boolean is set to true.
-     *
-     * @param Id The id of the device
-     * @param device The device that needs to be deleted
-     * @param deviceFoundAndDeleted AtomicBoolean to track if the device was found and deleted
-     */
-    private void deleteSpecsAndDevice(Long Id, Device device, AtomicBoolean deviceFoundAndDeleted) {
-        try {
-            // Delete the device specs
-            this.specsService.deleteDeviceSpecs(device);
-            // Delete the device from the database
-            this.deviceRepository.deleteDevice(Id);
-            deviceFoundAndDeleted.set(true);
-        } catch (Exception e) {
-            log.error("Failed to delete device: {}", e.getMessage());
-        }
-    }
-
-    /**
-     * Method that checks if the device was successfully deleted.
-     * If the device was found and deleted, a success message is returned.
-     * Otherwise, an exception is thrown. This exception is caught by the handler
-     *
-     * @param deviceFoundAndDeleted AtomicBoolean to track if the device was found and deleted
-     * @return ReturnMessage with the appropriate message
-     */
-    private static ReturnMessage checkSuccessfullyDeleted(AtomicBoolean deviceFoundAndDeleted) {
-        if (deviceFoundAndDeleted.get()) {
-            return new ReturnMessage(
-                    HttpStatus.OK.value(),
-                    new Date(),
-                    "Apparaat succesvol verwijderd",
-                    "Het apparaat is succesvol verwijderd uit de database");
-        } else {
-            throw new NoSuchElementException();
-        }
     }
 
     /**
