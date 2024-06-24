@@ -73,10 +73,13 @@ This application was built in Spring Boot. Additionally, the application uses a 
     - [Repository](#repository)
     - [Model](#model)
     - [Service](#service)
+      - [Other services](#other-services)
     - [DTO](#dto)
     - [Configuration](#configuration)
     - [Controllers](#controllers)
     - [Exception Handler / RestControllerAdvice](#exception-handler--restcontrolleradvice)
+      - [ReturnMessage](#returnmessage)
+    - [Logging](#logging)
     - [Auth / Authentication](#auth--authentication)
   - [Unit Tests](#unit-tests)
   - [Built with](#built-with)
@@ -109,7 +112,8 @@ java -jar QuintorCatalogBackEnd-0.0.1-SNAPSHOT.jar
 
  - Fill in the database credentials in the application.properties file
  - Build the application using Gradle, navigate to the cloned folder and type the following command in the terminal:
- ```bash
+ 
+```bash
  ./gradlew build
 ```
 
@@ -416,7 +420,38 @@ This method is used to generate a token. With the userDetails a unique key is cr
 
 ### DTO
 
-When listing devices in the frond end, you need devices, locations, device specification, etc. It is very redundant to first request the devices, then the locations, etc. Here comes the DTO package in play. DTO stands for Data Transfer Object. The DTO package contains objects that are used to transfer data from the back end to the front end. The `DeviceDTO.java` class is the most important class in the DTO package. This class contains all the information that is needed to display a device in the front end. Additionally, The `DeviceDTO.java` is also used as incoming request. Just like we were talking above: `@RequestBody @Valid DeviceDTO deviceDTO`.
+When listing devices in the frond end, you need devices, locations, device specification, etc. It is very redundant to first request the devices, then the locations, etc. Here comes the DTO package in play. DTO stands for Data Transfer Object. The DTO package contains objects that are used to transfer data from the back end to the front end. The `DeviceDTO.java` class is the most important class in the DTO package. This class contains all the information that is needed to display a device in the front end. Additionally, The `DeviceDTO.java` is also used as incoming request. 
+
+A small part of the `DeviceDTO.java` class
+
+```java
+// DeviceDTO.java
+
+@Setter
+@Getter
+public class DeviceDTO {
+
+  private Long id;
+
+  @NotNull
+  @NotEmpty(message = "Type mag niet leeg zijn")
+  @Length(min = 1, max = 50, message = "Type moet tussen de 1 en 50 karakters lang zijn")
+  private String type;
+
+  @NotNull
+  @NotEmpty(message = "Merk mag niet leeg zijn")
+  @Length(min = 1, max = 50, message = "Merk moet tussen de 1 en 50 karakters lang zijn")
+  private String brandName;
+
+  @NotNull
+  @NotEmpty(message = "Model mag niet leeg zijn")
+  @Length(min = 1, max = 50, message = "Model moet tussen de 1 en 50 karakters lang zijn")
+  private String model;
+```
+
+As mentioned this object is also used for incoming request, so all the fields are annotated with `@NotNull`, `@NotEmpty`, `@Length`. The `@Valid` annotation is placed in the controller and is checking for more validation annotations (`@NotNull`, `@NotEmpty`, `@Length`, etc.) in the incoming request object.
+
+More about validation in the [controllers section](#controllers). The `message()` field are for the exception handler. When an incoming object isn't valid, this message is passed to the exception handler. More about exception handler in the [exception handler section](#exception-handler--restcontrolleradvice).
 
 Right before sending the data to the front end, the right database lines are called from the database and converted to DTO. This is done in the `Converter` classes. The `Converter.java` class contains a method that: creates a new DTO object, sets the right values with incoming database lines (devices, locations, specifications, etc.) and returns the DTO object. Below is an example of a converter method in `BorrowDTOConverter.java` class:
 
@@ -444,16 +479,7 @@ public BorrowDTO apply(BorrowedStatus borrowedStatus) {
 
 The method creates a new BorrowDTO object, the values are set with the provided data from the database (borrowedStatus) and that's basically it. After converting, the DTO object is sent to the front end using the controller.
 
-Because the DTO is sometimes also used as incoming request, the `@Valid` annotation is used. The `@Valid` annotation is used to validate the incoming request. These annotation is placed in the controller and checks for more validation annotations in the incoming request-object. For example, the `@NotNull` annotation is used in the `DeviceDTO.java` class. This annotation checks if the incoming request contains a value for the field. An example validation in the `DeviceDTO.java` class:
-
-```java
-@NotNull
-@NotEmpty
-@Length(min = 1, max = 50, message = "Merk moet tussen de 1 en 50 karakters lang zijn")
-private String brandName;
-```
-
-Message is passed to the exception handler when the validation fails.
+> Attention: if the DTO needs to be expanded in the future, make sure to both edit the DTO and the converter. The converter is easily forgotten, but is simple to edit.
 
 ### Configuration
 
@@ -512,7 +538,7 @@ When creating a request to the /auth/login end-point, the request should contain
 
 Will be cast to a LoginRequest object. This is very handy, because you don't have to do this manually. This way of incoming request-to-object mapping is used more often in the project. Later, in the `DTO`, we will see that this method is extremely useful for `@Validation`.
 
-If a method does't contain an `@Mapping` at the top, the url defined above the Controller class is enough to trigger the method. Let's take a quick look at an exmple method in the `DeviceController.java` class:
+If a method doesn't contain an `@Mapping` at the top, the url defined above the Controller class is enough to trigger the method. Let's take a quick look at an exmple method in the `DeviceController.java` class:
 
 ```java
 @RestController
@@ -547,11 +573,78 @@ A post request to the end-point `/devices` will trigger the `addDevice` method. 
 
 ### Exception Handler / RestControllerAdvice
 
-Fill... 
+The exception handler is a single class, but very important for the client. In simple words, when a client is requesting information of wants to add data and something is wrong, this class comes in to work. The exception handler is used to catch exceptions that are thrown in the application. Let's take a look at the handler that's called when a user tries to login with invalid credentials (incorrect username of password):
+
+```java
+// ExceptionController.java
+
+@RestControllerAdvice
+public class ExceptionController {
+
+    private static final Logger log = LoggerFactory.getLogger(ExceptionController.class);
+
+    @ExceptionHandler(value = {BadCredentialsException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ReturnMessage badCredentialsException(BadCredentialsException ex, WebRequest request) {
+        log.error("Bad credentials exception: {}", ex.getMessage());
+        return new ReturnMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                "Incorrecte login gegevens: " + ex.getMessage(),
+                request.getDescription(true));
+    }
+
+    // ...
+
+}
+```
+
+The error is defined, so the application knows to call this method when a `BadCredentialsException` is thrown. The right status code is returned and a `ReturnMessage.java` object is sent to the client. First, the error is logged. Then, a new `ReturnMessage` object is created with the right information. 
+
+It's as simple as that. Because every exception is returning a *fixed* pattern (`ReturnMessage`), It's easier to let the user - in the font end - know what's going on.
+
+#### ReturnMessage 
+
+Let's take a closer look at the `ReturnMessage.java` class:
+
+```java
+// ReturnMessage.java
+
+public record ReturnMessage
+        (
+            int statusCode,
+            Date timestamp,
+            String message,
+            String description
+        ) {
+
+}
+```
+
+Just as you think, this class is very simple.
+
+> Not all specific exceptions are caught in the exception handler. Therefore in future development, custom errors could be defined in this class. Just add a new method using the same template as the `badCredentialsException` method.
+
+### Logging
+
+Logging is applied in this project. It's easily readable in the console where the jar is running. Additionally, the logs are written to a file called: `application.log`. The name of the log file can be changed in the `application.properties` file:
+
+```java
+logging.file.name=application.log
+logging.level.root=info
+logging.level.org.springframework.web=info
+logging.level.org.hibernate=info
+```
+
+The levels of the logging are default set to `info`. This means that only the info logs are written to the log file. The levels can be changed to `debug`, `error`, `warn`, `trace`, etc. The levels are used to filter the logs. For example, if you only want to see the error logs, you can set the level to `error`.
 
 ### Auth / Authentication
 
-To start with the Auth package. This package contains the main security configuration. The main security filter is being defined here (`JwtAuthenticationFilter.java`). Every new request that is made to the rest controllers is first being checked by the `doFilterInternal` method of the class. The security filter checks if the request is allowed to be made. I.e., is the right token present in the request header? Or is the token still valid? Let's look at the main logic ot the `doFilterInternal.java` method:
+As you now know, the user gets a unique token when logging in. This is not simply done by generating a random String and returning it to the user, but a complex process is behind it. That's why it's important to only work on this if you know a little more about it
+
+> It's only our first Spring Boot project, so it's a good idea to find out more about security and not just stick to this section. This section is purely for explaining the code
+
+The auth package contains the main security configuration. The main security filter is being defined here (`JwtAuthenticationFilter.java`). Every new request that is made to the rest controllers is first being checked by the `doFilterInternal` method of the class. The security filter checks if the request is allowed to be made. I.e., is the right token present in the request header? Or is the token still valid? Let's look at the main logic ot the `doFilterInternal.java` method:
 
 ```java
 // JwtAuthenticationFilter.java
@@ -614,10 +707,6 @@ After every push to the main branch, the unit tests will be run automatically. T
 ## React Project
 
 The front end of this project can be found [here](https://github.com/MarkStreek/QuintorCatalogFrontEnd)
-
-
-
-
 
 
 <!-- Markdown Links -->
