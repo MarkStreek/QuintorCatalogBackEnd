@@ -4,17 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import quintor.bioinf.catalog.controller.ReturnMessage;
 import quintor.bioinf.catalog.dto.DeviceDTO;
-import quintor.bioinf.catalog.dto.DeviceDTOConverter;
-import quintor.bioinf.catalog.dto.SpecDetail;
 import quintor.bioinf.catalog.entities.Device;
 import quintor.bioinf.catalog.repository.DeviceRepository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 

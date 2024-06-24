@@ -306,7 +306,7 @@ Learn more about `JPA` [here](https://en.wikipedia.org/wiki/Java_Persistence_API
 
 ### Model
 
-The model package in the project is a very basic package which contains only two classes. These classes are only used for two tasks: (1) as a JSON incoming request or (2) as a JSON outgoing response.
+The model package in the project is a very basic package. The classes are only used for two tasks: (1) as a JSON incoming request or (2) as a JSON outgoing response.
 
 ```java
 // LoginRequest.java

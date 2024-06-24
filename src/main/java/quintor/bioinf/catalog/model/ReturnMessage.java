@@ -1,4 +1,4 @@
-package quintor.bioinf.catalog.controller;
+package quintor.bioinf.catalog.model;
 
 import java.util.Date;
 

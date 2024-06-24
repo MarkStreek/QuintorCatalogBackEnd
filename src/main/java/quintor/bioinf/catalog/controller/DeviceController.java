@@ -4,10 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quintor.bioinf.catalog.dto.DeviceDTO;
+import quintor.bioinf.catalog.model.ReturnMessage;
 import quintor.bioinf.catalog.services.MainDeviceService;
 import quintor.bioinf.catalog.services.SpecsService;
 
