@@ -92,7 +92,7 @@ This application was built in Spring Boot. Additionally, the application uses a 
 To start the application, clone the repo and navigate to the cloned folder. Type the following command in the terminal:
 
 ```bash
-java -jar QuintorCatalogBackEnd-0.0.1-SNAPSHOT.jar
+java -jar QuintorCatalogBackEnd-1.0.jar
 ```
 
 > Warning: before starting the application, you have to meet the following (minimum) requirements to run the application:
