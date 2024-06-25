@@ -9,9 +9,10 @@
 The Quintor Catalog is an automated hardware catalog for the software company Quintor. System administrators can add, update, delete, search, filter, sort, and borrow hardware components. 
 CTO can approve/deny a borrow request to a user. The hardware is stored in a database. The front end is built using React. [Go to Front end repo](https://github.com/MarkStreek/QuintorCatalogFrontEnd)
 
-![Screenshot1](docs/screenshots/homepage.png)
-![Screenshot2](docs/screenshots/devices_page.png)
-![Screenshot3](docs/screenshots/AddDevice_page.png)
+![Screenshot1](docs/screenshots/welkom.png)
+![Screenshot2](docs/screenshots/lijstvanapparaten.png)
+![Screenshot3](docs/screenshots/apparaattoevoegen.png)
+![Screenshot4](docs/screenshots/verzoekgoedkeuren.png)
 
 This application was built in Spring Boot. Additionally, the application uses a MySQL database to store the hardware components. The information is served to the front end using a REST API. A REST API is a way to communicate between different software systems regardless of the operating system or programming language. 
 
