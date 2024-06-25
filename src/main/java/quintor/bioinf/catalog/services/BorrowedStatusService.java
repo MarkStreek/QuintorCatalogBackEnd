@@ -63,9 +63,20 @@ public class BorrowedStatusService {
     public void borrowDevice(String name, int deviceId, String description) {
         BorrowedStatus borrowedStatus = new BorrowedStatus();
         // Find or create a new user and set it to the borrowed status
-        borrowedStatus.setUser(findUser(name));
-        // Set the status to waiting for approval
-        borrowedStatus.setStatus("Wachten op goedkeuring");
+        User user = findUser(name);
+        borrowedStatus.setUser(user);
+
+        // Check if the user is already borrowing a device
+        List<BorrowedStatus> borrowedStatuses = borrowedStatusRepository.findAllByUser(user);
+        if (borrowedStatuses.size() > 0) {
+            log.warn("User with name {} is already borrowing a device, setting to approving", name);
+            borrowedStatus.setStatus("Wachten op goedkeuring");
+
+        } else {
+            log.error("User with name {} is not borrowing a device, no approve needed", name);
+            borrowedStatus.setStatus("Goedgekeurd");
+        }
+
         // Find the device by id and check for duplicates
         Device device = DeviceRepository.findById((long) deviceId).orElseThrow(() -> new IllegalArgumentException("Apparaat met id " + deviceId + " bestaat niet"));
         checkForDoubleDevices(deviceId);
@@ -161,6 +172,7 @@ public class BorrowedStatusService {
      *
      * @param id borrowed status id
      */
+    @Transactional
     public void approveBorrowedStatus(Long id) {
         BorrowedStatus borrowedStatus = borrowedStatusRepository
                 .findById(Math.toIntExact(id))
@@ -168,6 +180,20 @@ public class BorrowedStatusService {
                         -> new IllegalArgumentException("Id: " + id + " niet gevonden"));
         borrowedStatus.setStatus("Goedgekeurd");
         borrowedStatusRepository.save(borrowedStatus);
+    }
+
+    /**
+     * Method that deletes a borrowed status by id.
+     *
+     * @param id borrowed status id
+     */
+    @Transactional
+    public void deleteBorrowedStatus(Long id) {
+        if (!borrowedStatusRepository.existsById(Math.toIntExact(id))) {
+            log.error("Error deleting borrowed status with id: {}. Borrowed status does not exist", id);
+            throw new NoSuchElementException("Apparaat met id " + id + " bestaat niet");
+        }
+        borrowedStatusRepository.deleteById(Math.toIntExact(id));
     }
 
 }

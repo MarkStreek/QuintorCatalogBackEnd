@@ -146,4 +146,15 @@ public class BorrowStatusController {
                 "Het apparaat is succesvol goedgekeurd en is nu beschikbaar voor gebruik");
     }
 
+    @PostMapping("/delete/{id}")
+    public ReturnMessage deleteBorrowRequest(@PathVariable Long id, HttpServletRequest request) {
+        Logging.logIncomingRequest(request);
+        borrowedStatusService.deleteBorrowedStatus(id);
+        return new ReturnMessage(
+                HttpStatus.OK.value(),
+                new Date(),
+                "Uitleenverzoek succesvol verwijderd",
+                "Het uitleenverzoek is succesvol verwijderd uit de database");
+    }
+
 }
