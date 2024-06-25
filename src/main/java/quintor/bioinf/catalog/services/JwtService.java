@@ -18,7 +18,7 @@ public class JwtService {
 
     SecretKey jwtSecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    Long jwtExpirationMs = 3600000L * 24;
+    Long jwtExpirationMs = 3600000L * 2;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
