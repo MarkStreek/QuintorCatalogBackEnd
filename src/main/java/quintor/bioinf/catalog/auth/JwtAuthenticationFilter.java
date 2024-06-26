@@ -58,6 +58,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
         // Check for the bearer presence, if it is not present, continue with the filter chain
+        String requestUri = request.getRequestURI();
+        if (requestUri != null && requestUri.equals("/auth/validate")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (checkForBearerPresence(request, response, filterChain, authHeader)) return;
 
         final String jwt = authHeader.substring(7);
