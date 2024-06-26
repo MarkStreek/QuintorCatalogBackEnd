@@ -19,7 +19,11 @@ public class Logging {
      * @param request The incoming request
      */
     public static void logIncomingRequest(HttpServletRequest request) {
-        log.info("New incoming request. CLIENT IP: {}, PORT: {}, REQUEST URI: {}",
-                request.getRemoteAddr(), request.getRemotePort(), request.getRequestURI());
+        log.info("INCOMING REQUEST details: " + "CLIENT IP: {}" + " PORT: {}" + " REQUEST URI: {}" + " METHOD: {}" + " USER AGENT: {}",
+                request.getRemoteAddr(),
+                request.getRemotePort(),
+                request.getRequestURI(),
+                request.getMethod(),
+                request.getHeader("User-Agent"));
     }
 }
