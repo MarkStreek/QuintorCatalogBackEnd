@@ -46,7 +46,7 @@ public class DeviceDTO {
 
     @NotNull
     @NotEmpty(message = "Factuurnummer mag niet leeg zijn")
-    @Length(min = 3, max = 50)
+    @Length(min = 3, max = 50, message = "Factuurnummer moet tussen de 3 en 50 karakters lang zijn")
     private String invoiceNumber;
 
     @NotNull
