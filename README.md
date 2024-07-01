@@ -14,57 +14,14 @@ CTO can approve/deny a borrow request to a user. The hardware is stored in a dat
 ![Screenshot3](docs/screenshots/apparaattoevoegen.png)
 ![Screenshot4](docs/screenshots/verzoekgoedkeuren.png)
 
-This application was built in Spring Boot. Additionally, the application uses a MySQL database to store the hardware components. The information is served to the front end using a REST API. A REST API is a way to communicate between different software systems regardless of the operating system or programming language. 
-
-
-[//]: #
-
-[//]: # (![Screenshot4]&#40;docs/screenshots/homepage_phone.png&#41;)
-
-[//]: # (<div align="center">)
-
-[//]: # (  <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">)
-
-[//]: # (    <img src="https://quintor.nl/wp-content/uploads/2022/08/logo-square.png" alt="Logo" width="100" height="100">)
-
-[//]: # (  </a>)
-
-[//]: # (  <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">)
-
-[//]: # (    <img src="https://www.heeredwinger.nl/wp-content/uploads/2019/12/Logo-Hanze.jpg" alt="Logo" width="250" height="100">)
-
-[//]: # (  </a>)
-
-[//]: # (<h1 align="center">QuintorCatalogBackEnd</h3>)
-
-[//]: # ()
-[//]: # (  <p align="center">)
-
-[//]: # (    Automated hardware catalog for the software company Quintor)
-
-[//]: # (    <br />)
-
-[//]: # (    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd"><strong>Explore the docs »</strong></a>)
-
-[//]: # (    <br />)
-
-[//]: # (    <br />)
-
-[//]: # (    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd">View Demo</a>)
-
-[//]: # (    ·)
-
-[//]: # (    <a href="https://github.com/MarkStreek/QuintorCatalogBackEnd/issues">Report Bug</a>)
-
-[//]: # (  </p>)
-
-[//]: # (</div>)
+This application was built in Spring Boot. Additionally, the application uses a MySQL database to store the hardware components. The information is served to the front end using a REST API. A REST API is a way to communicate between different software systems regardless of the operating system or programming language.
 
 ## Table of Contents
 
 - [QuintorCatalogBackEnd](#quintorcatalogbackend)
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
+  - [Important Notes / Customization](#important-notes--customization)
   - [About Quintor](#about-quintor)
   - [About the project](#about-the-project)
   - [Full Insight](#full-insight)
@@ -89,6 +46,8 @@ This application was built in Spring Boot. Additionally, the application uses a 
 ## Getting Started
 
 **! It is very adviced to read the full insight of the project before starting the application !**
+
+*The application is developed using a MySQL database. As already told, this database will store devices and requests. For user management, Quintor is currently using microsoft active directory. This is not implemented in the application. Therefore, the mysql database is used to store the users. In the `application.properties` file, there are three users defined. You have to provide a password for these users. Passwords get Bcrypt encoded into the database. For adding a new user, you could bulk insert users in the database, but it's (of course) much cleaner to implement microsoft active directory.*
 
 To start the application, clone the repo and navigate to the cloned folder. Type the following command in the terminal:
 
@@ -119,6 +78,20 @@ java -jar QuintorCatalogBackEnd-1.0.jar
 ```
 
 > After building the application, you can start the application using the command mentioned above.
+
+## Important Notes / Customization
+
+As already told, the Users are stored in the database and not linked to Quintor's user management system. We defined some user emails and passwords in the `application.properties` file.
+
+```properties
+// application.properties
+
+admin.password=admin
+user.password=user
+another.password=another
+```
+
+These are some predefined users which can login to the application. Please take a look at the `DummyDataLoader.java` class.
 
 ## About Quintor
 
