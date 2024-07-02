@@ -25,7 +25,7 @@ Datum: 06 maart 2024
 
 ## Management Summary
 
-De Quintor catalogus zal een overzicht geven van alle aanwezige apparaten binnen Quintor. Ook zal de huidige locatie, gebruiker en specificaties van apparaten te zien zijn in de applicatie. Op deze manier kan er dus snel gekeken worden welke gebruiker en specifiek apparaat in gebruik heeft. Verder zal de applicatie een functie krijgen waarmee de financieel directeur (CTO) van Quintor goedkeuring kan geven bij een dubbele uitleen, want als een medewerker een tweede apparaat in gebruik wil nemen, moet daar goedkeuring voor gegeven worden.
+De Quintor catalogus geeft een overzicht van alle aanwezige apparaten binnen Quintor. Ook is de huidige locatie, gebruiker en specificaties van apparaten te zien in de applicatie. Op deze manier kan er dus snel gekeken worden welke gebruiker en specifiek apparaat in gebruik heeft. Verder heeft de applicatie een functie waarmee de technisch directeur (CTO) van Quintor goedkeuring kan geven bij een dubbele uitleen, want als een medewerker een tweede apparaat in gebruik wil nemen, moet daar goedkeuring voor gegeven worden.
 
 Om een globale schatting te geven van de kosten van de applicatie, zal er een simpele rekensom worden gemaakt. De kosten van de applicatie zullen bestaan uit de uren die de ontwikkelaars aan de applicatie werken. De kosten van een junior software developer zijn ongeveer € 50,- per uur.
 
@@ -33,16 +33,16 @@ Het project zal ongeveer 18 weken in beslag nemen. Beiden zullen we ongeveer 25-
 
 De applicatie zal verschillende features bevatten. Deze features zullen over een tijdlijn ontwikkeld worden. Er zal gekeken worden naar de use cases.
 
-De milestones van de applicatie zullen zijn:
+De milestones van de applicatie zijn:
 
 1. Een eenvoudige pagina waarop alle hardware componenten getoond worden.
 2. Halverwege het proces, een pagina waarop hardware componenten toegevoegd, verwijderd, aangepast en gefilterd kan worden.
 3. Een authenticatielaag die de gebruiker toegang geeft tot de verschillende pagina's.
 4. Een uitleen verzoek kunnen aanmaken voor een CTO goedkeuring.
 
- De deadline van de applicatie staat voor nu gepland in week 24 van 2024.
+De deadline van de applicatie staat voor nu gepland in week 24 van 2024.
 
-Aan de hand van onze applicatie zal het voor een systeembeheerder makkelijker zijn om de apparaten te beheren en te lokaliseren. Daarnaast zal het voor de technisch directeur ook makkelijker zijn om verzoeken tot uitleen goed te keuren.
+Aan de hand van deze applicatie is het voor een systeembeheerder makkelijker om de apparaten te beheren en lokaliseren. Daarnaast is het voor de technisch directeur makkelijker om verzoeken tot uitleen goed te keuren.
 
 ## Background and context
 
@@ -157,19 +157,49 @@ Om het project te kunnen hosten, zullen de volgende eisen moeten worden voldaan:
 
 #### Maintenance
 
-De applicatie zal zo gebouwd worden, dat het weinig aanpassingen nodig heeft in de toekomst. Dit wordt bijvoorbeeld gedaan door de applicatie zo te bouwen dat het makkelijk uit te breiden is.
+Commentaar is het belangrijkste woord als je spreekt over onderhoud van de applicatie. Het is belangrijk dat de code goed gedocumenteerd is, zodat andere ontwikkelaars ook kunnen begrijpen wat er gebeurt in de code.
+Uiteraard hoort de code self-explaining te zijn, maar sommige principes zijn niet altijd even duidelijk. Zeker niet bij een ontwikkelaar die weinig ervaring heeft met de technieken die gebruikt zijn in de applicatie.
 
-Ook zal er aan het eind van het project overzichtelijke en uitgebreid documentatie worden gemaakt. Dit zal ervoor zorgen dat het makkelijk is om de applicatie te onderhouden.
+Elk bestand, zowel backend als frontend, bevat commentaar. Dit commentaar is in het Engels geschreven en bevat een korte uitleg over wat er gebeurt in de methode/functie. Verder is er in de readme van de repositories meer uitleg te vinden over de applicatie.
+
+In de readme staan meer algemene zaken over de applicatie. Bijvoorbeeld, hoe de applicatie veranderd kan worden aangepast naar eigen voorkeuren. Ook staat er in de readme hoe de applicatie gestart kan worden.
+
+Tot slot is er (behoorlijk) uitgebreide handleiding geschreven voor ontwikkeling en uitbreiding van de applicatie. Deze handleiding is te vinden in de readme's van de repositories. Tevens zijn deze handleidingen ook geplaatst in de wiki van de repositories. 
+
+De wiki's zijn gestructueerd opgebouwd en daarom makkelijker te lezen dan de readme's. De wiki's zijn te vinden op de volgende links:
+
+- [BackEnd wiki](https://github.com/MarkStreek/QuintorCatalogBackEnd/wiki)
+- [FrontEnd wiki](https://github.com/MarkStreek/QuintorCatalogFrontEnd/wiki)
 
 ## Current status of development
 
-De huidige status van de ontwikkeling is dat er apparaten toegevoegd kunnen worden aan de database. De apparaten kunnen worden toegevoegd op een speciale pagina die hiervoor is gemaakt. Tevens is er met feedback van de eindgebruikers een tabel gemaakt waarin alle apparaten worden getoond. Deze tabel kan gefilterd worden op verschillende velden. Ook kan er gezocht worden in de tabel op verschillende velden.
+De huidige status van de ontwikkeling is dat de applicatie is afgerond. De applicatie is volledig werkend en kan gebruikt worden door de systeembeheerder van Quintor. De applicatie is klaar om in productie te worden genomen.
 
-Tot slot bevat de applicatie een homepagina, waarop de gebruiker binnenkomt na het inloggen. Op deze pagina staan snelle links naar de verschillende pagina's binnen de applicatie. Ook hier is de zoekbalk aanwezig, waar snel gezocht kan woorden naar een specifiek apparaat.
+De volgende functionaliteiten zijn geïmplementeerd:
+
+1. Een login systeem met JSON Web Tokens.
+2. Een user management database met de rollen systeembeheerder en CTO.
+3. Een thuis pagina met snelle navigatie en een directe zoekbalk naar apparaten.
+4. Apparaten kunnen worden toegevoegd aan de database, inclusief specificaties en locatie.
+5. Apparaten kunnen worden aangepast en verwijderd.
+6. Apparaten kunnen worden weergegeven in een overzichtelijke tabel.
+   1. De tabel kan gesorteerd worden op verschillende velden.
+   2. De tabel is doorzoekbaar van links naar rechts.
+7. Een uitleenverzoek kan gemaakt worden voor werknemer en apparaat.
+8. Het eerste uitleenverzoek van een werknemer wordt automatisch goedgekeurd.
+9. Een tweede uitleenverzoek moet worden goedgekeurd door de CTO.
+10. Een uitleenverzoek kan verwijderd worden.
+
+Onderstaand een aantal screenshots van de applicatie:
+
+![screenshot1](./screenshots/welkom.png)
+![screenshot1](./screenshots/lijstvanapparaten.png)
+![screenshot1](./screenshots/apparaattoevoegen.png)
+![screenshot1](./screenshots/verzoekgoedkeuren.png)
 
 ## Code Repo
 
-Voor dit project zijn twee repository's aangemaakt. Dit is omdat er gebruik gaat worden van twee totaal verschillende technieken. Het is daarom handig om deze gescheiden van elkaar te houden.
+Voor dit project zijn twee repositories. De frontend en backend zijn compleet verschillend van elkaar en daarom is er gekozen om deze in twee verschillende repositories te plaatsen.
 
 - [BackEnd repository](https://github.com/MarkStreek/QuintorCatalogBackEnd)
 - [FrontEnd repository](https://github.com/MarkStreek/QuintorCatalogFrontEnd)
