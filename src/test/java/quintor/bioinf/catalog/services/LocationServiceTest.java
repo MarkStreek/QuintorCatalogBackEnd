@@ -30,7 +30,6 @@ class LocationServiceTest {
         String name = "Server room";
         String city = "Springfield";
         String address = "123 Main St";
-        //when(locationRepository.findByAddress(address)).thenReturn(null);
         when(locationRepository.addLocation(name, city, address)).thenReturn(1L);
 
         Long result = locationService.addLocation(name, city, address);

@@ -12,7 +12,7 @@ import quintor.bioinf.catalog.repository.UserRepository;
 /**
  * Service class for handling the authentication process.
  * It communicates with the UserRepository, UserService, PasswordEncoder, JwtService and AuthenticationManager.
- * The signin method is used to authenticate a user and generate a JWT token.
+ * The signing method is used to authenticate a user and generate a JWT token.
  */
 @Service
 public class AuthenticationService {

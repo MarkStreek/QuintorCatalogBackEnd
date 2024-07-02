@@ -168,9 +168,12 @@ public class BorrowedStatusService {
     }
 
     /**
-     * Method that approves a borrowed status by id.
+     * Method that approves a borrowed status by id. The status is set to 'Goedgekeurd'.
+     * If the borrowed status does not exist, an exception is thrown.
+     * The checking for allowed role is already done in the controller.
      *
      * @param id borrowed status id
+     * @throws IllegalArgumentException if the borrowed status does not exist
      */
     @Transactional
     public void approveBorrowedStatus(Long id) {
@@ -184,8 +187,11 @@ public class BorrowedStatusService {
 
     /**
      * Method that deletes a borrowed status by id.
+     * If the borrowed status does not exist, an exception is thrown.
+     * The error is logged as well.
      *
      * @param id borrowed status id
+     * @throws NoSuchElementException if the borrowed status does not exist
      */
     @Transactional
     public void deleteBorrowedStatus(Long id) {

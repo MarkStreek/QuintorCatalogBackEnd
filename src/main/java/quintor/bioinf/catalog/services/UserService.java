@@ -11,6 +11,8 @@ import quintor.bioinf.catalog.repository.UserRepository;
 /**
  * UserService class that handles the retrieving user data from the database
  * The loadUserByUsername method is used by the Spring Security framework to retrieve the user data from the database
+ *
+ * @see quintor.bioinf.catalog.services.JwtService
  */
 @Service
 public class UserService {

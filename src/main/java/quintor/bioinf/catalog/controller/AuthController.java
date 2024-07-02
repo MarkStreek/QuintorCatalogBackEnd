@@ -60,34 +60,14 @@ public class AuthController {
 
     /**
      * POST endpoint to validate a JWT token. This endpoint is used to check if the token is still valid.
-     * The incoming request is a JWT token. The token is checked by the service class.
+     * The incoming request is a JWT token. The token is extracted from the request header and
+     * checked by the Jwt service class.
      */
     @PostMapping("/validate")
     public ReturnMessage validateToken(HttpServletRequest request) {
         Logging.logIncomingRequest(request);
-
         final String authHeader = request.getHeader("Authorization");
 
-        if (authHeader != null || authHeader.startsWith("Bearer ")) {
-
-            final String jwt = authHeader.substring(7);
-            final String userEmail = jwtService.extractUsername(jwt);
-
-            if (userEmail != null && !userEmail.isEmpty()) {
-                UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
-                if (jwtService.isTokenValid(jwt, userDetails)) {
-                    return new ReturnMessage(
-                            HttpStatus.OK.value(),
-                            new Date(),
-                            "Token is valid",
-                            "Token is still allowed to be used for incoming requests");
-                }
-            } else log.error("User email is empty or null While validating a token");
-        }
-        return new ReturnMessage(
-                HttpStatus.FORBIDDEN.value(),
-                new Date(),
-                "Token is invalid",
-                "Token is not valid anymore, please log in again");
+        return jwtService.validate(authHeader);
     }
 }
