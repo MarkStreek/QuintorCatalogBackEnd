@@ -21,6 +21,7 @@ Datum: 06 maart 2024
     - [Technical requirements and maintenance](#technical-requirements-and-maintenance)
       - [Maintenance](#maintenance)
   - [Current status of development](#current-status-of-development)
+  - [Discussion](#discussion)
   - [Code Repo](#code-repo)
 
 ## Management Summary
@@ -196,6 +197,14 @@ Onderstaand een aantal screenshots van de applicatie:
 ![screenshot1](./screenshots/lijstvanapparaten.png)
 ![screenshot1](./screenshots/apparaattoevoegen.png)
 ![screenshot1](./screenshots/verzoekgoedkeuren.png)
+
+## Discussion
+
+Om te reflecteren op het project, kunnen we zeggen dat het een uitermate leerzaam project is geweest. We hebben veel nieuwe technieken geleerd en toegepast in dit project. Kort kijkend naar de functionaliteiten die zijn uitgewerkt, kunnen we opmerken dat we een enkel punt niet hebben kunnen uitwerken. Namelijk het ontvangen van een melding wanneer een systeembeheerder een uitleenverzoek doet. Dit was nog een mooie aanvulling geweest op de applicatie, maar helaas hebben we hier niet genoeg tijd voor gehad.
+
+Verder nog een inhoudelijke opmerking over het frontend gedeelte van de applicatie. Voor de JSON Web Tokens wordt er in de back end (uiteraard) gecheckt of de token geldig is. Het was mooi geweest als we deze rol ook hadden geïmplementeerd in de frontend. Specifieker voorbeeld: de knop op een verzoek goed te keuren is nu altijd zichtbaar. Het zou mooi zijn als deze knop alleen zichtbaar is voor de CTO. Verder is het dan nog mogelijk om deze role based access control uit te breiden, zodat bepaalde kenmerken van apparaten niet zichtbaar zijn voor de systeembeheerder.
+
+Tot slot nog een opmerking over de code. De backend is geschreven in Java en de frontend in React.js. Zoals eerder al opgemerkt, waren beide technieken ons niet bekend. Het was daarom een uitdaging om de code te schrijven. Echter hadden we allebei wel meer ervaring in Java dan in React.js. Dit is ook terug te zien in de code. De backend zal van iets hogere kwaliteit zijn dan de frontend. Functioneel doet de frontend niet te kort.
 
 ## Code Repo
 
