@@ -26,9 +26,9 @@ Datum: 06 maart 2024
 
 ## Management Summary
 
-De Quintor catalogus geeft een overzicht van alle aanwezige apparaten binnen Quintor. Ook is de huidige locatie, gebruiker en specificaties van apparaten te zien in de applicatie. Op deze manier kan er dus snel gekeken worden welke gebruiker en specifiek apparaat in gebruik heeft. Verder heeft de applicatie een functie waarmee de technisch directeur (CTO) van Quintor goedkeuring kan geven bij een dubbele uitleen, want als een medewerker een tweede apparaat in gebruik wil nemen, moet daar goedkeuring voor gegeven worden.
+De Quintor catalogus geeft een overzicht van alle aanwezige apparaten binnen Quintor. Ook zijn de huidige locatie, gebruiker en specificaties van apparaten te zien in de applicatie. Op deze manier kan er dus snel gekeken worden welke gebruiker een specifiek apparaat in gebruik heeft. Verder heeft de applicatie een functie waarmee de technisch directeur (CTO) van Quintor goedkeuring kan geven bij een dubbele uitleen. Als een medewerker een tweede apparaat in gebruik wil nemen, moet daar goedkeuring voor gegeven worden.
 
-Om een globale schatting te geven van de kosten van de applicatie, zal er een simpele rekensom worden gemaakt. De kosten van de applicatie zullen bestaan uit de uren die de ontwikkelaars aan de applicatie werken. De kosten van een junior software developer zijn ongeveer € 50,- per uur.
+Om een globale schatting te geven van de kosten van de applicatie, zal er een simpele rekensom worden gemaakt. De kosten van de applicatie zullen bestaan uit de uren die de ontwikkelaars aan de applicatie werken. De kosten van een junior softwareontwikkelaar zijn ongeveer € 50,- per uur.
 
 Het project zal ongeveer 18 weken in beslag nemen. Beiden zullen we ongeveer 25-30 uur per week aan het project werken. Dit betekent dat er in totaal ongeveer 900-1080 uur aan het project zal worden gewerkt. Dit betekent dat de kosten van de applicatie ongeveer € 45.000,- tot € 54.000,- zullen zijn.
 
@@ -56,9 +56,9 @@ Quintor is een software bedrijf met meerdere vestigingen in Nederland. Quintor h
 5. Cloud-native development
 6. Security
 
-Verder helpt Quintor een groot scala aan studenten bij hun stages en/of afstudeerprojecten. Ook heeft Quintor een grote leeromgeving, genaamd Quintor Academy. Er worden veel leer sessies aangeboden in verschillende onderwerpen van de benoemde aspecten.
+Verder helpt Quintor een groot aantal studenten bij hun stages en/of afstudeerprojecten. Ook heeft Quintor een grote leeromgeving, genaamd Quintor Academy. Er worden veel leer sessies aangeboden in verschillende onderwerpen van de benoemde aspecten.
 
-Bij Quintor in Groningen wordt op dit moment handmatig hardware op een wikipagina bijgehouden. Denk hierbij aan monitoren of laptops die worden uitgeleend aan medewerkers. Uiteraard is dit niet wenselijk. Om te beginnen kost dit de systeembeheerder veel tijd en tevens is het ook erg foutgevoelig. Het is daarom voor hun zeer relevant om een software product te hebben die dit automatisch voor ze kan bijhouden.
+Bij Quintor in Groningen wordt op dit moment handmatig hardware op een wikipagina bijgehouden. Denk hierbij aan monitoren of laptops die worden uitgeleend aan medewerkers. Uiteraard is dit niet wenselijk. Om te beginnen kost dit de systeembeheerder veel tijd en tevens is het ook erg foutgevoelig. Het is daarom voor hen zeer relevant om een software product te hebben waarmee ze dit gemakkelijk kunnen bijhouden.
 
 De applicatie die ontwikkeld zal worden, gaat door Quintor breed gebruikt worden om hardware bij te houden. Verder zal deze applicatie ook worden gebruikt om aan te geven wie een apparaat in gebruikt heeft bij uitleen, of waar het ligt opgeslagen als het niet is uitgeleend. Tot slot zal de applicatie gebruikt worden om verzoeken goed te keuren bij een dubbele uitleen.
 
@@ -70,7 +70,7 @@ Zoals beschreven zal het bijhouden van apparaten, de hoofdfunctionaliteit van de
 
 1. Een login en registratie systeem.
 2. Een user management database met de rollen admin en gast.
-3. Een database waarin hardware producten kunnen worden opgeslagen. De volgende velden moeten verplicht worden ingevuld: merk, model, serienummer, factuurnummer, werknemer bij uitlening, datum van afgifte, gebruiksstatus.
+3. Een database waarin hardwareproducten kunnen worden opgeslagen. De volgende velden moeten verplicht worden ingevuld: merk, model, serienummer, factuurnummer, werknemer bij uitlening, datum van afgifte, gebruiksstatus.
 4. Een pagina waarin alle hardware componenten getoond worden en waar (minimaal) gefilterd kan worden op de volgende velden:
     - users
     - actief
@@ -90,7 +90,7 @@ Zoals beschreven zal het bijhouden van apparaten, de hoofdfunctionaliteit van de
 
 3. Als systeembeheerder wil ik een hardware product kunnen uitlenen aan een werknemer via de catalogus, zodat de gebruiksstatus van het hardware product automatisch wordt geüpdate en aan de desbetreffende werknemer wordt toegevoegd.
 
-4. Als een systeembeheerder wil ik kunnen zien wat de gebruiksstatus in van alle apparaten in de catalogus, zodat overzichtelijk wordt welke apparaten kunnen worden uitgeleend en wie wat in bezit heeft.
+4. Als systeembeheerder wil ik kunnen zien wat de gebruiksstatus in van alle apparaten in de catalogus, zodat overzichtelijk wordt welke apparaten kunnen worden uitgeleend en wie wat in bezit heeft.
 
 5. Als systeembeheerder wil ik kunnen zoeken binnen de catalogus op verschillende specs, zodat wanneer een werknemer een speciaal verzoek heeft ik makkelijk kan checken of zo’n apparaat beschikbaar is.
 
@@ -158,16 +158,16 @@ Om het project te kunnen hosten, zullen de volgende eisen moeten worden voldaan:
 
 #### Maintenance
 
-Commentaar is het belangrijkste woord als je spreekt over onderhoud van de applicatie. Het is belangrijk dat de code goed gedocumenteerd is, zodat andere ontwikkelaars ook kunnen begrijpen wat er gebeurt in de code.
-Uiteraard hoort de code self-explaining te zijn, maar sommige principes zijn niet altijd even duidelijk. Zeker niet bij een ontwikkelaar die weinig ervaring heeft met de technieken die gebruikt zijn in de applicatie.
+Documentatie is het belangrijkste woord als je spreekt over onderhoud van de applicatie. Het is belangrijk dat de code goed gedocumenteerd is, zodat andere ontwikkelaars ook kunnen begrijpen wat er gebeurt in de code.
+Uiteraard hoort de code zelfverklarend te zijn, maar sommige principes zijn niet altijd even duidelijk. Zeker niet bij een ontwikkelaar die weinig ervaring heeft met de technieken die gebruikt zijn in de applicatie.
 
 Elk bestand, zowel backend als frontend, bevat commentaar. Dit commentaar is in het Engels geschreven en bevat een korte uitleg over wat er gebeurt in de methode/functie. Verder is er in de readme van de repositories meer uitleg te vinden over de applicatie.
 
 In de readme staan meer algemene zaken over de applicatie. Bijvoorbeeld, hoe de applicatie veranderd kan worden aangepast naar eigen voorkeuren. Ook staat er in de readme hoe de applicatie gestart kan worden.
 
-Tot slot is er (behoorlijk) uitgebreide handleiding geschreven voor ontwikkeling en uitbreiding van de applicatie. Deze handleiding is te vinden in de readme's van de repositories. Tevens zijn deze handleidingen ook geplaatst in de wiki van de repositories. 
+Tot slot is er een (behoorlijk) uitgebreide handleiding geschreven voor ontwikkeling en uitbreiding van de applicatie. Deze handleiding is te vinden in de readme's van de repositories. Tevens zijn deze handleidingen ook geplaatst in de wiki van de repositories. 
 
-De wiki's zijn gestructueerd opgebouwd en daarom makkelijker te lezen dan de readme's. De wiki's zijn te vinden op de volgende links:
+De wiki's zijn gestructureerd opgebouwd en daarom makkelijker te lezen dan de readme's. De wiki's zijn te vinden op de volgende links:
 
 - [BackEnd wiki](https://github.com/MarkStreek/QuintorCatalogBackEnd/wiki)
 - [FrontEnd wiki](https://github.com/MarkStreek/QuintorCatalogFrontEnd/wiki)
@@ -200,11 +200,11 @@ Onderstaand een aantal screenshots van de applicatie:
 
 ## Discussion
 
-Om te reflecteren op het project, kunnen we zeggen dat het een uitermate leerzaam project is geweest. We hebben veel nieuwe technieken geleerd en toegepast in dit project. Kort kijkend naar de functionaliteiten die zijn uitgewerkt, kunnen we opmerken dat we een enkel punt niet hebben kunnen uitwerken. Namelijk het ontvangen van een melding wanneer een systeembeheerder een uitleenverzoek doet. Dit was nog een mooie aanvulling geweest op de applicatie, maar helaas hebben we hier niet genoeg tijd voor gehad.
+Om te reflecteren op het project, kunnen we zeggen dat het een uitermate leerzaam project is geweest. We hebben veel nieuwe technieken geleerd en toegepast. Kort kijkend naar de functionaliteiten die zijn uitgewerkt, kunnen we opmerken dat we een enkel punt niet hebben kunnen uitwerken. Namelijk het ontvangen van een melding wanneer een systeembeheerder een uitleenverzoek doet. Dit was nog een mooie aanvulling geweest op de applicatie, maar helaas hebben we hier niet genoeg tijd voor gehad.
 
 Verder nog een inhoudelijke opmerking over het frontend gedeelte van de applicatie. Voor de JSON Web Tokens wordt er in de back end (uiteraard) gecheckt of de token geldig is. Het was mooi geweest als we deze rol ook hadden geïmplementeerd in de frontend. Specifieker voorbeeld: de knop op een verzoek goed te keuren is nu altijd zichtbaar. Het zou mooi zijn als deze knop alleen zichtbaar is voor de CTO. Verder is het dan nog mogelijk om deze role based access control uit te breiden, zodat bepaalde kenmerken van apparaten niet zichtbaar zijn voor de systeembeheerder.
 
-Tot slot nog een opmerking over de code. De backend is geschreven in Java en de frontend in React.js. Zoals eerder al opgemerkt, waren beide technieken ons niet bekend. Het was daarom een uitdaging om de code te schrijven. Echter hadden we allebei wel meer ervaring in Java dan in React.js. Dit is ook terug te zien in de code. De backend zal van iets hogere kwaliteit zijn dan de frontend. Functioneel doet de frontend niet te kort.
+Tot slot nog een opmerking over de code. De backend is geschreven in Java en de frontend in REACT.js. Zoals eerder al opgemerkt, waren beide technieken ons niet bekend. Het was daarom een uitdaging om de code te schrijven. Echter hadden we allebei wel meer ervaring in Java dan in REACT.js. Dit is ook terug te zien in de code. De backend zal van iets hogere kwaliteit zijn dan de frontend. Functioneel doet de frontend niet te kort.
 
 ## Code Repo
 
