@@ -49,6 +49,8 @@ This application was built in Spring Boot. Additionally, the application uses a 
 
 *The application is developed using a MySQL database. As already told, this database will store devices and requests. For user management, Quintor is currently using microsoft active directory. This is not implemented in the application. Therefore, the mysql database is used to store the users. In the `application.properties` file, there are three users defined. You have to provide a password for these users. Passwords get Bcrypt encoded into the database. For adding a new user, you could bulk insert users in the database, but it's (of course) much cleaner to implement microsoft active directory.*
 
+You can change the predefined users in the `application.properties` file. Roles of users can be changed in the `dummyDataLoader.java` class.
+
 To start the application, clone the repo and navigate to the cloned folder. Type the following command in the terminal:
 
 ```bash
